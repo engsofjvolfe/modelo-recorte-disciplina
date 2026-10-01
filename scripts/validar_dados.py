@@ -10,9 +10,10 @@ O schema e achado pelo nome do arquivo de dados: "formato.json" ->
 
 Usa so a biblioteca padrao do Python, entao entende o subconjunto do JSON Schema que
 os schemas deste projeto usam: type, required, properties, additionalProperties,
-items, minItems, const, enum, not, minLength, pattern e $ref para "#/$defs/...". Alem
-disso, uma regra fixa: numa lista de objetos que tem o campo "id", nenhum id se repete.
-Campos que o schema nao conhece sao aceitos sem conferir (o formato pode crescer).
+items, minItems, const, enum, not, minLength, pattern, allOf, anyOf, if/then/else e $ref
+para "#/$defs/...". Alem disso, uma regra fixa: numa lista de objetos que tem o campo
+"id" ou "chave", nenhum id e nenhuma chave se repete. Campos que o schema nao conhece
+sao aceitos sem conferir (o formato pode crescer).
 
 Uso:
     python scripts/validar_dados.py docs/formato.json
@@ -52,17 +53,30 @@ def resolve(schema, raiz):
     return schema
 
 
+def erros_de(valor, schema, raiz, caminho="$"):
+    sub = []
+    valida(valor, schema, raiz, caminho, sub)
+    return sub
+
+
 def valida(valor, schema, raiz, caminho, erros):
     schema = resolve(schema, raiz)
+    for sub in schema.get("allOf", []):
+        valida(valor, sub, raiz, caminho, erros)
+    if "anyOf" in schema and all(erros_de(valor, s, raiz) for s in schema["anyOf"]):
+        erros.append(f"{caminho}: nao confere com nenhuma das formas aceitas")
+    if "if" in schema:
+        if not erros_de(valor, schema["if"], raiz):
+            if "then" in schema:
+                valida(valor, schema["then"], raiz, caminho, erros)
+        elif "else" in schema:
+            valida(valor, schema["else"], raiz, caminho, erros)
     if "const" in schema and valor != schema["const"]:
         erros.append(f"{caminho}: deve ser {schema['const']!r}, e {valor!r}")
     if "enum" in schema and valor not in schema["enum"]:
         erros.append(f"{caminho}: deve ser um de {schema['enum']}, e {valor!r}")
-    if "not" in schema:
-        sub = []
-        valida(valor, schema["not"], raiz, caminho, sub)
-        if not sub:
-            erros.append(f"{caminho}: valor nao permitido: {valor!r}")
+    if "not" in schema and not erros_de(valor, schema["not"], raiz, caminho):
+        erros.append(f"{caminho}: valor nao permitido: {valor!r}")
     tipo = schema.get("type")
     if tipo:
         tipos = tipo if isinstance(tipo, list) else [tipo]
@@ -93,15 +107,16 @@ def valida(valor, schema, raiz, caminho, erros):
         if "items" in schema:
             for i, item in enumerate(valor):
                 valida(item, schema["items"], raiz, f"{caminho}[{i}]", erros)
-        vistos, repetidos = set(), []
-        for item in valor:
-            if isinstance(item, dict) and "id" in item:
-                chave = json.dumps(item["id"], ensure_ascii=False, sort_keys=True)
-                if chave in vistos and chave not in repetidos:
-                    repetidos.append(chave)
-                vistos.add(chave)
-        for r in repetidos:
-            erros.append(f"{caminho}: id repetido {r}")
+        for campo in ("id", "chave"):
+            vistos, repetidos = set(), []
+            for item in valor:
+                if isinstance(item, dict) and campo in item:
+                    v = json.dumps(item[campo], ensure_ascii=False, sort_keys=True)
+                    if v in vistos and v not in repetidos:
+                        repetidos.append(v)
+                    vistos.add(v)
+            for r in repetidos:
+                erros.append(f"{caminho}: valor repetido no campo {campo!r}: {r}")
 
 
 def schema_padrao(dados: Path):

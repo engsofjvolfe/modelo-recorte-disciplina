@@ -2,13 +2,15 @@
 # Copyright do codigo sob GPL-3.0 -- ver LICENSE e NOTICE.md na raiz do projeto.
 
 """
-Gera pacotes Anki (.apkg) a partir de QUALQUER CSV de perguntas encontrado direto em
-docs/material-gerado/ (sem entrar em subpastas -- uma eventual subpasta de material
+Gera pacotes Anki (.apkg) a partir de QUALQUER CSV de perguntas encontrado direto na
+pasta do material gerado (sem entrar em subpastas -- uma eventual subpasta de material
 arquivado de outra disciplina nao e conteudo ativo e nao deve ser descoberta aqui). O
-script e agnostico de disciplina, de nome de coluna e atemporal: nenhum nome de
-disciplina, item ou arquivo fica fixado no codigo. O contrato estavel e minimo:
+script e agnostico de disciplina, de nome de coluna e de caminho: nenhum nome de
+disciplina, item, arquivo ou pasta fica fixado no codigo. As pastas e o prefixo das
+planilhas vem do projeto.json ("material_gerado", "baralhos" e "prefixo_planilhas").
+O contrato estavel e minimo:
 
-  1. o nome do arquivo comeca com "perguntas-" e termina em ".csv";
+  1. o nome do arquivo comeca com o prefixo das planilhas e termina em ".csv";
   2. existe uma coluna "pergunta" e uma coluna "resposta" -- os dois unicos nomes de
      coluna que o script realmente exige, porque sao intrinsecos a qualquer cartao de
      revisao, nao especificos de nenhuma disciplina.
@@ -27,12 +29,14 @@ cabecalho de cada CSV -- CSVs com conjuntos de coluna diferentes ganham modelos
 diferentes automaticamente, cada um com ID deterministico a partir do proprio conjunto
 de colunas.
 
-Uso:
-    python montar_deck.py              # gera um .apkg para cada CSV encontrado
-    python montar_deck.py <trecho>     # gera so os .apkg cujo nome de arquivo contem <trecho>
-    python montar_deck.py --listar     # so lista os CSVs que seriam processados, sem gerar nada
+Uso (de qualquer pasta dentro do projeto):
+    python scripts/montar_deck.py              # gera um .apkg para cada CSV encontrado
+    python scripts/montar_deck.py <trecho>     # gera so os .apkg cujo nome de arquivo contem <trecho>
+    python scripts/montar_deck.py --listar     # so lista os CSVs que seriam processados, sem gerar nada
+    python scripts/montar_deck.py --projeto projeto.json
 """
 
+import argparse
 import csv
 import hashlib
 import re
@@ -42,23 +46,8 @@ from pathlib import Path
 
 import genanki
 
-
-def _raiz_projeto(inicio: Path) -> Path:
-    """Sobe a arvore de pastas a partir de `inicio` ate achar a raiz do projeto,
-    identificada pela presenca da pasta `docs/material-gerado/` (onde o conteudo de
-    qualquer disciplina sempre mora). Isso deixa o script robusto a reorganizacoes de
-    pasta, inclusive renomear a propria pasta-raiz do projeto."""
-    for candidata in (inicio, *inicio.parents):
-        if (candidata / "docs" / "material-gerado").is_dir():
-            return candidata
-    raise FileNotFoundError(
-        f"nao encontrei a raiz do projeto (pasta docs/material-gerado/) subindo a partir de {inicio}"
-    )
-
-
-BASE = _raiz_projeto(Path(__file__).resolve().parent)
-MATERIAL_GERADO = BASE / "docs" / "material-gerado"
-SAIDA_DIR = BASE / "anki-decks"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from comum import acha_projeto  # noqa: E402
 
 # Coluna com papel de bastidor: se existir, vira campo do cartao (pra nao perder a
 # informacao), mas nao aparece na linha de metadados do cartao -- so pra nao poluir a
@@ -143,36 +132,33 @@ def id_estavel(nome, minimo=1_000_000_000, maximo=1_999_999_999):
     return minimo + (int(digest, 16) % (maximo - minimo))
 
 
-def descobrir_csvs(filtro=None):
-    """Lista os CSVs de perguntas prontos para virar deck: qualquer perguntas-*.csv
-    direto dentro de docs/material-gerado/ (nao entra em subpastas -- uma eventual
-    subpasta de material arquivado de outra disciplina nao e ativa e nao deve ser
-    descoberta aqui). `filtro`, se dado, mantem so arquivos cujo nome contenha o trecho
-    (case-insensitive)."""
-    candidatos = sorted(MATERIAL_GERADO.glob("perguntas-*.csv"))
+def descobrir_csvs(pasta, prefixo, filtro=None):
+    """Lista os CSVs de perguntas prontos para virar deck: qualquer <prefixo>*.csv
+    direto dentro da pasta (nao entra em subpastas -- uma eventual subpasta de material
+    arquivado de outra disciplina nao e ativa e nao deve ser descoberta aqui). `filtro`,
+    se dado, mantem so arquivos cujo nome contenha o trecho (case-insensitive)."""
+    candidatos = sorted(pasta.glob(f"{prefixo}*.csv"))
     if filtro:
         alvo = filtro.lower()
         candidatos = [c for c in candidatos if alvo in c.name.lower()]
     return candidatos
 
 
-def nomes_a_partir_do_arquivo(caminho_csv: Path):
-    """"perguntas-nucleo-dicionarios.csv" -> familia "Nucleo", nome de saida
-    "Nucleo-Dicionarios". Tira o prefixo generico "perguntas" (se existir) e capitaliza
-    cada palavra separada por hifen -- funciona pra qualquer nome de arquivo novo, nao
-    so pros padroes ja conhecidos (nucleo/fundamentos)."""
-    partes = [p for p in caminho_csv.stem.split("-") if p]
-    if partes and partes[0].lower() == "perguntas":
-        partes = partes[1:]
-    if not partes:
-        partes = [caminho_csv.stem]
+def nomes_a_partir_do_arquivo(caminho_csv: Path, prefixo: str):
+    """"<prefixo>nucleo-dicionarios.csv" -> familia "Nucleo", nome de saida
+    "Nucleo-Dicionarios". Tira o prefixo (se existir) e capitaliza cada palavra
+    separada por hifen -- funciona pra qualquer nome de arquivo novo."""
+    nome = caminho_csv.stem
+    if prefixo and nome.startswith(prefixo):
+        nome = nome[len(prefixo):]
+    partes = [p for p in nome.split("-") if p] or [caminho_csv.stem]
     familia = partes[0].capitalize()
     nome_saida = "-".join(p.capitalize() for p in partes)
     return familia, nome_saida
 
 
-def montar_pacote(caminho_csv: Path):
-    familia, nome_saida = nomes_a_partir_do_arquivo(caminho_csv)
+def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str):
+    familia, nome_saida = nomes_a_partir_do_arquivo(caminho_csv, prefixo)
 
     decks = {}  # chave de deck normalizada -> genanki.Deck, criado sob demanda
     total_cartoes = 0
@@ -209,9 +195,9 @@ def montar_pacote(caminho_csv: Path):
             decks[chave_deck].add_note(nota)
             total_cartoes += 1
 
-    caminho_saida = SAIDA_DIR / f"{nome_saida}.apkg"
+    caminho_saida = pasta_saida / f"{nome_saida}.apkg"
     pacote = genanki.Package(list(decks.values()))
-    SAIDA_DIR.mkdir(parents=True, exist_ok=True)
+    pasta_saida.mkdir(parents=True, exist_ok=True)
     pacote.write_to_file(caminho_saida)
 
     print(f"Deck gerado: {caminho_saida}")
@@ -219,19 +205,27 @@ def montar_pacote(caminho_csv: Path):
     print(f"  Total de cartoes: {total_cartoes}")
 
 
-if __name__ == "__main__":
-    args = sys.argv[1:]
-    listar_apenas = "--listar" in args
-    filtro = next((a for a in args if not a.startswith("--")), None)
+def main(argv=None):
+    p = argparse.ArgumentParser(description="Gera pacotes Anki (.apkg) a partir das planilhas de perguntas.")
+    p.add_argument("filtro", nargs="?", help="gera so as planilhas cujo nome contem este trecho")
+    p.add_argument("--listar", action="store_true", help="so lista as planilhas, sem gerar nada")
+    p.add_argument("--projeto", type=Path, help="projeto.json (padrao: o primeiro achado subindo a partir daqui)")
+    a = p.parse_args(argv)
+    projeto = acha_projeto(a.projeto)
+    pasta, prefixo = projeto.caminho("material_gerado"), projeto.valor("prefixo_planilhas")
 
-    csvs = descobrir_csvs(filtro)
+    csvs = descobrir_csvs(pasta, prefixo, a.filtro)
     if not csvs:
-        alvo_desc = f" com filtro {filtro!r}" if filtro else ""
-        raise SystemExit(f"nenhum CSV 'perguntas-*.csv' encontrado em {MATERIAL_GERADO}{alvo_desc}")
+        alvo_desc = f" com filtro {a.filtro!r}" if a.filtro else ""
+        raise SystemExit(f"nenhum CSV '{prefixo}*.csv' encontrado em {pasta}{alvo_desc}")
 
     print(f"CSVs encontrados ({len(csvs)}): {', '.join(c.name for c in csvs)}")
-    if listar_apenas:
-        raise SystemExit(0)
-
+    if a.listar:
+        return 0
     for caminho in csvs:
-        montar_pacote(caminho)
+        montar_pacote(caminho, projeto.caminho("baralhos"), prefixo)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,28 @@
+{
+  "versao_schema": 1,
+  "fontes": [
+    {
+      "chave": "[CHAVE-DA-AULA]",
+      "tipo": "monografia",
+      "titulo": "[TÍTULO da aula]",
+      "data": "[20--]",
+      "descricao_fisica": "1 arquivo PDF ([n] slides)",
+      "notas": ["Material de aula, não publicado."]
+    },
+    {
+      "chave": "[CHAVE-DO-DOCUMENTO]",
+      "tipo": "monografia",
+      "autores": [
+        { "entidade": ["[Instituição]", "[órgão dentro dela]"] }
+      ],
+      "titulo": "[Título]",
+      "subtitulo": "[subtítulo]",
+      "edicao": "[n]. ed.",
+      "local": "[Local]",
+      "editora": "[Editora]",
+      "data": "[ano]",
+      "url": "[endereço]",
+      "acesso": "[AAAA-MM-DD]"
+    }
+  ]
+}

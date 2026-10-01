@@ -31,9 +31,11 @@ ensina a usar IA — só deixa claro onde ela entra.
 - **[Modelo dos documentos de raiz](modelo-documentos-raiz/LEIA-ME.md)** — os quatro
   documentos que ficam na raiz do projeto da sua disciplina (a apresentação técnica, o
   índice, o manual de uso e o aviso de licenças), prontos pra copiar e preencher.
-- **[Modelo de dados](modelo-dados/formato.json)** — o arquivo em que ficam as respostas
-  do Descubra seu modelo, só como dados, pra copiar pra `docs/formato.json` do projeto e
-  preencher.
+- **[Modelo de dados](modelo-dados/)** — os três arquivos de dados do projeto da sua
+  disciplina, só dados, pra copiar e preencher: o [mapa do projeto](modelo-dados/projeto.json),
+  que diz aos scripts onde fica cada coisa; o [formato](modelo-dados/formato.json), com as
+  respostas do Descubra seu modelo; e as [fontes](modelo-dados/fontes.json), com os dados
+  de cada fonte, de onde saem as referências.
 - **[Material de base](docs/material-base/README.md)** — a pasta do material de aula, da
   transcrição literal dele e das cópias do material de fora que completa a aula. Nada
   dela vai pro GitHub: esse material não é seu pra publicar.

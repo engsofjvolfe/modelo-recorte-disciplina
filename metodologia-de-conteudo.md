@@ -13,6 +13,10 @@ Siga isto por padrão, mas corrija quando sua disciplina expuser um caso que nã
 coberto aqui. Quando isso acontecer, atualize este documento também, não só o conteúdo
 da sua disciplina.
 
+Os caminhos de pasta e de arquivo citados aqui são os do modelo. Em cada projeto, quem
+diz onde fica cada coisa é o `projeto.json`, na raiz dele: é dali que os scripts tiram
+todo caminho (ver o [README dos scripts](scripts/README.md)).
+
 ---
 
 ## 1. Escreva três documentos de conteúdo
@@ -161,8 +165,10 @@ coluna), porque um item solto pode mudar de sentido. Não entra nada que não es
 escrito: nem descrição de imagem, nem explicação, nem correção. Guarde a transcrição em
 `docs/material-base/gerados-ocr/` e, assim que ela for criada, registre no topo dela de
 qual arquivo veio, com `python scripts/registrar_fonte.py [transcrição] [arquivo
-original]`: o script grava o caminho do arquivo e a impressão digital dele (o hash). É
-esse registro que liga a transcrição ao original, não o nome dos arquivos.
+original] [chave]`. A chave é a mesma da referência dessa fonte (ver *Cite cada fonte*,
+abaixo); o script grava a chave, o caminho do arquivo e a impressão digital dele (o
+hash), e em seguida atualiza as referências. É esse registro que liga a transcrição ao
+original, não o nome dos arquivos.
 
 Cada página vira uma seção da transcrição, com o título no formato
 `## [como a citação chama a página] (arquivo p. [posição no arquivo])` — por exemplo,
@@ -234,6 +240,16 @@ toda referência é citada em algum lugar. Por exemplo:
 Esse documento é conteúdo do projeto e é versionado: o que fica fora do controle de
 versão é a cópia do material, não a referência a ele.
 
+Ninguém escreve esse documento à mão. Os dados de cada fonte — autoria, título, local,
+editora, data, endereço, data de acesso, com uma chave curta — ficam em
+`docs/fontes.json` (copiado de `modelo-dados/fontes.json`), e `python
+scripts/referencias.py` monta cada referência pela norma, em ordem alfabética, e grava o
+`docs/FONTES.md`. Junto, ele gera a conferência das referências: cada referência como
+ficou, ao lado da cópia registrada da fonte (a primeira página, se for PDF), com uma
+caixa de tique pra IA e outra pra pessoa. Confira cada referência contra a folha de
+rosto ou a página do documento; se os dados ou a cópia mudarem depois do tique, o tique
+é retirado.
+
 ---
 
 ## 6. Cartões de revisão espaçada
@@ -301,9 +317,10 @@ assim já existir (reaproveitado de outra disciplina), use-o sem editar, antes d
 um novo.
 
 > Escreva um script em Python que:
-> 1. Encontre sozinho, dentro de `docs/material-gerado/`, todos os arquivos CSV já
->    gerados cujo nome comece com o mesmo prefixo (ex.: `perguntas-`) — sem que ninguém
->    precise listar nomes de arquivo dentro do código.
+> 1. Encontre sozinho, na pasta do material gerado que o `projeto.json` do projeto
+>    indica, todos os arquivos CSV cujo nome comece com o prefixo que o mesmo arquivo
+>    indica (ex.: `perguntas-`) — sem que ninguém precise listar nomes de arquivo ou de
+>    pasta dentro do código.
 > 2. Para cada arquivo encontrado, gere um baralho do Anki (`.apkg`) separado, com um
 >    cartão por linha. Toda planilha tem uma coluna `pergunta` (frente do cartão) e uma
 >    `resposta` (verso). Qualquer outra coluna que existir no arquivo também deve virar
@@ -312,7 +329,8 @@ um novo.
 >    exceção é a coluna `fonte`, com a citação do fato: se existir, ela aparece no
 >    verso, abaixo da resposta.
 > 3. Não escreva, em nenhum lugar do código, o nome de uma disciplina, de um item
->    específico, ou uma quantidade de perguntas fixada — descubra tudo a partir do que
+>    específico, um caminho de pasta ou uma quantidade de perguntas fixada — descubra
+>    tudo a partir do `projeto.json` e do que
 >    existir nos arquivos a cada execução, pra funcionar com uma planilha nova sem
 >    precisar editar o código.
 > 4. Gere o identificador de cada baralho (o ID que o Anki usa internamente)
@@ -406,7 +424,10 @@ JSON nem aceita comentário.
 
 ## 11. Checklist: adicionando uma disciplina nova
 
-1. Ative o hook de commit: copie `.githooks/` pra raiz do projeto novo, adicione
+1. Prepare o projeto: copie `modelo-dados/projeto.json` pra raiz dele — é o mapa de onde
+   fica cada coisa, e os scripts tiram todo caminho dali (se mudar uma pasta de lugar,
+   mude também o `.gitignore`, pra o material de terceiros continuar fora do GitHub) — e
+   ative o hook de commit: copie `.githooks/` pra raiz do projeto novo, adicione
    `.githooks/` ao `.gitignore` desse projeto (a pasta é ferramenta local de quem
    mantém, não faz parte do pacote versionado de cada disciplina — só é versionada
    aqui, no modelo, que é a fonte de onde ela é copiada) e rode
@@ -414,8 +435,8 @@ JSON nem aceita comentário.
    .githooks/commit-template.txt` uma vez (ver `.githooks/README.md`).
 2. Guarde o material de aula original por convenção, com transcrição literal completa,
    conferida por uma pessoa, página por página, no arquivo de conferência (seção 5);
-   registre a referência de cada aula em `docs/FONTES.md` e leia tudo antes de escrever
-   qualquer coisa.
+   grave os dados da referência de cada aula em `docs/fontes.json` e leia tudo antes de
+   escrever qualquer coisa.
 3. Decida o nome do elo central do dicionário e os nomes dos eixos da ficha — tome essa
    decisão de forma explícita, sem herdar de outra disciplina — e grave essas decisões
    em `docs/formato.json`, como diz o `DESCUBRA-SEU-MODELO.md`.
@@ -446,7 +467,8 @@ JSON nem aceita comentário.
    fora.
 8. Confira as citações: todo fato tirado de uma fonte, em qualquer documento ou cartão,
    cita essa fonte; toda citação tem a referência em `docs/FONTES.md`; toda referência
-   de lá é citada em algum lugar; e a cópia de cada material de fora está guardada em
+   de lá é citada em algum lugar e tem o tique da pessoa na conferência das referências;
+   e a cópia de cada material de fora está guardada em
    `docs/material-base/fontes-externas/`.
 9. Confira a base literal: a transcrição de cada página tem só o que está escrito nela,
    com a posição no arquivo e o número impresso, e tem o tique da pessoa no arquivo de

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "projeto.schema.json",
+  "title": "Caminhos do projeto",
+  "type": "object",
+  "required": ["versao_schema", "prefixo_planilhas", "caminhos"],
+  "additionalProperties": true,
+  "properties": {
+    "versao_schema": { "const": 1 },
+    "prefixo_planilhas": { "$ref": "#/$defs/texto" },
+    "caminhos": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["formato", "fontes", "referencias", "licenca_conteudo", "material_base", "gerados",
+                   "conferencia_imagens", "conferencia_referencias", "material_gerado", "baralhos"],
+      "properties": {
+        "formato": { "$ref": "#/$defs/texto" },
+        "fontes": { "$ref": "#/$defs/texto" },
+        "referencias": { "$ref": "#/$defs/texto" },
+        "licenca_conteudo": { "$ref": "#/$defs/texto" },
+        "material_base": { "$ref": "#/$defs/texto" },
+        "gerados": { "$ref": "#/$defs/texto" },
+        "conferencia_imagens": { "$ref": "#/$defs/texto" },
+        "conferencia_referencias": { "$ref": "#/$defs/texto" },
+        "material_gerado": { "$ref": "#/$defs/texto" },
+        "baralhos": { "$ref": "#/$defs/texto" }
+      }
+    }
+  },
+  "$defs": {
+    "texto": { "type": "string", "minLength": 1 }
+  }
+}

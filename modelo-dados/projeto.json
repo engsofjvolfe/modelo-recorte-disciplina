@@ -1,0 +1,16 @@
+{
+  "versao_schema": 1,
+  "prefixo_planilhas": "perguntas-",
+  "caminhos": {
+    "formato": "docs/formato.json",
+    "fontes": "docs/fontes.json",
+    "referencias": "docs/FONTES.md",
+    "licenca_conteudo": "LICENSE-CONTENT.txt",
+    "material_base": "docs/material-base",
+    "gerados": "docs/material-base/gerados-ocr",
+    "conferencia_imagens": "docs/material-base/gerados-ocr/CONFERENCIA-COM-IMAGEM.md",
+    "conferencia_referencias": "docs/material-base/gerados-ocr/CONFERENCIA-REFERENCIAS.md",
+    "material_gerado": "docs/material-gerado",
+    "baralhos": "anki-decks"
+  }
+}

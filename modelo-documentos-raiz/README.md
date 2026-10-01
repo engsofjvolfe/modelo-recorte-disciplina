@@ -60,14 +60,17 @@ completo em [`NOTICE.md`](NOTICE.md):
 | Arquivo | O que é |
 |---|---|
 | [`docs/material-gerado/`](docs/material-gerado/) | Documentos de teoria, dicionário, ficha, e as planilhas de pergunta |
-| [`docs/FONTES.md`](docs/FONTES.md) | Referências, conforme a ABNT, de todas as fontes citadas nos documentos e nos cartões |
+| [`docs/FONTES.md`](docs/FONTES.md) | Referências, conforme a ABNT, de todas as fontes citadas nos documentos e nos cartões — geradas a partir de `docs/fontes.json` |
+| [`docs/fontes.json`](docs/fontes.json) | Os dados de cada fonte (autoria, título, local, editora, data, endereço), de onde saem as referências |
+| [`docs/formato.json`](docs/formato.json) | O formato da disciplina: curso, nível, itens, eixos, elos e colunas dos cartões |
+| [`projeto.json`](projeto.json) | O mapa do projeto: onde fica cada coisa; os scripts tiram todo caminho daqui |
 | [`INDICE.md`](INDICE.md) | Índice com um link para cada documento; os itens ficam no índice interno de cada um |
 | [`MANUAL.md`](MANUAL.md) | Guia rápido e não técnico de como usar o material e como colaborar |
 | [`LICENSE`](LICENSE) | Texto completo da GPL-3.0 (código) |
 | [`LICENSE-CONTENT.txt`](LICENSE-CONTENT.txt) | Texto completo da CC BY-NC-SA 4.0 (conteúdo) |
 | [`NOTICE.md`](NOTICE.md) | Explica qual licença cobre qual arquivo, e a exceção do material de terceiros |
 | [`.gitignore`](.gitignore) | Exclui o material de terceiros e arquivos temporários do controle de versão |
-| [`scripts/montar_deck.py`](scripts/montar_deck.py) | Gera um `.apkg` para cada planilha de pergunta encontrada em `docs/material-gerado/` |
+| [`scripts/`](scripts/README.md) | Os programas que fazem a parte mecânica do método — o README deles diz, em linguagem simples, pra que serve cada um e como rodar |
 | [`anki-decks/`](anki-decks/) | Os arquivos `.apkg` prontos para importar no Anki |
 
 Este projeto também usa um hook de commit local (`.githooks/`, copiado do projeto-modelo
