@@ -6,8 +6,9 @@ Gera pacotes Anki (.apkg) a partir de QUALQUER CSV de perguntas encontrado diret
 pasta do material gerado (sem entrar em subpastas -- uma eventual subpasta de material
 arquivado de outra disciplina nao e conteudo ativo e nao deve ser descoberta aqui). O
 script e agnostico de disciplina, de nome de coluna e de caminho: nenhum nome de
-disciplina, item, arquivo ou pasta fica fixado no codigo. As pastas e o prefixo das
-planilhas vem do projeto.json ("material_gerado", "baralhos" e "prefixo_planilhas").
+disciplina, item, arquivo ou pasta fica fixado no codigo. As pastas, o prefixo das
+planilhas e o arquivo de estilo dos cartoes vem do projeto.json ("material_gerado",
+"baralhos", "prefixo_planilhas" e "estilo_cartao").
 O contrato estavel e minimo:
 
   1. o nome do arquivo comeca com o prefixo das planilhas e termina em ".csv";
@@ -72,12 +73,13 @@ def campo_anki(nome_coluna):
     return "".join(p.capitalize() for p in re.split(r"[_\s]+", nome_coluna) if p) or "Campo"
 
 
-def construir_modelo(colunas_extra, rotulo):
+def construir_modelo(colunas_extra, rotulo, estilo):
     """Monta um genanki.Model com campos Pergunta, Resposta, mais um campo pra cada
     coluna extra que o CSV realmente tiver -- nenhum nome de coluna e exigido pra isso
     funcionar. CSVs com conjuntos de coluna diferentes ganham modelos diferentes, cada
     um com ID deterministico a partir do proprio conjunto de colunas, entao o mesmo
-    "formato" de CSV sempre reusa o mesmo modelo ao reimportar."""
+    "formato" de CSV sempre reusa o mesmo modelo ao reimportar. O nome do modelo vem do
+    nome da planilha, e o estilo do cartao, do arquivo de estilo do projeto."""
     campos_extra = [campo_anki(c) for c in colunas_extra]
     campos_visiveis = [
         campo_anki(c)
@@ -97,7 +99,7 @@ def construir_modelo(colunas_extra, rotulo):
 
     return genanki.Model(
         model_id,
-        f"Nucleo Multidisciplina - {rotulo}",
+        rotulo,
         fields=[{"name": "Pergunta"}, {"name": "Resposta"}] + [{"name": c} for c in campos_extra],
         templates=[{
             "name": "Cartao Padrao",
@@ -112,14 +114,7 @@ def construir_modelo(colunas_extra, rotulo):
                 )
             ),
         }],
-        css="""
-        .card { font-family: Arial, sans-serif; font-size: 18px; text-align: center; color: #1a1a1a; }
-        .meta { color: #888; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
-        .meta-item:not(:last-child)::after { content: " • "; }
-        .pergunta { font-weight: 600; }
-        .resposta { margin-top: 10px; }
-        .fonte { color: #888; font-size: 13px; margin-top: 12px; }
-        """,
+        css=estilo,
     )
 
 
@@ -157,7 +152,7 @@ def nomes_a_partir_do_arquivo(caminho_csv: Path, prefixo: str):
     return familia, nome_saida
 
 
-def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str):
+def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str, estilo: str):
     familia, nome_saida = nomes_a_partir_do_arquivo(caminho_csv, prefixo)
 
     decks = {}  # chave de deck normalizada -> genanki.Deck, criado sob demanda
@@ -173,7 +168,7 @@ def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str):
                 f"(colunas encontradas: {colunas})."
             )
         colunas_extra = [c for c in colunas if c not in ("pergunta", "resposta")]
-        modelo = construir_modelo(colunas_extra, nome_saida)
+        modelo = construir_modelo(colunas_extra, nome_saida, estilo)
         tem_disciplina = "disciplina" in colunas
 
         for linha in leitor:
@@ -222,8 +217,13 @@ def main(argv=None):
     print(f"CSVs encontrados ({len(csvs)}): {', '.join(c.name for c in csvs)}")
     if a.listar:
         return 0
+    arquivo_estilo = projeto.caminho("estilo_cartao")
+    if not arquivo_estilo.exists():
+        raise SystemExit(f"o arquivo de estilo dos cartoes nao existe: {arquivo_estilo} -- "
+                         "copie modelo-dados/estilo-cartao.css do modelo")
+    estilo = arquivo_estilo.read_text(encoding="utf-8")
     for caminho in csvs:
-        montar_pacote(caminho, projeto.caminho("baralhos"), prefixo)
+        montar_pacote(caminho, projeto.caminho("baralhos"), prefixo, estilo)
     return 0
 
 

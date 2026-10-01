@@ -32,7 +32,6 @@ ARQUIVO_PROJETO = "projeto.json"
 LINHA_FONTE = re.compile(r"^fonte (?P<chave>\S+): (?P<caminho>.+?) \| sha256: (?P<hash>[0-9a-f]{64})$")
 MARCA_PARTE = re.compile(r"^<!-- parte: ([^|]+)\|([^|]+)\|([0-9a-f]+) -->$")
 TIQUE = re.compile(r"^- \[([ xX])\] (IA|pessoa)\s*$")
-RESOLUCAO = "80"  # dpi da imagem da pagina
 
 
 class Projeto:
@@ -46,8 +45,22 @@ class Projeto:
     def caminho(self, nome):
         return self.raiz / self.dados["caminhos"][nome]
 
+    def caminho_do_item(self, nome, item):
+        """Caminho que o projeto.json da com "{item}" no lugar do id do item."""
+        return self.raiz / self.dados["caminhos"][nome].replace("{item}", item)
+
+    def todos_os_itens(self, nome):
+        """Arquivos que existem para o modelo de caminho com "{item}" (qualquer item)."""
+        modelo = self.dados["caminhos"][nome]
+        return sorted(self.raiz.glob(modelo.replace("{item}", "*")))
+
     def valor(self, nome):
         return self.dados[nome]
+
+    def pasta_de_imagens(self, conferencia):
+        """Pasta das imagens de um arquivo de conferencia: dentro da pasta de imagens do
+        projeto, uma subpasta com o nome do proprio arquivo de conferencia."""
+        return self.caminho("imagens") / Path(conferencia).stem
 
 
 def acha_projeto(arquivo=None):
@@ -149,13 +162,15 @@ def numero_de_paginas(pdf):
     return int(m.group(1)) if m else 0
 
 
-def imagem(pdf, n, pasta, nome):
-    """PNG da pagina, gerado de novo so se nao existe ou se o PDF e mais novo que ele."""
+def imagem(pdf, n, pasta, nome, resolucao):
+    """PNG da pagina, na resolucao dada (dpi), gerado de novo so se nao existe ou se o
+    PDF e mais novo que ele."""
     pasta.mkdir(parents=True, exist_ok=True)
     base = pasta / f"{nome}-p{n:03d}"
     png = base.with_suffix(".png")
     if not png.exists() or png.stat().st_mtime < Path(pdf).stat().st_mtime:
-        comando(["pdftoppm", "-f", str(n), "-l", str(n), "-r", RESOLUCAO, "-png", "-singlefile", str(pdf), str(base)])
+        comando(["pdftoppm", "-f", str(n), "-l", str(n), "-r", str(resolucao), "-png", "-singlefile",
+                 str(pdf), str(base)])
     return png
 
 

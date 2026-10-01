@@ -27,7 +27,10 @@ Você precisa de três coisas. Faça uma vez só, no seu computador.
    aulas, onde ficam as transcrições, onde sai o baralho. Se um dia você mudar uma pasta
    de lugar, muda só nesse arquivo — nenhum script precisa ser mexido. Só lembre de mudar
    também o `.gitignore`, se a pasta mudada for a do material de base: é ele que mantém o
-   material de terceiros fora do GitHub.
+   material de terceiros fora do GitHub. No mesmo arquivo ficam a resolução das imagens
+   das conferências e o nome da pasta onde elas são gravadas. Copie junto o
+   [`modelo-dados/estilo-cartao.css`](../modelo-dados/estilo-cartao.css): é a aparência
+   dos cartões do Anki (cores, tamanho da letra), e você pode mudá-la ali.
 3. **Dois complementos**, só pra alguns scripts:
    - pro `montar_deck.py`, a biblioteca `genanki`: no terminal, digite
      `pip install genanki` (ou `pip3 install genanki`) e aperte Enter;
@@ -59,14 +62,16 @@ como `docs/formato.json`, são os do modelo; no seu projeto, valem os do `projet
 | Assim que cada transcrição é criada | `registrar_fonte.py`, que já roda o `referencias.py` |
 | Sempre que mudar os dados das fontes | `referencias.py` |
 | Com as transcrições prontas, antes de escrever o material | `conferencia.py` |
+| Quando a aula não cobre um eixo de um item | `base_externa.py`, que também roda o `referencias.py` |
 | Com as planilhas de pergunta prontas e conferidas | `montar_deck.py` |
 
 ## `validar_dados.py` — confere um arquivo de dados
 
-**Pra que serve.** Os arquivos de dados do projeto (o `projeto.json`, o `formato.json` e
-o `fontes.json`) têm uma forma certa, descrita num molde — o *schema* — que fica em
-`scripts/esquemas/`. Este script confere se o arquivo segue o molde: se não falta campo
-obrigatório, se nada está no tipo errado, se nenhum código (id ou chave) se repete.
+**Pra que serve.** Os arquivos de dados do projeto (o `projeto.json`, o `formato.json`, o
+`fontes.json` e o arquivo de base de cada item) têm uma forma certa, descrita num molde —
+o *schema* — que fica em `scripts/esquemas/`. Este script confere se o arquivo segue o
+molde: se não falta campo obrigatório, se nada está no tipo errado, se nenhum código (id
+ou chave) se repete.
 
 **Quando usar.** Depois de preencher qualquer um desses arquivos, e sempre que mexer
 neles.
@@ -74,6 +79,11 @@ neles.
 **Como rodar.** Escreva o caminho do arquivo depois do nome do script:
 
     python scripts/validar_dados.py docs/formato.json
+
+O script acha o molde pelo nome do arquivo (o de `formato.json` é `formato.schema.json`).
+Os arquivos de base têm o nome do item, então pra eles diga o molde com `--schema`:
+
+    python scripts/validar_dados.py docs/bases/AG1.json --schema scripts/esquemas/base.schema.json
 
 **O que aparece.** `0 erro(s)` quer dizer que está tudo na forma certa. Senão, cada
 linha `ERRO` diz onde está o problema. Por exemplo, `$.itens[2].id: deve ser string` quer
@@ -148,9 +158,59 @@ melhor de ler na visualização do VSCode: abra o arquivo e aperte `Ctrl+Shift+V
 
 Precisa do Poppler.
 
+## `base_externa.py` — monta a base do material de fora
+
+**Pra que serve.** Quando a aula não traz o que algum eixo pede pra um item, o fato vem
+de um material de fora — um guia oficial, um livro, uma página da internet. Este script
+monta a base desse material: um arquivo só com as frases que o item usa, copiadas letra
+por letra da fonte, com a página de cada uma. Ninguém copia trecho à mão: o script
+recolhe todo o texto das páginas que você declarar, a IA decide o que cada frase é, e a
+pessoa confere.
+
+**Como funciona, passo a passo.**
+
+1. Copie [`modelo-dados/base.json`](../modelo-dados/base.json) pra `docs/bases/`, com o id
+   do item no nome (por exemplo, `docs/bases/AG1.json`), e preencha:
+   - em `lugares`, cada fonte lida: a chave da referência dela, o arquivo e as páginas
+     do arquivo que foram lidas (em PDF). Em `desloca`, quanto somar à página do arquivo
+     pra chegar ao número impresso — se a página 47 do arquivo tem impresso "45", é `-2`;
+   - em `cobertura`, cada subtópico da grade do formato da disciplina: `aula` (a aula
+     cobre), `fonte` (vem do material de fora) ou `lacuna` (nenhuma fonte cobre).
+2. Rode o script. Na primeira vez, todas as frases aparecem como **sem classe** no
+   arquivo de conferência, cada uma com um código, como `GUIA-2020:p47:3f2a91c0`: uma
+   frase da página 47 do arquivo da fonte GUIA-2020. O final do código é uma impressão
+   digital do texto da própria frase. Se a frase mudar — o PDF foi trocado, ou a
+   separação em frases mudou —, o código muda junto: a classe antiga aparece como
+   "classe para frase que não existe" e a frase nova como "sem classe". Assim uma classe
+   nunca passa de uma frase para outra sem ninguém ver.
+3. A IA, ou você, classifica cada frase em `classes`, no arquivo de dados, pelo código:
+   - `usa`, com o `subtopico` e a `afirmacao`: `categorica` se a fonte afirma,
+     `possibilidade` se ela trata como possível ou provável;
+   - `outro-item`, `repetida` (com `de`: o código da frase que ela repete),
+     `fora-do-recorte` ou `nao-e-conteudo` (referência, cabeçalho, legenda solta).
+
+   A separação em frases é mecânica: se ela partir uma frase em duas, junte os códigos em
+   `juntar`; se juntar dois pedaços numa frase só, a classe vale pro pedaço inteiro.
+4. Rode de novo. Com tudo classificado, sai a base do item, e a conferência mostra cada
+   página com as frases e a classe de cada uma, com os tiques da IA e da pessoa.
+
+**Como rodar.**
+
+    python scripts/base_externa.py
+
+Pra um item só: `python scripts/base_externa.py AG1`.
+
+**O que aparece.** Uma linha `ERRO` pra tudo o que falta ou se contradiz: frase sem
+classe, subtópico sem marca, subtópico marcado como `fonte` sem nenhuma frase usada,
+frase usada num subtópico que a aula já cobre. O script não julga se a classe está certa
+— isso é a conferência. Logo depois aparece o resultado das referências: este script
+também roda o `referencias.py`, porque a base registra as fontes que usa.
+
+Precisa do Poppler quando alguma fonte é PDF.
+
 ## Como ticar uma conferência
 
-Os dois arquivos de conferência têm, em cada parte, duas linhas assim:
+Os arquivos de conferência têm, em cada parte, duas linhas assim:
 
     - [ ] IA
     - [ ] pessoa
@@ -168,7 +228,8 @@ novo já foi conferido.
 um arquivo `.apkg`, que aparece em `anki-decks/`. As colunas `pergunta` e `resposta` são
 obrigatórias; qualquer outra vira campo do cartão. Uma coluna `disciplina` separa os
 cartões em grupos; `ordem` fica guardada sem aparecer; e a `fonte`, com a citação do
-fato, aparece atrás do cartão, embaixo da resposta.
+fato, aparece atrás do cartão, embaixo da resposta. A aparência dos cartões vem do
+arquivo de estilo do projeto (no modelo, `estilo-cartao.css`).
 
 **Quando usar.** Com as planilhas prontas e conferidas, e de novo sempre que uma
 planilha mudar.

@@ -13,7 +13,8 @@ arquivo contra o schema dele, formata cada fonte pela ABNT NBR 6023 e grava:
     copia mudarem depois do tique, o tique e retirado.
 
 Os caminhos vem do projeto.json: "fontes", "referencias", "conferencia_referencias",
-"gerados" e "licenca_conteudo".
+"gerados", "licenca_conteudo" e "imagens", e a resolucao das imagens, de
+"resolucao_imagens".
 
 A copia de cada fonte e achada pelo registro no topo dos documentos gerados (ver
 registrar_fonte.py), pela chave. O script lista no terminal as chaves registradas que
@@ -161,9 +162,8 @@ def grava_fontes_md(refs, saida, licenca):
     saida.write_text("\n".join(corpo) + "\n", encoding="utf-8")
 
 
-def grava_conferencia(refs, fontes, copias, saida):
+def grava_conferencia(refs, fontes, copias, saida, pasta_img, resolucao):
     anteriores = tiques_anteriores(saida)
-    pasta_img = saida.with_name(saida.stem + "-imagens")
     por_chave = {f["chave"]: f for f in fontes}
     resumo, corpo, sem_pessoa = [], [], []
     for chave, ref in refs:
@@ -185,7 +185,7 @@ def grava_conferencia(refs, fontes, copias, saida):
             if arquivo.suffix.lower() == ".pdf" and situacao != "nao-existe":
                 nome = re.sub(r"[^\w.-]", "_", chave)
                 corpo += [f"[original, primeira página]({link(arquivo, saida)}#page=1)", "",
-                          f"![{chave}, primeira página]({link(imagem(arquivo, 1, pasta_img, nome), saida)})", ""]
+                          f"![{chave}, primeira página]({link(imagem(arquivo, 1, pasta_img, nome, resolucao), saida)})", ""]
         if retirado:
             corpo += ["Tique retirado: os dados da referência ou a cópia mudaram depois do tique", ""]
         corpo += caixas(tiques)
@@ -215,7 +215,8 @@ def roda(projeto, chave_nova=None):
     refs = sorted(((f["chave"], referencia(f)) for f in lista), key=lambda x: ordem(x[1]))
     grava_fontes_md(refs, saida, projeto.caminho("licenca_conteudo"))
     copias = copias_registradas(transcricoes, projeto.raiz) if transcricoes.exists() else {}
-    sem_pessoa = grava_conferencia(refs, lista, copias, conferencia)
+    sem_pessoa = grava_conferencia(refs, lista, copias, conferencia, projeto.pasta_de_imagens(conferencia),
+                                   projeto.valor("resolucao_imagens"))
     chaves = {f["chave"] for f in lista}
     faltam = sorted(set(copias) - chaves)
     print(f"{len(refs)} referência(s) gravadas em {saida}")

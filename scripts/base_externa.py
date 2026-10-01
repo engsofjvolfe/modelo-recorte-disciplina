@@ -1,0 +1,358 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright do codigo sob GPL-3.0 -- ver LICENSE e NOTICE.md na raiz do projeto.
+
+"""
+Monta a base de trechos literais do material de fora de um item, e a conferencia dela.
+O script recolhe, a IA julga na curadoria, a pessoa julga na aceitacao:
+
+  1. o arquivo de dados do item (no modelo, docs/bases/<item>.json) declara os lugares
+     lidos: de qual fonte (pela chave da referencia), de qual arquivo e de quais paginas;
+  2. o script recolhe todo o texto desses lugares e separa em frases, sem filtro nenhum,
+     cada uma com um codigo que sai do proprio texto dela:
+     <chave>:p<pagina no arquivo>:<impressao digital curta do texto> (ou
+     <chave>:<impressao>, em fonte sem paginas, como HTML). Se o texto ou a separacao
+     mudar, o codigo muda: a classe antiga aparece como "classe para frase que nao
+     existe" e a frase nova como "sem classe" -- nada passa de uma frase para outra em
+     silencio;
+  3. a IA classifica cada frase no arquivo de dados, numa lista fechada: "usa" (com o
+     subtopico e se a fonte afirma ou trata como possibilidade), "outro-item",
+     "repetida" (com a frase que ela repete), "fora-do-recorte" ou "nao-e-conteudo";
+  4. cada subtopico da grade do formato da disciplina fica marcado como "aula", "fonte"
+     ou "lacuna";
+  5. o script grava a base do item (so as frases "usa", literais, com a citacao e a
+     pagina, e o registro das fontes no topo) e a conferencia dos trechos: cada pagina
+     (ou documento, quando nao ha paginas), com a imagem quando e PDF, as frases e a
+     classe de cada uma, e as caixas de tique "IA" e "pessoa".
+
+O script nao julga nada; so recusa o que falta ou contradiz os dados: frase sem classe,
+classe para frase que nao existe, subtopico da grade sem marca, subtopico "fonte" sem
+nenhuma frase, frase usada num subtopico que a aula cobre ou que e lacuna. A separacao
+em frases e mecanica (ponto final seguido de maiuscula, ou marcador de lista); quando
+ela parte uma frase em duas, o campo "juntar" do arquivo de dados as une.
+
+Depois de gravar, roda as referencias (referencias.py), porque a base registra as
+fontes que usa. Os caminhos vem do projeto.json: "bases", "base_externa",
+"conferencia_trechos", "formato" e "imagens", e a resolucao das imagens, de
+"resolucao_imagens". Precisa dos comandos pdftotext e pdftoppm (Poppler) quando alguma
+fonte e PDF.
+
+Uso (de qualquer pasta dentro do projeto):
+    python scripts/base_externa.py              # todos os itens que tem arquivo de dados
+    python scripts/base_externa.py ITEM [ITEM]  # so esses itens
+    python scripts/base_externa.py --projeto projeto.json
+"""
+
+import argparse
+import hashlib
+import html
+import json
+import re
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from comum import (acha_projeto, ancora, assinatura, caixas, comando, imagem, impressao, link,  # noqa: E402
+                   marca, tiques_anteriores, tiques_da_parte)
+from validar_dados import PASTA_ESQUEMAS, erros_de  # noqa: E402
+
+CLASSES = {
+    "usa": "usa",
+    "outro-item": "fala de outro item",
+    "repetida": "repete outra frase",
+    "fora-do-recorte": "fora do recorte",
+    "nao-e-conteudo": "não é conteúdo",
+}
+AFIRMACAO = {"categorica": "a fonte afirma", "possibilidade": "a fonte trata como possibilidade"}
+COBERTURA = {"aula": "coberto pela aula", "fonte": "coberto pelo material de fora",
+             "lacuna": "lacuna: nenhuma fonte cobre"}
+PARAGRAFO = "¶"  # marca interna de quebra de bloco (linha em branco no PDF, fim de bloco no HTML)
+FIM_DE_FRASE = re.compile(r'(?<=[.!?])\s+(?=[A-ZÀ-Ý"“(])|\s*[•▪●¶]\s*')
+BLOCO_HTML = re.compile(r"(?i)</?(p|div|h[1-6]|li|tr|td|th|br|section|article|header|footer|ul|ol|table|caption"
+                        r"|dt|dd|blockquote|title)\b[^>]*>")
+CERCA = "````"
+
+
+# ---------- texto das fontes ----------
+
+def normaliza(texto):
+    """Junta as linhas, desfaz a hifenizacao silabica de fim de linha, marca a linha em
+    branco como quebra de bloco e junta espacos."""
+    texto = texto.replace("­\n", "").replace("­", "")
+    texto = re.sub(r"-\n(?=[a-zà-ÿ])", "", texto)
+    texto = re.sub(r"\n\s*\n", f" {PARAGRAFO} ", texto)
+    return re.sub(r"\s+", " ", texto).strip()
+
+
+def texto_pdf(arquivo, pagina):
+    return normaliza(comando(["pdftotext", "-f", str(pagina), "-l", str(pagina), str(arquivo), "-"]))
+
+
+def texto_marcado(arquivo):
+    """Texto de HTML ou XML: sem script e estilo, com as marcas de texto corrido juntas."""
+    s = Path(arquivo).read_text(encoding="utf-8", errors="ignore")
+    s = re.sub(r"(?is)<(script|style)[^>]*>.*?</\1>", " ", s)
+    s = BLOCO_HTML.sub(f" {PARAGRAFO} ", s)
+    s = re.sub(r"(?i)</?(em|i|strong|b|a|span|sup|sub|u|abbr)(\s[^>]*)?>", "", s)
+    s = normaliza(html.unescape(re.sub(r"<[^>]+>", " ", s)))
+    return re.sub(r"\s+([,.;:)])", r"\1", s)
+
+
+def frases(texto):
+    return [f.strip() for f in FIM_DE_FRASE.split(texto) if f and f.strip() and f.strip() != PARAGRAFO]
+
+
+def eh_pdf(arquivo):
+    return arquivo.suffix.lower() == ".pdf"
+
+
+def pagina_impressa(lugar, p):
+    impressas = lugar.get("impressas", {})
+    if str(p) in impressas:
+        return f"p. {impressas[str(p)]}"
+    if "desloca" in lugar:
+        return f"p. {p + lugar['desloca']}"
+    return "p. ?"
+
+
+def com_codigos(prefixo, fs):
+    """[(codigo, frase)]: o codigo e o prefixo mais a impressao digital curta do texto da
+    frase; frase repetida na mesma parte ganha -2, -3..., na ordem."""
+    out, vistos = [], {}
+    for f in fs:
+        h = hashlib.sha256(f.encode("utf-8")).hexdigest()[:8]
+        vistos[h] = vistos.get(h, 0) + 1
+        out.append((f"{prefixo}:{h}" + (f"-{vistos[h]}" if vistos[h] > 1 else ""), f))
+    return out
+
+
+def partes_do_lugar(lugar, raiz):
+    """[(parte, pagina ou None, [(codigo, frase)])]: uma parte por pagina, ou o documento inteiro."""
+    arquivo = raiz / lugar["arquivo"]
+    if eh_pdf(arquivo):
+        return [(f"{lugar['fonte']}:p{p}", p, com_codigos(f"{lugar['fonte']}:p{p}", frases(texto_pdf(arquivo, p))))
+                for p in lugar["paginas"]]
+    return [(lugar["fonte"], None, com_codigos(lugar["fonte"], frases(texto_marcado(arquivo))))]
+
+
+def junta(partes, grupos, erros):
+    """Une as frases de cada grupo do campo "juntar" na primeira delas."""
+    texto = {c: f for _, _, fs in partes for c, f in fs}
+    some = set()
+    for grupo in grupos:
+        faltam = [c for c in grupo if c not in texto]
+        if faltam:
+            erros.append(f"juntar: frase que não existe: {', '.join(faltam)}")
+            continue
+        texto[grupo[0]] = " ".join(texto[c] for c in grupo)
+        some.update(grupo[1:])
+    return [(parte, p, [(c, texto[c]) for c, _ in fs if c not in some]) for parte, p, fs in partes]
+
+
+# ---------- dados ----------
+
+def unidades_da_grade(formato):
+    """{id: (rotulo, eixo)}: os subtopicos de cada eixo, ou o proprio eixo quando nao tem subtopicos."""
+    out = {}
+    for eixo in formato["eixos"]:
+        for sub in eixo["subtopicos"] or [eixo]:
+            out[sub["id"]] = (f"{sub['id']} {sub['nome']}", eixo)
+    return out
+
+
+def confere(dados, grade, partes, item_ok):
+    """Erros de dados: tudo o que falta ou se contradiz. Nao julga conteudo."""
+    erros = []
+    if not item_ok:
+        erros.append(f"o item {dados['item']!r} não está nos itens do formato da disciplina")
+    codigos = {c for _, _, fs in partes for c, _ in fs}
+    classes, cobertura = dados["classes"], dados["cobertura"]
+    for c in sorted(set(classes) - codigos):
+        erros.append(f"classe para frase que não existe: {c}")
+    sem_classe = [c for _, _, fs in partes for c, _ in fs if c not in classes]
+    if sem_classe:
+        erros.append(f"{len(sem_classe)} frase(s) sem classe: {', '.join(sem_classe)}")
+    for u in grade:
+        if u not in cobertura:
+            erros.append(f"subtópico {u} da grade sem marca de cobertura")
+    for u in sorted(set(cobertura) - set(grade)):
+        erros.append(f"cobertura para subtópico que não está na grade: {u}")
+    usadas = {}
+    for c, cl in classes.items():
+        if cl["classe"] == "usa":
+            sub = cl["subtopico"]
+            usadas.setdefault(sub, []).append(c)
+            if sub not in grade:
+                erros.append(f"{c}: subtópico {sub} não está na grade")
+            elif cobertura.get(sub) in ("aula", "lacuna"):
+                erros.append(f"{c}: usada no subtópico {sub}, que está marcado como {cobertura[sub]}")
+        if cl["classe"] == "repetida" and cl["de"] not in codigos:
+            erros.append(f"{c}: repete uma frase que não existe: {cl['de']}")
+    for u, marca_ in cobertura.items():
+        if marca_ == "fonte" and u in grade and not usadas.get(u):
+            erros.append(f"subtópico {u} marcado como fonte, sem nenhuma frase usada")
+    return erros
+
+
+# ---------- arquivos gerados ----------
+
+def descricao(classe):
+    if classe is None:
+        return "**sem classe**"
+    texto = CLASSES[classe["classe"]]
+    if classe["classe"] == "usa":
+        texto += f", subtópico {classe['subtopico']}, {AFIRMACAO[classe['afirmacao']]}"
+    if classe["classe"] == "repetida":
+        texto += f" ({classe['de']})"
+    return texto
+
+
+def grava_base(dados, formato, grade, partes, lugares, raiz, saida):
+    item = next((i for i in formato["itens"] if i["id"] == dados["item"]), {"nome": dados["item"]})
+    registro, vistos = [], set()
+    for lugar in lugares:
+        if lugar["fonte"] not in vistos:
+            vistos.add(lugar["fonte"])
+            arquivo = raiz / lugar["arquivo"]
+            registro.append(f"fonte {lugar['fonte']}: {lugar['arquivo']} | sha256: {impressao(arquivo)}")
+    por_codigo = {c: (parte, p, f) for parte, p, fs in partes for c, f in fs}
+    lugar_da_fonte = {l["fonte"]: l for l in lugares}
+    corpo = ["---"] + registro + ["---", "", f"# Base de trechos do material de fora — {item['nome']}"]
+    for eixo in formato["eixos"]:
+        corpo += ["", f"## {eixo['id']}. {eixo['nome']}"]
+        for sub in eixo["subtopicos"] or [eixo]:
+            if eixo["subtopicos"]:
+                corpo += ["", f"### {sub['id']} {sub['nome']}"]
+            corpo += ["", f"Cobertura: {COBERTURA.get(dados['cobertura'].get(sub['id']), 'sem marca')}"]
+            for c, cl in dados["classes"].items():
+                if cl["classe"] != "usa" or cl["subtopico"] != sub["id"] or c not in por_codigo:
+                    continue
+                _, p, f = por_codigo[c]
+                fonte = c.split(":")[0]
+                local = (f"{pagina_impressa(lugar_da_fonte[fonte], p)} (arquivo p. {p})" if p is not None
+                         else "texto inteiro")
+                corpo += ["", f"**{fonte}, {local} — {c} — {AFIRMACAO[cl['afirmacao']]}**", "", f"> {f}"]
+    saida.parent.mkdir(parents=True, exist_ok=True)
+    saida.write_text("\n".join(corpo) + "\n", encoding="utf-8")
+
+
+def bloco_do_item(dados, arquivo_dados, base, partes, lugares, raiz, saida, anteriores, pasta_img, resolucao):
+    item = dados["item"]
+    lugar_da_fonte = {l["fonte"]: l for l in lugares}
+    corpo = ["", "---", "", f"## {item}", "", f"Dados: `{link(arquivo_dados, saida)}` · base gerada: `{link(base, saida)}`"]
+    cont = [0, 0, 0, 0]  # partes, tique IA, tique pessoa, sem classe
+    sig_cob = assinatura(json.dumps(dados["cobertura"], sort_keys=True))
+    tiques, retirado = tiques_da_parte(anteriores, item, "cobertura", sig_cob)
+    corpo += ["", f"### {item} — cobertura da grade", "", marca(item, "cobertura", sig_cob), ""]
+    corpo += [f"- {u}: {COBERTURA[m]}" for u, m in sorted(dados["cobertura"].items())] + [""]
+    if retirado:
+        corpo += ["Tique retirado: a cobertura mudou depois do tique", ""]
+    corpo += caixas(tiques)
+    cont = [cont[0] + 1, cont[1] + tiques["IA"], cont[2] + tiques["pessoa"], cont[3]]
+    for parte, p, fs in partes:
+        fonte = parte.split(":")[0]
+        lugar = lugar_da_fonte[fonte]
+        arquivo = raiz / lugar["arquivo"]
+        classes = [dados["classes"].get(c) for c, _ in fs]
+        sig = assinatura(impressao(arquivo), parte, *[f"{c}|{f}|{json.dumps(cl, sort_keys=True)}"
+                                                      for (c, f), cl in zip(fs, classes)])
+        tiques, retirado = tiques_da_parte(anteriores, item, parte, sig)
+        titulo = f"{pagina_impressa(lugar, p)} (arquivo p. {p})" if p is not None else "texto inteiro"
+        corpo += ["", f"### {fonte} — {titulo}", "", marca(item, parte, sig), ""]
+        if p is not None:
+            nome_img = re.sub(r"[^\w.-]", "_", f"{item}-{fonte}")
+            corpo += [f"[original, arquivo p. {p}]({link(arquivo, saida)}#page={p})", "",
+                      f"![{fonte}, arquivo p. {p}]({link(imagem(arquivo, p, pasta_img, nome_img, resolucao), saida)})",
+                      ""]
+        else:
+            corpo += [f"[original]({link(arquivo, saida)})", ""]
+        for (c, f), cl in zip(fs, classes):
+            corpo += [f"- **{c}** — {descricao(cl)}", f"  > {f}"]
+            cont[3] += cl is None
+        corpo.append("")
+        if retirado:
+            corpo += ["Tique retirado: o texto, a fonte ou as classes desta parte mudaram depois do tique", ""]
+        corpo += caixas(tiques)
+        cont = [cont[0] + 1, cont[1] + tiques["IA"], cont[2] + tiques["pessoa"], cont[3]]
+    return corpo, cont
+
+
+def processa(projeto, arquivo_dados, formato, anteriores):
+    dados = json.loads(arquivo_dados.read_text(encoding="utf-8"))
+    schema = json.loads((PASTA_ESQUEMAS / "base.schema.json").read_text(encoding="utf-8"))
+    erros = erros_de(dados, schema, schema)
+    if erros:
+        return None, [f"{arquivo_dados.name}: {e}" for e in erros]
+    raiz, lugares = projeto.raiz, dados["lugares"]
+    erros = []
+    for lugar in lugares:
+        arquivo = raiz / lugar["arquivo"]
+        if not arquivo.exists():
+            erros.append(f"{lugar['fonte']}: arquivo não existe: {lugar['arquivo']}")
+        elif eh_pdf(arquivo) and (not lugar.get("paginas") or min(lugar["paginas"]) < 1):
+            erros.append(f"{lugar['fonte']}: fonte em PDF precisa das páginas lidas (a partir de 1)")
+    chaves = [l["fonte"] for l in lugares]
+    for chave in sorted({c for c in chaves if chaves.count(c) > 1 and
+                         len({l["arquivo"] for l in lugares if l["fonte"] == c}) > 1}):
+        erros.append(f"a chave {chave} aponta para mais de um arquivo")
+    if erros:
+        return None, [f"{arquivo_dados.name}: {e}" for e in erros]
+    partes = junta([pt for l in lugares for pt in partes_do_lugar(l, raiz)], dados.get("juntar", []), erros)
+    grade = unidades_da_grade(formato)
+    erros += confere(dados, grade, partes, any(i["id"] == dados["item"] for i in formato["itens"]))
+    base = projeto.caminho_do_item("base_externa", dados["item"])
+    grava_base(dados, formato, grade, partes, lugares, raiz, base)
+    saida = projeto.caminho("conferencia_trechos")
+    bloco, cont = bloco_do_item(dados, arquivo_dados, base, partes, lugares, raiz, saida, anteriores,
+                                projeto.pasta_de_imagens(saida), projeto.valor("resolucao_imagens"))
+    return (dados["item"], bloco, cont), [f"{dados['item']}: {e}" for e in erros]
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description="Monta a base de trechos do material de fora e a conferência dela.")
+    p.add_argument("itens", nargs="*", help="ids dos itens (padrao: todos os que tem arquivo de dados)")
+    p.add_argument("--projeto", type=Path, help="projeto.json (padrao: o primeiro achado subindo a partir daqui)")
+    a = p.parse_args(argv)
+    projeto = acha_projeto(a.projeto)
+    if not projeto.caminho("formato").exists():
+        raise SystemExit(f"o formato da disciplina não existe: {projeto.caminho('formato')} -- "
+                         "responda o Descubra seu modelo e grave as respostas nele")
+    formato = json.loads(projeto.caminho("formato").read_text(encoding="utf-8"))
+    arquivos = ([projeto.caminho_do_item("bases", i) for i in a.itens] if a.itens
+                else projeto.todos_os_itens("bases"))
+    if not arquivos:
+        raise SystemExit("nenhum arquivo de dados de base encontrado")
+    saida = projeto.caminho("conferencia_trechos")
+    anteriores = tiques_anteriores(saida)
+    resumo, corpo, todos_erros = [], [], []
+    totais = [0, 0, 0, 0]
+    for arquivo_dados in arquivos:
+        if not arquivo_dados.exists():
+            todos_erros.append(f"arquivo de dados não existe: {arquivo_dados}")
+            continue
+        resultado, erros = processa(projeto, arquivo_dados, formato, anteriores)
+        todos_erros += erros
+        if resultado:
+            item, bloco, (partes, ia, pessoa, sem_classe) = resultado
+            corpo += bloco
+            totais = [a + b for a, b in zip(totais, (partes, ia, pessoa, sem_classe))]
+            resumo.append(f"| [{item}](#{ancora(item)}) | {partes} | {sem_classe} | {ia} | {pessoa} | {partes - pessoa} |")
+    cabecalho = ["# Conferência dos trechos do material de fora", "",
+                 "| Item | Partes | Frases sem classe | Tique da IA | Tique da pessoa | Sem tique da pessoa |",
+                 "| :--- | ---: | ---: | ---: | ---: | ---: |"] + resumo
+    cabecalho.append(f"| **Total** | **{totais[0]}** | **{totais[3]}** | **{totais[1]}** | **{totais[2]}** | "
+                     f"**{totais[0] - totais[2]}** |")
+    saida.parent.mkdir(parents=True, exist_ok=True)
+    saida.write_text("\n".join(cabecalho + corpo) + "\n", encoding="utf-8")
+    for e in todos_erros:
+        print("ERRO:", e)
+    print(f"{totais[0]} parte(s) | frases sem classe: {totais[3]} | sem tique da pessoa: {totais[0] - totais[2]}")
+    print(f"conferência: {saida}")
+
+    # gancho: a base registra as fontes que usa, entao as referencias sao refeitas
+    import referencias
+    resultado_refs = referencias.roda(projeto)
+    return 1 if (todos_erros or resultado_refs) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

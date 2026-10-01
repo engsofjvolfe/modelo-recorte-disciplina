@@ -26,8 +26,9 @@ Os tiques ficam no proprio arquivo gerado, com a assinatura do que foi conferido
 pagina e transcricao). Ao gerar de novo, o tique volta se a assinatura e a mesma; se o
 texto da pagina ou o PDF mudou, o tique e retirado, e a pagina diz isso.
 
-As pastas e o arquivo gerado vem do projeto.json ("gerados", "conferencia_imagens" e
-"material_base"). Precisa dos comandos pdfinfo e pdftoppm (pacote Poppler).
+As pastas, o arquivo gerado, a pasta das imagens e a resolucao delas vem do projeto.json
+("gerados", "conferencia_imagens", "material_base", "imagens" e "resolucao_imagens").
+Precisa dos comandos pdfinfo e pdftoppm (pacote Poppler).
 
 Uso (de qualquer pasta dentro do projeto):
     python scripts/conferencia.py
@@ -94,7 +95,7 @@ def fonte_da_transcricao(texto, raiz):
     return chave, pdf, situacao
 
 
-def partes(nome, texto, pdf, situacao, anteriores, pasta_img):
+def partes(nome, texto, pdf, situacao, anteriores, pasta_img, resolucao):
     com_pdf = situacao in ("confere", "mudou")
     hash_pdf = impressao(pdf) if com_pdf else ""
     total = numero_de_paginas(pdf) if com_pdf else 0
@@ -108,7 +109,7 @@ def partes(nome, texto, pdf, situacao, anteriores, pasta_img):
         sig = assinatura(hash_pdf, n, rotulo, "\n\n".join(c for _, c in secs))
         tiques, retirado = tiques_da_parte(anteriores, nome, n, sig)
         out.append({"n": n, "rotulo": rotulo, "secoes": secs, "sig": sig, "tiques": tiques, "retirado": retirado,
-                    "imagem": imagem(pdf, n, pasta_img, nome) if com_pdf and n <= total else None})
+                    "imagem": imagem(pdf, n, pasta_img, nome, resolucao) if com_pdf and n <= total else None})
     return out
 
 
@@ -130,9 +131,8 @@ def bloco(nome, pdf, parte, saida):
     return out + caixas(parte["tiques"])
 
 
-def gera(transcricoes, saida, raiz):
+def gera(transcricoes, saida, raiz, pasta_img, resolucao):
     anteriores = tiques_anteriores(saida)
-    pasta_img = saida.with_name(saida.stem + "-imagens")
     resumo, corpo, totais, problemas_de_registro, registrados = [], [], [0, 0, 0, 0], [], set()
     for arq, texto in transcricoes_da_pasta(transcricoes, saida):
         nome = arq.stem
@@ -141,7 +141,7 @@ def gera(transcricoes, saida, raiz):
             registrados.add(pdf)
         if situacao != "confere":
             problemas_de_registro.append((arq, situacao))
-        ps = partes(nome, texto, pdf, situacao, anteriores, pasta_img)
+        ps = partes(nome, texto, pdf, situacao, anteriores, pasta_img, resolucao)
         cont = [len(ps), sum(p["tiques"]["IA"] for p in ps), sum(p["tiques"]["pessoa"] for p in ps)]
         cont.append(cont[0] - cont[2])
         totais = [a + b for a, b in zip(totais, cont)]
@@ -168,7 +168,8 @@ def main(argv=None):
     transcricoes, saida = projeto.caminho("gerados"), projeto.caminho("conferencia_imagens")
     if not transcricoes_da_pasta(transcricoes, saida):
         raise SystemExit(f"nenhuma transcricao em {transcricoes}")
-    (paginas, ia, pessoa, sem_pessoa), problemas_de_registro, registrados = gera(transcricoes, saida, projeto.raiz)
+    (paginas, ia, pessoa, sem_pessoa), problemas_de_registro, registrados = gera(
+        transcricoes, saida, projeto.raiz, projeto.pasta_de_imagens(saida), projeto.valor("resolucao_imagens"))
     for arq, situacao in problemas_de_registro:
         print(f"REGISTRO: {arq.name} -- PDF registrado: {SITUACAO[situacao]}")
     for pdf in sorted(projeto.caminho("material_base").glob("*.pdf")):

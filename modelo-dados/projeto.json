@@ -1,6 +1,7 @@
 {
   "versao_schema": 1,
   "prefixo_planilhas": "perguntas-",
+  "resolucao_imagens": 80,
   "caminhos": {
     "formato": "docs/formato.json",
     "fontes": "docs/fontes.json",
@@ -11,6 +12,11 @@
     "conferencia_imagens": "docs/material-base/gerados-ocr/CONFERENCIA-COM-IMAGEM.md",
     "conferencia_referencias": "docs/material-base/gerados-ocr/CONFERENCIA-REFERENCIAS.md",
     "material_gerado": "docs/material-gerado",
-    "baralhos": "anki-decks"
+    "baralhos": "anki-decks",
+    "bases": "docs/bases/{item}.json",
+    "base_externa": "docs/material-base/gerados-ocr/{item}-fontes-externas.md",
+    "conferencia_trechos": "docs/material-base/gerados-ocr/CONFERENCIA-TRECHOS.md",
+    "imagens": "docs/material-base/gerados-ocr/imagens",
+    "estilo_cartao": "estilo-cartao.css"
   }
 }

@@ -3,16 +3,18 @@
   "$id": "projeto.schema.json",
   "title": "Caminhos do projeto",
   "type": "object",
-  "required": ["versao_schema", "prefixo_planilhas", "caminhos"],
+  "required": ["versao_schema", "prefixo_planilhas", "resolucao_imagens", "caminhos"],
   "additionalProperties": true,
   "properties": {
     "versao_schema": { "const": 1 },
     "prefixo_planilhas": { "$ref": "#/$defs/texto" },
+    "resolucao_imagens": { "type": "integer" },
     "caminhos": {
       "type": "object",
       "additionalProperties": true,
       "required": ["formato", "fontes", "referencias", "licenca_conteudo", "material_base", "gerados",
-                   "conferencia_imagens", "conferencia_referencias", "material_gerado", "baralhos"],
+                   "conferencia_imagens", "conferencia_referencias", "material_gerado", "baralhos",
+                   "bases", "base_externa", "conferencia_trechos", "imagens", "estilo_cartao"],
       "properties": {
         "formato": { "$ref": "#/$defs/texto" },
         "fontes": { "$ref": "#/$defs/texto" },
@@ -23,11 +25,17 @@
         "conferencia_imagens": { "$ref": "#/$defs/texto" },
         "conferencia_referencias": { "$ref": "#/$defs/texto" },
         "material_gerado": { "$ref": "#/$defs/texto" },
-        "baralhos": { "$ref": "#/$defs/texto" }
+        "baralhos": { "$ref": "#/$defs/texto" },
+        "bases": { "$ref": "#/$defs/modelo_por_item" },
+        "base_externa": { "$ref": "#/$defs/modelo_por_item" },
+        "conferencia_trechos": { "$ref": "#/$defs/texto" },
+        "imagens": { "$ref": "#/$defs/texto" },
+        "estilo_cartao": { "$ref": "#/$defs/texto" }
       }
     }
   },
   "$defs": {
-    "texto": { "type": "string", "minLength": 1 }
+    "texto": { "type": "string", "minLength": 1 },
+    "modelo_por_item": { "type": "string", "pattern": "\\{item\\}" }
   }
 }

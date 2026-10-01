@@ -1,0 +1,17 @@
+{
+  "versao_schema": 1,
+  "item": "[id do item, o mesmo do formato.json]",
+  "lugares": [
+    {
+      "fonte": "[CHAVE-DA-FONTE]",
+      "arquivo": "docs/material-base/fontes-externas/[arquivo].pdf",
+      "paginas": [1],
+      "desloca": 0
+    }
+  ],
+  "classes": {},
+  "juntar": [],
+  "cobertura": {
+    "[id do subtópico]": "aula"
+  }
+}

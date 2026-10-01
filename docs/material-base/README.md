@@ -14,10 +14,12 @@ pendência a resolver depois (ver seção 10 da
 - A transcrição literal do material de aula (OCR ou equivalente) e a base de trechos
   literais do material de fora vão em `gerados-ocr/` — são a base contra a qual se
   confere tudo o que se escreve, e também nunca são versionadas (ver seção 5 da
-  metodologia). Ali ficam também os dois arquivos de conferência: o das transcrições
-  contra a imagem de cada página, `CONFERENCIA-COM-IMAGEM.md`, gerado por
-  `scripts/conferencia.py`, e o das referências contra a cópia de cada fonte,
-  `CONFERENCIA-REFERENCIAS.md`, gerado por `scripts/referencias.py`.
+  metodologia). Ali ficam também a base de cada item, `[item]-fontes-externas.md`, e os
+  três arquivos de conferência, com as imagens deles na subpasta `imagens/`: o das
+  transcrições contra a imagem de cada página, `CONFERENCIA-COM-IMAGEM.md`, gerado por
+  `scripts/conferencia.py`; o das referências contra a cópia de cada fonte,
+  `CONFERENCIA-REFERENCIAS.md`, gerado por `scripts/referencias.py`; e o das frases do
+  material de fora, `CONFERENCIA-TRECHOS.md`, gerado por `scripts/base_externa.py`.
 - Os caminhos daqui são os do modelo. Em cada projeto, quem diz onde fica cada coisa é o
   `projeto.json` da raiz (ver o [README dos scripts](../../scripts/README.md)).
 - Antes de escrever qualquer coisa em `docs/material-gerado/`, leia este material

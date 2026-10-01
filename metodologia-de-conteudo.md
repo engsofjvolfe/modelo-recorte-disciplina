@@ -204,13 +204,21 @@ disponibilizar publicamente: ele também não é de quem mantém o projeto. Dê 
 um nome que comece pela entrada e pelo ano da referência dela, pra achar o arquivo a
 partir da citação.
 
-Do material de fora, faça também uma base literal, no mesmo padrão da transcrição: todo
-trecho dele que trata do que a aula não cobre — não só o que você já usou —, copiado
-letra por letra, cada um com a citação da fonte (entrada, ano e página impressa) e a
-posição da página no arquivo, pra achar o trecho no original. Faça um arquivo por item,
-em `docs/material-base/gerados-ocr/` (por exemplo, `[item]-fontes-externas.md`). É
-contra essa base que se confere cada fato tirado do material de fora, e ela também
-passa pela conferência humana, contra o original.
+Do material de fora, faça também uma base literal, item por item — e ninguém copia
+trecho à mão. No arquivo de dados do item (`docs/bases/[item].json`, copiado de
+`modelo-dados/base.json`), declare quais páginas de quais fontes foram lidas e marque
+cada subtópico da grade do formato como coberto pela aula, pelo material de fora ou como
+lacuna. `python scripts/base_externa.py` recolhe todo o texto dessas páginas, sem
+filtro, separado em frases, cada uma com um código; a IA classifica cada frase — usada
+(com o subtópico e se a fonte afirma ou trata como possibilidade), de outro item,
+repetida, fora do recorte ou não é conteúdo —, e o script grava a base do item, só com
+as frases usadas, letra por letra, com a citação e a página. Ele recusa frase sem classe,
+subtópico sem marca, subtópico do material de fora sem frase nenhuma e frase usada onde
+a aula já cobre. A base e a conferência dela — cada página com as frases e a classe de
+cada uma, com tique da IA e da pessoa — ficam fora do controle de versão; o arquivo de
+dados, que só tem códigos e decisões, é versionado. É contra essa base que se confere
+cada fato tirado do material de fora, e frase que a fonte trata como possibilidade entra
+no material com a ressalva escrita, nunca como certeza.
 
 ### Cite cada fonte, conforme a ABNT
 
@@ -424,9 +432,10 @@ JSON nem aceita comentário.
 
 ## 11. Checklist: adicionando uma disciplina nova
 
-1. Prepare o projeto: copie `modelo-dados/projeto.json` pra raiz dele — é o mapa de onde
-   fica cada coisa, e os scripts tiram todo caminho dali (se mudar uma pasta de lugar,
-   mude também o `.gitignore`, pra o material de terceiros continuar fora do GitHub) — e
+1. Prepare o projeto: copie `modelo-dados/projeto.json` e `modelo-dados/estilo-cartao.css`
+   pra raiz dele — o primeiro é o mapa de onde fica cada coisa, e os scripts tiram todo
+   caminho dali (se mudar uma pasta de lugar, mude também o `.gitignore`, pra o material
+   de terceiros continuar fora do GitHub); o segundo é a aparência dos cartões — e
    ative o hook de commit: copie `.githooks/` pra raiz do projeto novo, adicione
    `.githooks/` ao `.gitignore` desse projeto (a pasta é ferramenta local de quem
    mantém, não faz parte do pacote versionado de cada disciplina — só é versionada
@@ -472,8 +481,8 @@ JSON nem aceita comentário.
    `docs/material-base/fontes-externas/`.
 9. Confira a base literal: a transcrição de cada página tem só o que está escrito nela,
    com a posição no arquivo e o número impresso, e tem o tique da pessoa no arquivo de
-   conferência; a base de cada material de fora traz todo trecho que trata do que a
-   aula não cobre, com a citação de cada um.
+   conferência; o arquivo de base de cada item não deixa frase sem classe nem subtópico
+   sem marca, e cada página da conferência dos trechos tem o tique da pessoa.
 
 ---
 
