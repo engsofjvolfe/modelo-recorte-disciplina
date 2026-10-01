@@ -129,7 +129,7 @@ imagem e devolve como texto comum). Essa transcrição não é opcional, com ou 
 de IA: ela é o que permite conferir, depois, que nada do material ficou de fora do que
 você escreveu — texto literal e completo é mais fácil de conferir contra o que foi
 escrito do que voltar num PDF escaneado toda vez. Guarde essa transcrição também sem
-disponibilizar publicamente.
+disponibilizar publicamente, no padrão de *Como transcrever*, logo abaixo.
 
 Ao escrever o conteúdo de estudo — sozinho, ou com ajuda de um assistente de IA, o que
 preferir — leia o material inteiro antes de escrever qualquer coisa, sem usar nenhuma
@@ -147,6 +147,29 @@ Se o nome de um arquivo de origem não bater com o conteúdo real dele, corrija 
 arquivo (registrando essa correção em algum lugar), em vez de conviver com o nome
 errado.
 
+### Como transcrever
+
+Transcreva página por página (ou slide por slide), marcando duas coisas em cada uma: a
+posição dela no arquivo, que é por onde se acha a imagem pra conferir, e o número
+impresso na própria página, que é o que a citação usa. Os dois costumam ser diferentes
+(capa, ficha técnica e páginas em algarismos romanos contam no arquivo, mas não na
+numeração impressa). Quando a página não tem número impresso, como costuma acontecer
+com slides, a citação usa a posição dela no arquivo, como slide. Entra todo texto que
+está escrito na página, inclusive o de dentro de figuras, tabelas e esquemas, e cada
+item junto do rótulo que lhe dá contexto (o título da lista, a legenda, o cabeçalho da
+coluna), porque um item solto pode mudar de sentido. Não entra nada que não esteja
+escrito: nem descrição de imagem, nem explicação, nem correção. Guarde a transcrição em
+`docs/material-base/gerados-ocr/`, com o mesmo nome do arquivo original (só a extensão
+muda).
+
+Um fato que só a imagem mostra, sem texto, não está na transcrição. Se ele precisar
+entrar no material, a prova dele é a própria imagem, conferida por uma pessoa, ou uma
+fonte de fora que o diga por escrito.
+
+Antes de usar a transcrição como base, uma pessoa a confere contra a imagem de cada
+página: OCR e IA trocam letras, pulam linhas e às vezes escrevem o que não está lá. Até
+essa conferência, a transcrição não prova nada.
+
 ### Quando a aula não cobre um eixo
 
 Se o material de aula não trouxer o que algum eixo da ficha pede pra um item (ver
@@ -161,13 +184,22 @@ disponibilizar publicamente: ele também não é de quem mantém o projeto. Dê 
 um nome que comece pela entrada e pelo ano da referência dela, pra achar o arquivo a
 partir da citação.
 
+Do material de fora, faça também uma base literal, no mesmo padrão da transcrição: todo
+trecho dele que trata do que a aula não cobre — não só o que você já usou —, copiado
+letra por letra, cada um com a citação da fonte (entrada, ano e página impressa) e a
+posição da página no arquivo, pra achar o trecho no original. Faça um arquivo por item,
+em `docs/material-base/gerados-ocr/` (por exemplo, `[item]-fontes-externas.md`). É
+contra essa base que se confere cada fato tirado do material de fora, e ela também
+passa pela conferência humana, contra o original.
+
 ### Cite cada fonte, conforme a ABNT
 
 Todo documento que escreve algo tirado de uma fonte — teoria fundamental, dicionário,
 ficha, planilha de perguntas — cita essa fonte ali mesmo, junto do fato, segundo a norma
 de citações (no Brasil, a ABNT NBR 10520, no sistema autor-data): a mesma entrada da
 referência (o autor, a instituição ou, sem autor, o começo do título), o ano e o local
-do trecho (página ou slide). Diga o fato com suas palavras; se precisar transcrever
+do trecho: a página impressa no documento ou, se ela não tiver número impresso, a
+posição do slide no arquivo. Diga o fato com suas palavras; se precisar transcrever
 literalmente, use aspas e só um trecho curto, como a norma manda. Na planilha, a
 citação vai numa coluna `fonte`, que aparece no cartão, e a resposta é sempre com
 palavras próprias ([seção 6](#6-cartões-de-revisão-espaçada)).
@@ -343,8 +375,9 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
 - **Conteúdo gerado** (teoria fundamental, dicionário, ficha, planilhas, o documento
   de fontes, e os documentos de metodologia): escolha uma licença de conteúdo que exija
   dar crédito.
-- **Material de terceiros** (o material de aula original, sua transcrição literal e as
-  cópias do material de fora — ver [seção 5](#5-trate-as-fontes)):
+- **Material de terceiros** (o material de aula original, sua transcrição literal, as
+  cópias do material de fora e a base de trechos dele — ver
+  [seção 5](#5-trate-as-fontes)):
   não coloque sob nenhuma licença deste projeto, porque quem mantém o projeto não é
   quem escreveu esse material. Nunca disponibilize publicamente, de forma permanente —
   não "por enquanto".
@@ -365,15 +398,15 @@ quebraria a leitura de quem abre o arquivo só como tabela de dados.
    `git config core.hooksPath .githooks` mais `git config commit.template
    .githooks/commit-template.txt` uma vez (ver `.githooks/README.md`).
 2. Guarde o material de aula original por convenção, com transcrição literal completa,
-   registre a referência de cada aula em `docs/FONTES.md` e leia tudo antes de escrever
-   qualquer coisa.
+   conferida por uma pessoa contra a imagem de cada página; registre a referência de
+   cada aula em `docs/FONTES.md` e leia tudo antes de escrever qualquer coisa.
 3. Decida o nome do elo central do dicionário e os nomes dos eixos da ficha — tome essa
    decisão de forma explícita, sem herdar de outra disciplina.
 4. Escreva o documento de teoria fundamental primeiro — é onde as categorias que os
    itens específicos vão citar precisam estar definidas.
 5. Escreva dicionário e ficha por item, citando os termos de teoria fundamental que se
    aplicam a cada um. Onde a aula não cobrir um eixo, complete com material de fora,
-   guardado e citado como diz a seção 5.
+   guardado, com base de trechos e citado como diz a seção 5.
 6. Gere as planilhas a partir do dicionário/ficha, e confira se cobrem tudo que
    deveriam cobrir.
 7. Atualize as quatro seções correspondentes nos quatro documentos de navegação raiz.
@@ -398,6 +431,10 @@ quebraria a leitura de quem abre o arquivo só como tabela de dados.
    cita essa fonte; toda citação tem a referência em `docs/FONTES.md`; toda referência
    de lá é citada em algum lugar; e a cópia de cada material de fora está guardada em
    `docs/material-base/fontes-externas/`.
+9. Confira a base literal: a transcrição de cada página tem só o que está escrito nela,
+   com a posição no arquivo e o número impresso, e passou pela conferência humana; a
+   base de cada material de fora traz todo trecho que trata do que a aula não cobre,
+   com a citação de cada um.
 
 ---
 
