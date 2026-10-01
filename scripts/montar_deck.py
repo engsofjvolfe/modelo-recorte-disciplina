@@ -17,7 +17,9 @@ Qualquer outra coluna (disciplina, tipo_pergunta, fonte, ordem, ou qualquer nome
 disciplina preferir) e opcional e vira campo do cartao automaticamente, com o nome que
 a propria coluna tiver -- nao exige nenhuma mudanca neste script. Uma coluna
 "disciplina", se presente, organiza os cartoes em subdecks por valor distinto; se
-ausente, todos os cartoes desse CSV vao para um unico deck.
+ausente, todos os cartoes desse CSV vao para um unico deck. Uma coluna "fonte" (a
+citacao da fonte do fato, que a metodologia pede em toda planilha), se presente,
+aparece no verso, abaixo da resposta.
 
 Cada arquivo processado vira seu proprio pacote .apkg (nomeado a partir do proprio nome
 do arquivo). O modelo de nota (campos e template do cartao) e construido a partir do
@@ -58,11 +60,14 @@ BASE = _raiz_projeto(Path(__file__).resolve().parent)
 MATERIAL_GERADO = BASE / "docs" / "material-gerado"
 SAIDA_DIR = BASE / "anki-decks"
 
-# Colunas com papel de bastidor: se existirem, viram campo do cartao (pra nao perder a
-# informacao), mas nao aparecem na linha de metadados do cartao -- so pra nao poluir a
-# tela com numero de ordem ou citacao de fonte toda vez. Nao sao exigidas; um CSV sem
-# nenhuma das duas funciona normalmente.
-COLUNAS_SO_CAMPO = {"ordem", "fonte"}
+# Coluna com papel de bastidor: se existir, vira campo do cartao (pra nao perder a
+# informacao), mas nao aparece na linha de metadados do cartao -- so pra nao poluir a
+# tela com numero de ordem toda vez. Nao e exigida.
+COLUNAS_SO_CAMPO = {"ordem"}
+
+# Coluna com a citacao da fonte do fato: se existir, aparece no verso, abaixo da
+# resposta, e nao na linha de metadados da frente.
+COLUNA_FONTE = "fonte"
 
 
 def normalizar(texto):
@@ -86,8 +91,13 @@ def construir_modelo(colunas_extra, rotulo):
     "formato" de CSV sempre reusa o mesmo modelo ao reimportar."""
     campos_extra = [campo_anki(c) for c in colunas_extra]
     campos_visiveis = [
-        campo_anki(c) for c in colunas_extra if c.lower() not in COLUNAS_SO_CAMPO
+        campo_anki(c)
+        for c in colunas_extra
+        if c.lower() not in COLUNAS_SO_CAMPO and c.lower() != COLUNA_FONTE
     ]
+    campo_fonte = next(
+        (campo_anki(c) for c in colunas_extra if c.lower() == COLUNA_FONTE), None
+    )
     assinatura = ",".join(colunas_extra) or "minimo"
     model_id = id_estavel("modelo::" + assinatura)
 
@@ -106,6 +116,11 @@ def construir_modelo(colunas_extra, rotulo):
             "afmt": (
                 '{{FrontSide}}<hr id="answer">'
                 '<div class="resposta">{{Resposta}}</div>'
+                + (
+                    f'{{{{#{campo_fonte}}}}}<div class="fonte">{{{{{campo_fonte}}}}}</div>{{{{/{campo_fonte}}}}}'
+                    if campo_fonte
+                    else ""
+                )
             ),
         }],
         css="""
@@ -114,6 +129,7 @@ def construir_modelo(colunas_extra, rotulo):
         .meta-item:not(:last-child)::after { content: " • "; }
         .pergunta { font-weight: 600; }
         .resposta { margin-top: 10px; }
+        .fonte { color: #888; font-size: 13px; margin-top: 12px; }
         """,
     )
 

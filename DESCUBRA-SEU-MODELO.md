@@ -42,9 +42,10 @@ do dicionário — direto no material da sua disciplina. Não existe um arquivo 
 pra copiar aqui: o exemplo é a disciplina real linkada no topo deste documento.
 
 O gerador de baralho (`scripts/montar_deck.py`) só exige duas colunas por nome: uma
-chamada `pergunta` e outra `resposta`. Qualquer outra coluna que você criar vira parte
-do cartão automaticamente, com o nome que você escolheu — nenhuma outra coluna é
-obrigatória.
+chamada `pergunta` e outra `resposta`. A metodologia pede mais uma em toda planilha, a
+`fonte`, com a citação de cada fato, que o gerador mostra no verso do cartão (seção 5
+da metodologia). Qualquer outra coluna que você criar vira parte do cartão
+automaticamente, com o nome que você escolheu.
 
 ---
 

@@ -18,7 +18,8 @@ da sua disciplina.
 ## 1. Escreva três documentos de conteúdo
 
 Escreva, no mínimo, três documentos pra cada disciplina, cada um com uma função própria
-e exclusiva:
+e exclusiva. Nos três, todo fato tirado de uma fonte leva a citação dela, como diz a
+[seção 5](#5-trate-as-fontes):
 
 ### A) Teoria fundamental
 
@@ -43,9 +44,9 @@ assunto, então o elo do meio — o que faz aquele item "funcionar" — vai prec
 nome que só faz sentido pra sua disciplina; não herde o nome que outra disciplina usou.
 
 Escreva num tom narrativo, em prosa corrida, sem tom pessoal e sem comentar sobre o
-próprio texto (não escreva algo como "isto é uma lista completa", nem cite de qual
-material a informação veio — isso fica nos documentos da raiz do projeto, não dentro do
-texto de estudo). Sempre que um item usar uma categoria que você já definiu no
+próprio texto (não escreva algo como "isto é uma lista completa"). Citar a fonte de um
+fato não é comentar o texto: a citação continua valendo aqui, junto de cada fato que
+veio de uma fonte. Sempre que um item usar uma categoria que você já definiu no
 documento de teoria fundamental, cite essa categoria pelo nome (ver
 [seção 3](#3-cite-uma-categoria-em-vez-de-redefinir)) em vez de explicá-la de novo ali.
 
@@ -113,7 +114,7 @@ qualquer disciplina futura que usar este documento.
 
 ---
 
-## 5. Trate o material de aula original
+## 5. Trate as fontes
 
 Guarde o material de aula original da disciplina — slides, apostila, ou o que for —
 numa pasta própria (`material-base/`, por convenção). Essa pasta carrega um arquivo
@@ -156,19 +157,32 @@ aula: o fato tem de estar escrito nesse material, nunca deduzido.
 
 Guarde uma cópia de cada material de fora junto do material de aula, numa subpasta
 própria (`docs/material-base/fontes-externas/`, por convenção), também sem versionar nem
-disponibilizar publicamente: ele também não é de quem mantém o projeto.
+disponibilizar publicamente: ele também não é de quem mantém o projeto. Dê a cada cópia
+um nome que comece pela entrada e pelo ano da referência dela, pra achar o arquivo a
+partir da citação.
 
-Cite cada fonte corretamente, segundo uma norma de referência (no Brasil, a ABNT NBR
-6023), num documento de referências do projeto, `docs/FONTES.md`. Ele lista todas as
-fontes — as aulas inclusive —, cada uma com a data em que foi obtida ou consultada e o
-caminho da cópia guardada, por exemplo:
+### Cite cada fonte, conforme a ABNT
+
+Todo documento que escreve algo tirado de uma fonte — teoria fundamental, dicionário,
+ficha, planilha de perguntas — cita essa fonte ali mesmo, junto do fato, segundo a norma
+de citações (no Brasil, a ABNT NBR 10520, no sistema autor-data): a mesma entrada da
+referência (o autor, a instituição ou, sem autor, o começo do título), o ano e o local
+do trecho (página ou slide). Diga o fato com suas palavras; se precisar transcrever
+literalmente, use aspas e só um trecho curto, como a norma manda. Na planilha, a
+citação vai numa coluna `fonte`, que aparece no cartão, e a resposta é sempre com
+palavras próprias ([seção 6](#6-cartões-de-revisão-espaçada)).
+
+As referências completas de todas as fontes citadas — as aulas e o material de fora —
+ficam num documento só, `docs/FONTES.md`, como a lista de referências do fim de um
+trabalho: em ordem alfabética, segundo a norma de referências (ABNT NBR 6023), e nada
+além delas. Ele não diz onde cada fonte foi usada, porque isso é o papel da citação em
+cada documento, nem onde a cópia está guardada. Toda citação tem a referência ali, e
+toda referência é citada em algum lugar. Por exemplo:
 
 ```
-[TÍTULO DA AULA]. [S. l.: s. n.], [20--]. 1 arquivo PDF ([n] slides). Material de aula, não publicado.
-Arquivo obtido em: [data]. Arquivo: docs/material-base/[arquivo].pdf.
+[TÍTULO da aula]. [S. l.: s. n.], [20--]. 1 arquivo PDF ([n] slides). Material de aula, não publicado.
 
 [AUTOR OU INSTITUIÇÃO]. [Título]. [Local]: [editora], [ano]. Disponível em: [endereço]. Acesso em: [data].
-Arquivo: docs/material-base/fontes-externas/[arquivo].
 ```
 
 Esse documento é conteúdo do projeto e é versionado: o que fica fora do controle de
@@ -196,10 +210,11 @@ Você não precisa extrair essas perguntas à mão. Envie o dicionário e a fich
 escritos, seção 1) pra um assistente de IA, com uma instrução como esta:
 
 > A partir do dicionário de gatilhos e da ficha determinística em anexo, gere uma
-> planilha CSV de perguntas e respostas de revisão espaçada. Use uma coluna `pergunta`
-> e uma `resposta` (obrigatórias), mais as colunas [nomeie as que fizerem sentido pra
-> sua disciplina — por exemplo, o que identifica o item, o tipo de pergunta, de onde
-> veio]. Para cada item específico, gere uma quantidade pequena e fixa de perguntas (a
+> planilha CSV de perguntas e respostas de revisão espaçada. Use uma coluna `pergunta`,
+> uma `resposta`, escrita com palavras próprias, e uma `fonte`, com a citação que o fato
+> já tem no dicionário ou na ficha (as três obrigatórias), mais as colunas [nomeie as
+> que fizerem sentido pra sua disciplina — por exemplo, o que identifica o item, o tipo
+> de pergunta]. Para cada item específico, gere uma quantidade pequena e fixa de perguntas (a
 > mesma quantidade pra todo item da disciplina), cobrindo os fatos de maior valor de
 > revisão espalhados pelos diferentes elos/eixos daquele item — não repita sempre o
 > mesmo tipo de pergunta pra todos os itens se isso deixar de fora um fato importante e
@@ -208,7 +223,8 @@ escritos, seção 1) pra um assistente de IA, com uma instrução como esta:
 > nenhum fato que não esteja no texto do dicionário/ficha fornecido.
 
 Depois de gerada, confira a planilha à mão, lado a lado com o dicionário e a ficha: ela
-cobre tudo que deveria cobrir, sem inventar nem perder nada? Essa conferência é sua,
+cobre tudo que deveria cobrir, sem inventar nem perder nada, e cada cartão traz a
+citação certa? Essa conferência é sua,
 não da IA — é o que garante que nada ficou de fora.
 
 Uma vez com a planilha pronta e conferida, o baralho do Anki será gerado automaticamente
@@ -246,7 +262,9 @@ um novo.
 >    cartão por linha. Toda planilha tem uma coluna `pergunta` (frente do cartão) e uma
 >    `resposta` (verso). Qualquer outra coluna que existir no arquivo também deve virar
 >    um campo do cartão, com esse mesmo nome — os nomes dessas colunas variam de
->    planilha pra planilha, e o script não deve esperar nenhum nome específico.
+>    planilha pra planilha, e o script não deve esperar nenhum nome específico. A única
+>    exceção é a coluna `fonte`, com a citação do fato: se existir, ela aparece no
+>    verso, abaixo da resposta.
 > 3. Não escreva, em nenhum lugar do código, o nome de uma disciplina, de um item
 >    específico, ou uma quantidade de perguntas fixada — descubra tudo a partir do que
 >    existir nos arquivos a cada execução, pra funcionar com uma planilha nova sem
@@ -326,7 +344,7 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
   de fontes, e os documentos de metodologia): escolha uma licença de conteúdo que exija
   dar crédito.
 - **Material de terceiros** (o material de aula original, sua transcrição literal e as
-  cópias do material de fora — ver [seção 5](#5-trate-o-material-de-aula-original)):
+  cópias do material de fora — ver [seção 5](#5-trate-as-fontes)):
   não coloque sob nenhuma licença deste projeto, porque quem mantém o projeto não é
   quem escreveu esse material. Nunca disponibilize publicamente, de forma permanente —
   não "por enquanto".
@@ -376,8 +394,10 @@ quebraria a leitura de quem abre o arquivo só como tabela de dados.
 7. Confira a planilha de perguntas linha por linha contra o dicionário/ficha de origem
    — procure um fato inventado que não está na fonte, ou um fato da fonte que ficou de
    fora.
-8. Confira se cada material de fora usado está citado em `docs/FONTES.md`, com a data
-   de consulta, e se a cópia dele está guardada em `docs/material-base/fontes-externas/`.
+8. Confira as citações: todo fato tirado de uma fonte, em qualquer documento ou cartão,
+   cita essa fonte; toda citação tem a referência em `docs/FONTES.md`; toda referência
+   de lá é citada em algum lugar; e a cópia de cada material de fora está guardada em
+   `docs/material-base/fontes-externas/`.
 
 ---
 

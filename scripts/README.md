@@ -16,8 +16,9 @@ Entra no fim, com as planilhas de pergunta prontas e conferidas (seção 6 da
 Lê cada planilha `perguntas-*.csv` de `docs/material-gerado/` e grava um `.apkg` por
 planilha em `anki-decks/`, pronto pra importar no Anki. As colunas `pergunta` e
 `resposta` são obrigatórias, e qualquer outra vira campo do cartão, com o mesmo nome.
-Uma coluna `disciplina` separa os cartões em subdecks; `ordem` e `fonte` viram campo,
-mas não aparecem na linha de cima da pergunta.
+Uma coluna `disciplina` separa os cartões em subdecks; `ordem` vira campo, mas não
+aparece na linha de cima da pergunta; e a `fonte`, com a citação do fato, aparece no
+verso, abaixo da resposta.
 
 - `python scripts/montar_deck.py` gera todos os baralhos.
 - `python scripts/montar_deck.py [trecho]` gera só os das planilhas cujo nome contém o

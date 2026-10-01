@@ -65,6 +65,9 @@ documento:
 - **Teoria fundamental** — os conceitos gerais que vêm antes de entrar em item
   específico.
 
+Todo fato, nos documentos e nos cartões, traz a citação da fonte de onde veio; as
+referências completas estão em `docs/FONTES.md`.
+
 Resumindo:
 
 ```
