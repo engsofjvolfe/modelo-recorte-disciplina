@@ -5,6 +5,19 @@ dicionário de gatilhos, ficha determinística, planilhas de pergunta, baralho d
 pra qualquer disciplina de graduação, a partir do material de aula dela. Pra usar,
 comece pelos dois primeiros itens da lista abaixo, nessa ordem.
 
+## Uso de IA
+
+O método deste modelo usa IA na produção do material: transcrever o material de aula,
+redigir os documentos, gerar as planilhas de pergunta e escrever os scripts (seções 5 a 7
+da [metodologia](metodologia-de-conteudo.md)). O que a IA produz não vira material final
+direto: passa primeiro por uma análise mecânica, a que um script consegue fazer, e depois
+pela análise humana, contra o material de origem. A escolha do recorte, a decisão sobre
+cada fato e a palavra final são de uma pessoa.
+
+Qualquer assistente de IA serve. Como usá-lo — gratuito ou pago, sozinho ou com
+agentes trabalhando em equipe — é decisão de quem segue o modelo. Este repositório não
+ensina a usar IA — só deixa claro onde ela entra.
+
 ## O que tem aqui
 
 - **[Descubra seu modelo](DESCUBRA-SEU-MODELO.md)** — o primeiro passo: as perguntas que
