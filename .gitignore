@@ -1,0 +1,56 @@
+# === Material de terceiros — NUNCA versionar (ver NOTICE.md) ===
+# Material de aula de terceiros (PDFs de slides ou equivalente). Nao e nosso para
+# redistribuir; fica so localmente. Isto nao e uma pendencia a resolver depois — e
+# uma regra de proveniencia permanente (ver secao 10 da metodologia de conteudo).
+docs/material-base/*.pdf
+docs/material-base/gerados-ocr
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# === Saida gerada / temporaria dos scripts deste projeto ===
+_media_apkg_tmp/
+*.apkg.bak
+
+# === Editor / IDE ===
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.code-workspace
+*.swp
+*.swo
+
+# === Ferramentas de IA (configs/cache locais, nao para versionar) ===
+.claude/settings.local.json
+.cursor/
+.continue/
+.aider*
+.copilot/
+.claude/
+
+# === Sistema operacional ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Backups e arquivos compactados ad-hoc (nao sao entregaveis do projeto) ===
+*.rar
+*.zip
+*.7z
+*.bak
