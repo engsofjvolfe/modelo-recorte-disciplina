@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "meses.schema.json",
+  "title": "Abreviatura dos meses por idioma",
+  "type": "object",
+  "required": ["versao_schema", "fonte", "meses"],
+  "additionalProperties": true,
+  "properties": {
+    "versao_schema": { "const": 1 },
+    "fonte": { "type": "string", "minLength": 1 },
+    "meses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 12,
+        "maxItems": 12,
+        "items": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

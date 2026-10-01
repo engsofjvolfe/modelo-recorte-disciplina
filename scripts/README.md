@@ -119,11 +119,23 @@ Usa só o Python: não precisa instalar nada.
 autoria, título, local, editora, data, endereço, data de acesso. O script escreve cada
 referência no padrão da ABNT (NBR 6023), coloca em ordem alfabética e grava o arquivo de
 referências do projeto (no modelo, `docs/FONTES.md`). Ninguém digita a referência à mão.
+Ele monta também a chamada de cada fonte, o que vai no meio do texto, como
+`(Silva, 2020)`, pela norma de citações (NBR 10520). As [Regras da ABNT](../regras-abnt.md)
+explicam cada campo do `fontes.json` e o que cada norma pede.
 
 Junto, ele monta a conferência das referências (no modelo, `CONFERENCIA-REFERENCIAS.md`,
-na pasta das transcrições): cada referência como ficou, ao lado da cópia da fonte — a
-primeira página, se for PDF —, com duas caixas de tique, uma pra IA e outra pra pessoa.
-Confira se a referência bate com a folha de rosto ou com a página do documento.
+na pasta das transcrições): cada referência e a chamada dela como ficaram, ao lado da
+cópia da fonte — a primeira página, se for PDF —, com duas caixas de tique, uma pra IA e
+outra pra pessoa. Confira se a referência bate com a folha de rosto ou com a página do
+documento.
+
+Três coisas dependem de você, nos dados: o campo `et_al`, no topo do arquivo, diz se uma
+fonte com quatro autores ou mais aparece só com o primeiro, seguido de *et al.*, ou com
+todos; o campo `idioma` de cada fonte diz em que língua sai o mês da data, e é
+obrigatório quando a data tem mês; e o campo `participacao` (`org.`, `coord.`...) diz que
+os autores organizaram a obra. O mês da data de acesso sai no idioma do texto, que vem
+do formato da disciplina (`docs/formato.json`, no modelo). A abreviatura dos meses de
+cada idioma fica em `scripts/normas/meses.json`, copiada da tabela da norma.
 
 **Quando usar.** Sempre que mudar o `fontes.json`. O `registrar_fonte.py` já roda este
 script sozinho.
@@ -132,9 +144,10 @@ script sozinho.
 
     python scripts/referencias.py
 
-**O que aparece.** Quantas referências foram gravadas e onde. `FALTA REFERÊNCIA` lista
-fonte registrada que ainda não tem dados no `fontes.json`; `CONFERIR` lista as
-referências que ainda não têm o tique da pessoa.
+**O que aparece.** Quantas referências foram gravadas e onde. `ERRO` aponta o que falta
+ou não pode ser nos dados, como uma data com mês numa fonte sem `idioma`; nesse caso nada
+é gravado. `FALTA REFERÊNCIA` lista fonte registrada que ainda não tem dados no
+`fontes.json`; `CONFERIR` lista as referências que ainda não têm o tique da pessoa.
 
 Precisa do Poppler quando alguma fonte é PDF, pra mostrar a primeira página.
 

@@ -10,7 +10,7 @@ O schema e achado pelo nome do arquivo de dados: "formato.json" ->
 
 Usa so a biblioteca padrao do Python, entao entende o subconjunto do JSON Schema que
 os schemas deste projeto usam: type, required, properties, additionalProperties,
-items, minItems, const, enum, not, minLength, pattern, allOf, anyOf, if/then/else e $ref
+items, minItems, maxItems, const, enum, not, minLength, pattern, allOf, anyOf, if/then/else e $ref
 para "#/$defs/...". Alem disso, uma regra fixa: numa lista de objetos que tem o campo
 "id" ou "chave", nenhum id e nenhuma chave se repete. Campos que o schema nao conhece
 sao aceitos sem conferir (o formato pode crescer).
@@ -104,6 +104,8 @@ def valida(valor, schema, raiz, caminho, erros):
     if isinstance(valor, list):
         if len(valor) < schema.get("minItems", 0):
             erros.append(f"{caminho}: lista com menos de {schema['minItems']} item(ns)")
+        if "maxItems" in schema and len(valor) > schema["maxItems"]:
+            erros.append(f"{caminho}: lista com mais de {schema['maxItems']} item(ns)")
         if "items" in schema:
             for i, item in enumerate(valor):
                 valida(item, schema["items"], raiz, f"{caminho}[{i}]", erros)

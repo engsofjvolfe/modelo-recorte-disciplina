@@ -230,7 +230,10 @@ do trecho: a página impressa no documento ou, se ela não tiver número impress
 posição do slide no arquivo. Diga o fato com suas palavras; se precisar transcrever
 literalmente, use aspas e só um trecho curto, como a norma manda. Na planilha, a
 citação vai numa coluna `fonte`, que aparece no cartão, e a resposta é sempre com
-palavras próprias ([seção 6](#6-cartões-de-revisão-espaçada)).
+palavras próprias ([seção 6](#6-cartões-de-revisão-espaçada)). A chamada de cada fonte —
+o nome e o ano, já com o *et al.* e as letras de desempate quando a norma pede — sai
+pronta na conferência das referências; o que cada norma pede, item por item, e o que cabe
+ao script, aos dados e a quem escreve, está nas [Regras da ABNT](regras-abnt.md).
 
 As referências completas de todas as fontes citadas — as aulas e o material de fora —
 ficam num documento só, `docs/FONTES.md`, como a lista de referências do fim de um
@@ -252,11 +255,11 @@ Ninguém escreve esse documento à mão. Os dados de cada fonte — autoria, tí
 editora, data, endereço, data de acesso, com uma chave curta — ficam em
 `docs/fontes.json` (copiado de `modelo-dados/fontes.json`), e `python
 scripts/referencias.py` monta cada referência pela norma, em ordem alfabética, e grava o
-`docs/FONTES.md`. Junto, ele gera a conferência das referências: cada referência como
-ficou, ao lado da cópia registrada da fonte (a primeira página, se for PDF), com uma
-caixa de tique pra IA e outra pra pessoa. Confira cada referência contra a folha de
-rosto ou a página do documento; se os dados ou a cópia mudarem depois do tique, o tique
-é retirado.
+`docs/FONTES.md`. Junto, ele gera a conferência das referências: cada referência e a
+chamada dela como ficaram, ao lado da cópia registrada da fonte (a primeira página, se
+for PDF), com uma caixa de tique pra IA e outra pra pessoa. Confira cada referência contra
+a folha de rosto ou a página do documento; se a referência, a chamada ou a cópia mudarem
+depois do tique, o tique é retirado.
 
 ---
 

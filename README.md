@@ -28,6 +28,9 @@ ensina a usar IA — só deixa claro onde ela entra.
 - **[Metodologia de conteúdo](metodologia-de-conteudo.md)** — o método inteiro, do
   material de aula ao cartão: o que vai em cada documento, como tratar o material de
   aula e como conferir, com os checklists de disciplina nova e de auditoria.
+- **[Regras da ABNT](regras-abnt.md)** — o que as normas de citação e de referência
+  pedem, item por item, em palavras simples, e quem cuida de cada regra: o script, os
+  dados das fontes ou quem escreve o texto.
 - **[Modelo dos documentos de raiz](modelo-documentos-raiz/LEIA-ME.md)** — os quatro
   documentos que ficam na raiz do projeto da sua disciplina (a apresentação técnica, o
   índice, o manual de uso e o aviso de licenças), prontos pra copiar e preencher.

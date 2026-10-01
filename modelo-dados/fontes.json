@@ -1,5 +1,6 @@
 {
   "versao_schema": 1,
+  "et_al": false,
   "fontes": [
     {
       "chave": "[CHAVE-DA-AULA]",
@@ -12,6 +13,7 @@
     {
       "chave": "[CHAVE-DO-DOCUMENTO]",
       "tipo": "monografia",
+      "idioma": "[idioma da publicação]",
       "autores": [
         { "entidade": ["[Instituição]", "[órgão dentro dela]"] }
       ],
