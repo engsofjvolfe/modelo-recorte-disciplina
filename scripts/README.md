@@ -22,6 +22,34 @@ repetidos. Campo novo é aceito, porque o formato pode crescer.
 
 Usa só o Python, sem nada a instalar.
 
+## `registrar_fonte.py` — liga o documento gerado à fonte dele
+
+Entra assim que uma transcrição, ou outro documento gerado de uma fonte, é criada.
+
+Grava no topo do documento de qual arquivo ele veio: o caminho e a impressão digital
+(o hash) do arquivo. É esse registro que liga o gerado à fonte, não o nome dos arquivos.
+Um documento que junta várias fontes leva uma linha por fonte, cada uma com uma chave
+curta.
+
+- `python scripts/registrar_fonte.py [documento] [arquivo de origem]`
+- `python scripts/registrar_fonte.py [documento] [arquivo de origem] --chave [CHAVE]`
+
+Usa só o Python, sem nada a instalar.
+
+## `conferencia.py` — monta a conferência das transcrições
+
+Entra com as transcrições prontas e registradas, antes de escrever qualquer material
+(seção 5 da [metodologia](../metodologia-de-conteudo.md)).
+
+Gera `docs/material-base/gerados-ocr/CONFERENCIA-COM-IMAGEM.md`: cada página do PDF, com a
+imagem e o que a transcrição tem pra ela, e duas caixas de tique, uma pra IA e outra pra
+pessoa, que é sempre o último elo. O script não julga o conteúdo, só mostra. Se o texto
+de uma página ou o PDF mudar depois do tique, o tique é retirado.
+
+- `python scripts/conferencia.py`
+
+Precisa do Poppler, que traz os comandos `pdfinfo` e `pdftoppm`.
+
 ## `montar_deck.py` — das planilhas de pergunta ao baralho do Anki
 
 Entra no fim, com as planilhas de pergunta prontas e conferidas (seção 6 da

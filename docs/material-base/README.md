@@ -13,7 +13,9 @@ pendência a resolver depois (ver seção 10 da
 - A transcrição literal do material de aula (OCR ou equivalente) e a base de trechos
   literais do material de fora vão em `gerados-ocr/` — são a base contra a qual se
   confere tudo o que se escreve, e também nunca são versionadas (ver seção 5 da
-  metodologia).
+  metodologia). Ali fica também o arquivo de conferência dessas transcrições contra a
+  imagem de cada página, `CONFERENCIA-COM-IMAGEM.md`, gerado por
+  `scripts/conferencia.py`.
 - Antes de escrever qualquer coisa em `docs/material-gerado/`, leia este material
   inteiro, sem ferramenta que corte ou resuma automaticamente o texto (ver seção 5 da
   metodologia).

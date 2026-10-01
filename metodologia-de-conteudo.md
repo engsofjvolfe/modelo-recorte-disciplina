@@ -159,16 +159,30 @@ está escrito na página, inclusive o de dentro de figuras, tabelas e esquemas, 
 item junto do rótulo que lhe dá contexto (o título da lista, a legenda, o cabeçalho da
 coluna), porque um item solto pode mudar de sentido. Não entra nada que não esteja
 escrito: nem descrição de imagem, nem explicação, nem correção. Guarde a transcrição em
-`docs/material-base/gerados-ocr/`, com o mesmo nome do arquivo original (só a extensão
-muda).
+`docs/material-base/gerados-ocr/` e, assim que ela for criada, registre no topo dela de
+qual arquivo veio, com `python scripts/registrar_fonte.py [transcrição] [arquivo
+original]`: o script grava o caminho do arquivo e a impressão digital dele (o hash). É
+esse registro que liga a transcrição ao original, não o nome dos arquivos.
+
+Cada página vira uma seção da transcrição, com o título no formato
+`## [como a citação chama a página] (arquivo p. [posição no arquivo])` — por exemplo,
+`## p. 12 (arquivo p. 14)` ou `## slide 3 (arquivo p. 3)`. Uma página sem texto nenhum
+fica com a seção e a marca `[sem texto]`.
 
 Um fato que só a imagem mostra, sem texto, não está na transcrição. Se ele precisar
 entrar no material, a prova dele é a própria imagem, conferida por uma pessoa, ou uma
 fonte de fora que o diga por escrito.
 
-Antes de usar a transcrição como base, uma pessoa a confere contra a imagem de cada
-página: OCR e IA trocam letras, pulam linhas e às vezes escrevem o que não está lá. Até
-essa conferência, a transcrição não prova nada.
+Antes de usar a transcrição como base, ela é conferida contra a imagem de cada página:
+OCR e IA trocam letras, pulam linhas e às vezes escrevem o que não está lá. Com a
+transcrição pronta, gere o arquivo de conferência (`python scripts/conferencia.py`). Ele
+nasce das transcrições, não do PDF, e mostra, página por página, a imagem da página no
+arquivo registrado e o que a transcrição tem pra ela — se não tem nada, aparece vazio —,
+com duas caixas de tique, uma pra IA e outra pra pessoa. O script não julga o conteúdo:
+quem confere é quem tica. A IA pode ticar primeiro, como uma primeira passada; a pessoa é
+sempre o último elo, e nenhuma página vale como conferida sem o tique dela. Se o texto
+de uma página ou o arquivo original mudar depois do tique, o tique é retirado. Até essa
+conferência, a transcrição não prova nada.
 
 ### Quando a aula não cobre um eixo
 
@@ -399,8 +413,9 @@ JSON nem aceita comentário.
    `git config core.hooksPath .githooks` mais `git config commit.template
    .githooks/commit-template.txt` uma vez (ver `.githooks/README.md`).
 2. Guarde o material de aula original por convenção, com transcrição literal completa,
-   conferida por uma pessoa contra a imagem de cada página; registre a referência de
-   cada aula em `docs/FONTES.md` e leia tudo antes de escrever qualquer coisa.
+   conferida por uma pessoa, página por página, no arquivo de conferência (seção 5);
+   registre a referência de cada aula em `docs/FONTES.md` e leia tudo antes de escrever
+   qualquer coisa.
 3. Decida o nome do elo central do dicionário e os nomes dos eixos da ficha — tome essa
    decisão de forma explícita, sem herdar de outra disciplina — e grave essas decisões
    em `docs/formato.json`, como diz o `DESCUBRA-SEU-MODELO.md`.
@@ -434,9 +449,9 @@ JSON nem aceita comentário.
    de lá é citada em algum lugar; e a cópia de cada material de fora está guardada em
    `docs/material-base/fontes-externas/`.
 9. Confira a base literal: a transcrição de cada página tem só o que está escrito nela,
-   com a posição no arquivo e o número impresso, e passou pela conferência humana; a
-   base de cada material de fora traz todo trecho que trata do que a aula não cobre,
-   com a citação de cada um.
+   com a posição no arquivo e o número impresso, e tem o tique da pessoa no arquivo de
+   conferência; a base de cada material de fora traz todo trecho que trata do que a
+   aula não cobre, com a citação de cada um.
 
 ---
 
