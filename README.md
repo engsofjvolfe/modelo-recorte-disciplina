@@ -7,7 +7,8 @@ comece pelos dois primeiros itens da lista abaixo, nessa ordem.
 
 ## Uso de IA
 
-O método deste modelo usa IA na produção do material: transcrever o material de aula,
+O método deste modelo usa IA na produção do material: propor o formato da disciplina
+(no [Descubra seu modelo](DESCUBRA-SEU-MODELO.md)), transcrever o material de aula,
 redigir os documentos, gerar as planilhas de pergunta e escrever os scripts (seções 5 a 7
 da [metodologia](metodologia-de-conteudo.md)). O que a IA produz não vira material final
 direto: passa primeiro por uma análise mecânica, a que um script consegue fazer, e depois
@@ -20,15 +21,19 @@ ensina a usar IA — só deixa claro onde ela entra.
 
 ## O que tem aqui
 
-- **[Descubra seu modelo](DESCUBRA-SEU-MODELO.md)** — o primeiro passo: as perguntas que
-  decidem o formato do material da sua disciplina, como os itens que ela tem, os fatos
-  que cada item precisa ter e as colunas que os cartões levam.
+- **[Descubra seu modelo](DESCUBRA-SEU-MODELO.md)** — o primeiro passo: você diz o curso,
+  a disciplina e o nível de estudo e responde, sozinho ou com ajuda de uma IA, às
+  perguntas que decidem o formato do material, como os itens que a disciplina tem, os
+  fatos que cada item precisa ter e as colunas que os cartões levam.
 - **[Metodologia de conteúdo](metodologia-de-conteudo.md)** — o método inteiro, do
   material de aula ao cartão: o que vai em cada documento, como tratar o material de
   aula e como conferir, com os checklists de disciplina nova e de auditoria.
 - **[Modelo dos documentos de raiz](modelo-documentos-raiz/LEIA-ME.md)** — os quatro
   documentos que ficam na raiz do projeto da sua disciplina (a apresentação técnica, o
   índice, o manual de uso e o aviso de licenças), prontos pra copiar e preencher.
+- **[Modelo de dados](modelo-dados/formato.json)** — o arquivo em que ficam as respostas
+  do Descubra seu modelo, só como dados, pra copiar pra `docs/formato.json` do projeto e
+  preencher.
 - **[Material de base](docs/material-base/README.md)** — a pasta do material de aula, da
   transcrição literal dele e das cópias do material de fora que completa a aula. Nada
   dela vai pro GitHub: esse material não é seu pra publicar.

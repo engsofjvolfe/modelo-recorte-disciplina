@@ -384,8 +384,9 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
 
 Em todo arquivo de código e todo documento de conteúdo, indique de forma breve qual
 licença o cobre — um comentário de uma ou duas linhas no topo do código, uma linha no
-fim do documento de conteúdo. Deixe as planilhas fora dessa regra: um comentário
-quebraria a leitura de quem abre o arquivo só como tabela de dados.
+fim do documento de conteúdo. Deixe as planilhas e os arquivos de dados (JSON) fora
+dessa regra: um comentário quebraria a leitura de quem abre o arquivo como tabela, e o
+JSON nem aceita comentário.
 
 ---
 
@@ -401,7 +402,8 @@ quebraria a leitura de quem abre o arquivo só como tabela de dados.
    conferida por uma pessoa contra a imagem de cada página; registre a referência de
    cada aula em `docs/FONTES.md` e leia tudo antes de escrever qualquer coisa.
 3. Decida o nome do elo central do dicionário e os nomes dos eixos da ficha — tome essa
-   decisão de forma explícita, sem herdar de outra disciplina.
+   decisão de forma explícita, sem herdar de outra disciplina — e grave essas decisões
+   em `docs/formato.json`, como diz o `DESCUBRA-SEU-MODELO.md`.
 4. Escreva o documento de teoria fundamental primeiro — é onde as categorias que os
    itens específicos vão citar precisam estar definidas.
 5. Escreva dicionário e ficha por item, citando os termos de teoria fundamental que se

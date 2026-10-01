@@ -8,6 +8,20 @@ Pra rodar um script, abra um terminal na pasta do projeto (no VSCode, menu
 **Terminal → Novo Terminal**, ou `` Ctrl+` ``) e digite o comando que aparece na seção
 dele. Cada script explica também, no começo do próprio arquivo, as opções que aceita.
 
+## `validar_dados.py` — confere um arquivo de dados
+
+Entra logo no começo, depois de gravar as respostas do
+[Descubra seu modelo](../DESCUBRA-SEU-MODELO.md) em `docs/formato.json`, e de novo
+sempre que um arquivo de dados mudar.
+
+Confere o arquivo contra o schema dele, que fica em `scripts/esquemas/` com o mesmo nome
+(o de `formato.json` é `formato.schema.json`): campos obrigatórios, tipos e ids
+repetidos. Campo novo é aceito, porque o formato pode crescer.
+
+- `python scripts/validar_dados.py docs/formato.json`
+
+Usa só o Python, sem nada a instalar.
+
 ## `montar_deck.py` — das planilhas de pergunta ao baralho do Anki
 
 Entra no fim, com as planilhas de pergunta prontas e conferidas (seção 6 da

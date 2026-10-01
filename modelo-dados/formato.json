@@ -1,0 +1,23 @@
+{
+  "versao_schema": 1,
+  "curso": "[nome do curso]",
+  "disciplina": "[nome da disciplina]",
+  "nivel": "[nível de estudo]",
+  "idioma": "pt-BR",
+  "itens": [
+    { "id": "[id curto do item]", "nome": "[nome do item]" }
+  ],
+  "elos": [
+    { "id": "1", "nome": "[nome do elo]" }
+  ],
+  "eixos": [
+    {
+      "id": "1",
+      "nome": "[nome do eixo]",
+      "subtopicos": [
+        { "id": "1.1", "nome": "[nome do subtópico]" }
+      ]
+    }
+  ],
+  "colunas_extras": ["[nome da coluna]"]
+}
