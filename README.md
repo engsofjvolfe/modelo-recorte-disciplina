@@ -29,9 +29,9 @@ ensina a usar IA — só deixa claro onde ela entra.
 - **[Modelo dos documentos de raiz](modelo-documentos-raiz/LEIA-ME.md)** — os quatro
   documentos que ficam na raiz do projeto da sua disciplina (a apresentação técnica, o
   índice, o manual de uso e o aviso de licenças), prontos pra copiar e preencher.
-- **[Material de base](docs/material-base/README.md)** — a pasta do material de aula e
-  da transcrição literal dele. Nada dela vai pro GitHub: esse material não é seu pra
-  publicar.
+- **[Material de base](docs/material-base/README.md)** — a pasta do material de aula, da
+  transcrição literal dele e das cópias do material de fora que completa a aula. Nada
+  dela vai pro GitHub: esse material não é seu pra publicar.
 - **[Scripts](scripts/README.md)** — os programas que fazem a parte mecânica do método,
   sempre do mesmo jeito: em que etapa cada um entra e como rodá-lo.
 - **[Hook de commit](.githooks/README.md)** — confere a forma de cada mensagem de commit,

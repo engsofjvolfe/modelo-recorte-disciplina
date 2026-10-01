@@ -28,13 +28,18 @@ específica de uma disciplina de graduação:
 ## Origem do conteúdo
 
 O material de [disciplina] original que serviu de base para este núcleo está em
-[`docs/material-base/`](docs/material-base/) — "referências completas" na seção
-[Referências](#referências), ao final deste documento.
+[`docs/material-base/`](docs/material-base/); as referências completas de todas as
+fontes estão em [`docs/FONTES.md`](docs/FONTES.md).
 
 [Origem do material de base: de onde veio, se foi produzido por quem mantém o
 repositório ou por terceiros, se está coberto pela licença deste projeto.] Por isso
 esse material nunca é versionado nem redistribuído: fica só localmente, fora do
 controle de versão (`.gitignore`).
+
+Onde a aula não cobre o que algum eixo da ficha pede, o material usa [quais fontes de
+fora — ou diga que a aula cobriu tudo e apague o resto deste parágrafo]. As cópias
+dessas fontes ficam em `docs/material-base/fontes-externas/`, também fora do controle de
+versão, e as referências delas estão em [`docs/FONTES.md`](docs/FONTES.md).
 
 ## Licença
 
@@ -52,6 +57,7 @@ completo em [`NOTICE.md`](NOTICE.md):
 | Arquivo | O que é |
 |---|---|
 | [`docs/material-gerado/`](docs/material-gerado/) | Documentos de teoria, dicionário, ficha, e as planilhas de pergunta |
+| [`docs/FONTES.md`](docs/FONTES.md) | Referências de todas as fontes (aulas e material de fora), com a data de consulta de cada uma |
 | [`INDICE.md`](INDICE.md) | Índice com um link para cada documento; os itens ficam no índice interno de cada um |
 | [`MANUAL.md`](MANUAL.md) | Guia rápido e não técnico de como usar o material e como colaborar |
 | [`LICENSE`](LICENSE) | Texto completo da GPL-3.0 (código) |
@@ -79,11 +85,9 @@ documento e a planilha correspondente em `docs/material-gerado/` e rode
 
 ## Referências
 
-Material de aula que serviu de fonte primária para o conteúdo deste projeto (ver
-[Origem do conteúdo](#origem-do-conteúdo)):
-
-[NOME DA FONTE]. [S.l.: s.n., s.d.]. Material de aula, não publicado. Localização:
-`docs/material-base/[arquivo]` (arquivo de terceiros, não versionado neste repositório).
+As referências de todas as fontes do projeto — as aulas e o material de fora (ver
+[Origem do conteúdo](#origem-do-conteúdo)) —, com a data de consulta de cada uma, estão
+em [`docs/FONTES.md`](docs/FONTES.md).
 
 ---
 

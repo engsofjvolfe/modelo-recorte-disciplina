@@ -146,6 +146,34 @@ Se o nome de um arquivo de origem não bater com o conteúdo real dele, corrija 
 arquivo (registrando essa correção em algum lugar), em vez de conviver com o nome
 errado.
 
+### Quando a aula não cobre um eixo
+
+Se o material de aula não trouxer o que algum eixo da ficha pede pra um item (ver
+[seção 1](#1-escreva-três-documentos-de-conteúdo)), busque esse fato num material de fora
+— de preferência um documento oficial ou de referência da área. O material de fora
+completa a aula, não a substitui: use-o só onde a aula não chega. Vale a mesma regra da
+aula: o fato tem de estar escrito nesse material, nunca deduzido.
+
+Guarde uma cópia de cada material de fora junto do material de aula, numa subpasta
+própria (`docs/material-base/fontes-externas/`, por convenção), também sem versionar nem
+disponibilizar publicamente: ele também não é de quem mantém o projeto.
+
+Cite cada fonte corretamente, segundo uma norma de referência (no Brasil, a ABNT NBR
+6023), num documento de referências do projeto, `docs/FONTES.md`. Ele lista todas as
+fontes — as aulas inclusive —, cada uma com a data em que foi obtida ou consultada e o
+caminho da cópia guardada, por exemplo:
+
+```
+[TÍTULO DA AULA]. [S. l.: s. n.], [20--]. 1 arquivo PDF ([n] slides). Material de aula, não publicado.
+Arquivo obtido em: [data]. Arquivo: docs/material-base/[arquivo].pdf.
+
+[AUTOR OU INSTITUIÇÃO]. [Título]. [Local]: [editora], [ano]. Disponível em: [endereço]. Acesso em: [data].
+Arquivo: docs/material-base/fontes-externas/[arquivo].
+```
+
+Esse documento é conteúdo do projeto e é versionado: o que fica fora do controle de
+versão é a cópia do material, não a referência a ele.
+
 ---
 
 ## 6. Cartões de revisão espaçada
@@ -266,7 +294,7 @@ não mudam de disciplina pra disciplina — só o conteúdo dentro de cada seç�
 | Documento | Papel fixo |
 |---|---|
 | `README.md` | Documentação técnica: o que é o projeto, aviso sobre o recorte, origem do material, licença, estrutura de arquivos, como usar, referências. |
-| `INDICE.md` | Índice do projeto: lista e linka os documentos que existem (teoria fundamental, dicionário, ficha, planilhas), sem explicação. |
+| `INDICE.md` | Índice do projeto: lista e linka os documentos que existem (teoria fundamental, dicionário, ficha, planilhas, fontes), sem explicação. |
 | `MANUAL.md` (ou equivalente não técnico) | Guia em níveis, sem jargão, pra quem só quer estudar. Abra com o aviso do recorte e feche com um canal pra reportar erro. |
 | `NOTICE.md` | Mapa de licenciamento: qual licença cobre qual categoria de arquivo, e a exceção do material de terceiros. |
 
@@ -294,9 +322,11 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
 
 - **Código** (os scripts): escolha uma licença de código aberto que exija que qualquer
   trabalho derivado também seja aberto.
-- **Conteúdo gerado** (teoria fundamental, dicionário, ficha, planilhas, e os
-  documentos de metodologia): escolha uma licença de conteúdo que exija dar crédito.
-- **Material de terceiros** (o material de aula original e sua transcrição literal):
+- **Conteúdo gerado** (teoria fundamental, dicionário, ficha, planilhas, o documento
+  de fontes, e os documentos de metodologia): escolha uma licença de conteúdo que exija
+  dar crédito.
+- **Material de terceiros** (o material de aula original, sua transcrição literal e as
+  cópias do material de fora — ver [seção 5](#5-trate-o-material-de-aula-original)):
   não coloque sob nenhuma licença deste projeto, porque quem mantém o projeto não é
   quem escreveu esse material. Nunca disponibilize publicamente, de forma permanente —
   não "por enquanto".
@@ -317,13 +347,15 @@ quebraria a leitura de quem abre o arquivo só como tabela de dados.
    `git config core.hooksPath .githooks` mais `git config commit.template
    .githooks/commit-template.txt` uma vez (ver `.githooks/README.md`).
 2. Guarde o material de aula original por convenção, com transcrição literal completa,
-   e leia tudo antes de escrever qualquer coisa.
+   registre a referência de cada aula em `docs/FONTES.md` e leia tudo antes de escrever
+   qualquer coisa.
 3. Decida o nome do elo central do dicionário e os nomes dos eixos da ficha — tome essa
    decisão de forma explícita, sem herdar de outra disciplina.
 4. Escreva o documento de teoria fundamental primeiro — é onde as categorias que os
    itens específicos vão citar precisam estar definidas.
 5. Escreva dicionário e ficha por item, citando os termos de teoria fundamental que se
-   aplicam a cada um.
+   aplicam a cada um. Onde a aula não cobrir um eixo, complete com material de fora,
+   guardado e citado como diz a seção 5.
 6. Gere as planilhas a partir do dicionário/ficha, e confira se cobrem tudo que
    deveriam cobrir.
 7. Atualize as quatro seções correspondentes nos quatro documentos de navegação raiz.
@@ -344,6 +376,8 @@ quebraria a leitura de quem abre o arquivo só como tabela de dados.
 7. Confira a planilha de perguntas linha por linha contra o dicionário/ficha de origem
    — procure um fato inventado que não está na fonte, ou um fato da fonte que ficou de
    fora.
+8. Confira se cada material de fora usado está citado em `docs/FONTES.md`, com a data
+   de consulta, e se a cópia dele está guardada em `docs/material-base/fontes-externas/`.
 
 ---
 

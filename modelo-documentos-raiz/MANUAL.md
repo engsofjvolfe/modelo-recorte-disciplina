@@ -48,8 +48,10 @@ direto no VSCode como texto, ou no Excel/Google Sheets. Depois de editar:
 
 O projeto tem duas pastas de conteúdo bem diferentes:
 
-**`docs/material-base/`** — o material de aula original. Nunca é versionada nem
-redistribuída (ver [NOTICE.md](NOTICE.md)) — fica só localmente.
+**`docs/material-base/`** — o material de aula original e, onde a aula não cobre um
+ponto, as cópias do material de fora usado (as referências de tudo estão em
+`docs/FONTES.md`). Nunca é versionada nem redistribuída (ver [NOTICE.md](NOTICE.md)) —
+fica só localmente.
 
 **`docs/material-gerado/`** — todo o conteúdo do material original reescrito e
 reorganizado em texto corrido, mais claro. É material de estudo completo por si só —

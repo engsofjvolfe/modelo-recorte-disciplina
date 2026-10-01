@@ -19,6 +19,10 @@ projeto; o [MANUAL.md](MANUAL.md) é um guia rápido e não técnico de uso.
 - [Planilha de perguntas de teoria fundamental](docs/material-gerado/[nome-do-arquivo].csv)
 - [Planilha de perguntas por item](docs/material-gerado/[nome-do-arquivo].csv)
 
+## Fontes
+
+- [Referências das aulas e do material de fora](docs/FONTES.md)
+
 ---
 
 _Voltar ao [README.md](README.md)_
