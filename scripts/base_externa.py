@@ -36,9 +36,11 @@ fontes que usa. Os caminhos vem do projeto.json: "bases", "base_externa",
 "resolucao_imagens". Precisa dos comandos pdftotext e pdftoppm (Poppler) quando alguma
 fonte e PDF.
 
+Roda sempre todos os itens que tem arquivo de dados: a conferencia e um arquivo so, e os
+tiques de um item so continuam nela se o item for gerado de novo junto com os outros.
+
 Uso (de qualquer pasta dentro do projeto):
-    python scripts/base_externa.py              # todos os itens que tem arquivo de dados
-    python scripts/base_externa.py ITEM [ITEM]  # so esses itens
+    python scripts/base_externa.py
     python scripts/base_externa.py --projeto projeto.json
 """
 
@@ -310,7 +312,6 @@ def processa(projeto, arquivo_dados, formato, anteriores):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description="Monta a base de trechos do material de fora e a conferência dela.")
-    p.add_argument("itens", nargs="*", help="ids dos itens (padrao: todos os que tem arquivo de dados)")
     p.add_argument("--projeto", type=Path, help="projeto.json (padrao: o primeiro achado subindo a partir daqui)")
     a = p.parse_args(argv)
     projeto = acha_projeto(a.projeto)
@@ -318,8 +319,7 @@ def main(argv=None):
         raise SystemExit(f"o formato da disciplina não existe: {projeto.caminho('formato')} -- "
                          "responda o Descubra seu modelo e grave as respostas nele")
     formato = json.loads(projeto.caminho("formato").read_text(encoding="utf-8"))
-    arquivos = ([projeto.caminho_com("bases", i) for i in a.itens] if a.itens
-                else projeto.todos_com("bases"))
+    arquivos = projeto.todos_com("bases")
     if not arquivos:
         raise SystemExit("nenhum arquivo de dados de base encontrado")
     saida = projeto.caminho("conferencia_trechos")

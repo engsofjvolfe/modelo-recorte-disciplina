@@ -214,7 +214,8 @@ pessoa confere.
 
     python scripts/base_externa.py
 
-Pra um item só: `python scripts/base_externa.py AG1`.
+Ele refaz sempre todos os itens de uma vez: a conferência é um arquivo só, e é assim que
+os tiques de todos os itens continuam nela.
 
 **O que aparece.** Uma linha `ERRO` pra tudo o que falta ou se contradiz: frase sem
 classe, subtópico sem marca, subtópico marcado como `fonte` sem nenhuma frase usada,
