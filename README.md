@@ -17,7 +17,10 @@ cada fato e a palavra final são de uma pessoa.
 
 Qualquer assistente de IA serve. Como usá-lo — gratuito ou pago, sozinho ou com
 agentes trabalhando em equipe — é decisão de quem segue o modelo. Este repositório não
-ensina a usar IA — só deixa claro onde ela entra.
+ensina a usar IA — só deixa claro onde ela entra: o
+[Trabalhar com uma IA](trabalhar-com-ia.md) diz, etapa por etapa, o que pedir, o que
+entregar e o que conferir depois, e o [método em dados](modelo-dados/fluxo-ia.json) é o
+arquivo que a IA lê pra seguir as etapas.
 
 ## O que tem aqui
 
@@ -31,6 +34,9 @@ ensina a usar IA — só deixa claro onde ela entra.
 - **[Regras da ABNT](regras-abnt.md)** — o que as normas de citação e de referência
   pedem, item por item, em palavras simples, e quem cuida de cada regra: o script, os
   dados das fontes ou quem escreve o texto.
+- **[Trabalhar com uma IA](trabalhar-com-ia.md)** — o que pedir à IA em cada etapa, o
+  que entregar a ela, o que conferir depois e o que é sempre seu, pra qualquer
+  assistente de IA.
 - **[Modelo dos documentos de raiz](modelo-documentos-raiz/LEIA-ME.md)** — os quatro
   documentos que ficam na raiz do projeto da sua disciplina (a apresentação técnica, o
   índice, o manual de uso e o aviso de licenças), prontos pra copiar e preencher.
@@ -41,8 +47,10 @@ ensina a usar IA — só deixa claro onde ela entra.
   cada fonte, de onde saem as referências; a [base](modelo-dados/base.json) de um item,
   com o que foi lido do material de fora e a decisão sobre cada frase; a
   [prova](modelo-dados/prova.json) dos cartões de uma planilha, com o trecho da fonte que
-  prova cada um; e o
-  [estilo dos cartões](modelo-dados/estilo-cartao.css), com a aparência deles no Anki.
+  prova cada um; o
+  [estilo dos cartões](modelo-dados/estilo-cartao.css), com a aparência deles no Anki;
+  e o [método em dados](modelo-dados/fluxo-ia.json), que não se preenche: é copiado e
+  entregue à IA.
 - **[Material de base](docs/material-base/README.md)** — a pasta do material de aula, da
   transcrição literal dele e das cópias do material de fora que completa a aula. Nada
   dela vai pro GitHub: esse material não é seu pra publicar.

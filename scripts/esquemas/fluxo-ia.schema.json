@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "fluxo-ia.schema.json",
+  "title": "Método em dados, para a IA",
+  "type": "object",
+  "required": ["versao_schema", "ao_receber", "regras", "etapas"],
+  "additionalProperties": true,
+  "properties": {
+    "versao_schema": { "const": 1 },
+    "ao_receber": { "$ref": "#/$defs/textos" },
+    "regras": { "$ref": "#/$defs/textos" },
+    "etapas": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/etapa" } }
+  },
+  "$defs": {
+    "texto": { "type": "string", "minLength": 1 },
+    "textos": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/texto" } },
+    "chave_do_projeto": { "type": "string", "pattern": "^[a-z_]+$" },
+    "chaves_do_projeto": { "type": "array", "items": { "$ref": "#/$defs/chave_do_projeto" } },
+    "etapa": {
+      "type": "object",
+      "required": ["id", "nome", "metodologia", "documentos", "entradas", "saidas", "scripts", "conferencias",
+                   "ia", "pessoa"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z-]+$" },
+        "nome": { "$ref": "#/$defs/texto" },
+        "metodologia": { "type": "array", "minItems": 1, "items": { "type": "integer" } },
+        "documentos": { "type": "array", "items": { "$ref": "#/$defs/texto" } },
+        "entradas": { "$ref": "#/$defs/chaves_do_projeto" },
+        "saidas": { "$ref": "#/$defs/chaves_do_projeto" },
+        "scripts": { "type": "array", "items": { "type": "string", "pattern": "^[a-z_]+\\.py$" } },
+        "conferencias": { "$ref": "#/$defs/chaves_do_projeto" },
+        "ia": { "$ref": "#/$defs/textos" },
+        "pessoa": { "$ref": "#/$defs/textos" }
+      }
+    }
+  }
+}

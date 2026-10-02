@@ -69,8 +69,8 @@ como `docs/formato.json`, são os do modelo; no seu projeto, valem os do `projet
 ## `validar_dados.py` — confere um arquivo de dados
 
 **Pra que serve.** Os arquivos de dados do projeto (o `projeto.json`, o `formato.json`, o
-`fontes.json`, o arquivo de base de cada item e o de prova de cada planilha) têm uma forma
-certa, descrita num molde —
+`fontes.json`, o arquivo de base de cada item, o de prova de cada planilha e o
+`fluxo-ia.json`) têm uma forma certa, descrita num molde —
 o *schema* — que fica em `scripts/esquemas/`. Este script confere se o arquivo segue o
 molde: se não falta campo obrigatório, se nada está no tipo errado, se nenhum código (id
 ou chave) se repete.

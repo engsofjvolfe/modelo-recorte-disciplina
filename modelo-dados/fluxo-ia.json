@@ -1,0 +1,205 @@
+{
+  "versao_schema": 1,
+  "ao_receber": [
+    "Guarde este arquivo inteiro na memória da ferramenta ou nas instruções do projeto, se a ferramenta tiver um desses lugares.",
+    "Se a ferramenta não guarda nada de uma conversa para outra, peça à pessoa que entregue este arquivo no começo de cada conversa, e releia-o inteiro antes de continuar.",
+    "Leia o projeto.json do projeto antes de qualquer etapa: \"entradas\", \"saidas\" e \"conferencias\" de cada etapa são chaves de \"caminhos\" dele.",
+    "Os documentos de \"documentos\" e as seções de \"metodologia\" (números de seção de metodologia-de-conteudo.md) estão no repositório do modelo; leia-os inteiros antes da etapa.",
+    "Siga as etapas na ordem. Se não estiver claro em que etapa o projeto está, pergunte à pessoa."
+  ],
+  "regras": [
+    "A pessoa é sempre o último elo: nada vale como conferido sem o tique dela; o tique da IA é só uma primeira passada.",
+    "Escolhas de formato, de recorte e de fonte são da pessoa: a IA propõe e diz por quê, a pessoa decide.",
+    "Nunca invente nem deduza um fato que não esteja escrito na fonte; se um dado faltar ou for ambíguo, pergunte à pessoa.",
+    "Leia cada fonte e cada documento inteiro antes de escrever, sem ferramenta que corte ou resuma o texto.",
+    "Cada etapa nasce da anterior, nunca direto da fonte: os documentos nascem das transcrições conferidas e da base do material de fora; os cartões, dos documentos.",
+    "Todo fato tirado de uma fonte leva a chamada dela (ABNT NBR 10520, autor-data), com o lugar: a página impressa ou o slide.",
+    "Fato que a fonte trata como possibilidade entra com a ressalva escrita, nunca como certeza.",
+    "Material de terceiros nunca entra no controle de versão nem é publicado: o material de aula, as transcrições, as cópias e a base do material de fora, as provas dos cartões e os arquivos de conferência.",
+    "Nenhum caminho é escrito de memória: todo caminho sai do projeto.json.",
+    "Nada de disciplina vai para o código dos scripts: o que muda de um projeto para outro fica nos arquivos de dados.",
+    "O script recolhe e confere o que é mecânico, a IA julga na curadoria e a pessoa julga na aceitação.",
+    "Uma linha ERRO de script se resolve antes de ticar.",
+    "Mensagem de commit: um título e um parágrafo em prosa, sem lista."
+  ],
+  "etapas": [
+    {
+      "id": "preparar",
+      "nome": "Preparar o projeto",
+      "metodologia": [15],
+      "documentos": [".githooks/README.md"],
+      "entradas": [],
+      "saidas": ["estilo_cartao"],
+      "scripts": ["validar_dados.py"],
+      "conferencias": [],
+      "ia": [
+        "Copiar para a raiz do projeto, se a pessoa autorizar, o projeto.json, o estilo-cartao.css e este arquivo, de modelo-dados.",
+        "Conferir o projeto.json com validar_dados.py."
+      ],
+      "pessoa": [
+        "Decidir onde fica cada pasta, no projeto.json.",
+        "Ativar o hook de commit na própria máquina."
+      ]
+    },
+    {
+      "id": "formato",
+      "nome": "Formato da disciplina",
+      "metodologia": [1],
+      "documentos": ["DESCUBRA-SEU-MODELO.md"],
+      "entradas": ["material_base"],
+      "saidas": ["formato"],
+      "scripts": ["validar_dados.py"],
+      "conferencias": [],
+      "ia": [
+        "Com o curso, a disciplina, o nível e o material de aula (e a ementa, se houver), propor cada resposta do Descubra seu modelo, dizendo na conversa por que ela cabe, ou não, nesse curso e nesse nível.",
+        "Gravar no formato só as respostas que a pessoa aceitou, sem justificativa, e conferir com validar_dados.py."
+      ],
+      "pessoa": [
+        "Dizer o curso, a disciplina e o nível de estudo.",
+        "Decidir cada resposta do formato."
+      ]
+    },
+    {
+      "id": "transcricao",
+      "nome": "Transcrição da aula",
+      "metodologia": [2],
+      "documentos": [],
+      "entradas": ["material_base"],
+      "saidas": ["gerados"],
+      "scripts": ["registrar_fonte.py", "conferencia.py"],
+      "conferencias": ["conferencia_imagens"],
+      "ia": [
+        "Transcrever cada fonte da aula página por página, só o que está escrito, com o título de página da seção 2 da metodologia.",
+        "Registrar cada transcrição com registrar_fonte.py, com a chave da referência da fonte.",
+        "Gerar a conferência com conferencia.py e ticar \"IA\" em cada página que conferir contra a imagem."
+      ],
+      "pessoa": [
+        "Conferir cada página da transcrição contra a imagem e ticar \"pessoa\"."
+      ]
+    },
+    {
+      "id": "referencias",
+      "nome": "Referências das fontes",
+      "metodologia": [3],
+      "documentos": ["regras-abnt.md"],
+      "entradas": ["material_base"],
+      "saidas": ["fontes", "referencias"],
+      "scripts": ["validar_dados.py", "referencias.py"],
+      "conferencias": ["conferencia_referencias"],
+      "ia": [
+        "Preencher os dados de cada fonte no arquivo de fontes, como estão na folha de rosto ou na página do documento.",
+        "Conferir o arquivo com validar_dados.py, gerar as referências com referencias.py e ticar \"IA\" em cada referência conferida."
+      ],
+      "pessoa": [
+        "Decidir o \"et_al\" do arquivo de fontes.",
+        "Conferir cada referência e a chamada dela contra a fonte e ticar \"pessoa\"."
+      ]
+    },
+    {
+      "id": "material-de-fora",
+      "nome": "Material de fora, onde a aula não cobre",
+      "metodologia": [4],
+      "documentos": [],
+      "entradas": ["formato", "gerados"],
+      "saidas": ["bases", "base_externa"],
+      "scripts": ["base_externa.py"],
+      "conferencias": ["conferencia_trechos"],
+      "ia": [
+        "Marcar, item por item, cada subtópico da grade do formato como coberto pela aula, pelo material de fora ou como lacuna, a partir das transcrições conferidas.",
+        "Propor, para cada subtópico que a aula não cobre, um material de fora oficial ou de referência da área, com a referência dele.",
+        "Declarar as páginas lidas no arquivo de dados do item, rodar base_externa.py e classificar cada frase.",
+        "Ticar \"IA\" em cada página da conferência dos trechos."
+      ],
+      "pessoa": [
+        "Aceitar ou não cada material de fora.",
+        "Conferir a cobertura e a classe de cada frase e ticar \"pessoa\"."
+      ]
+    },
+    {
+      "id": "documentos",
+      "nome": "Documentos de conteúdo",
+      "metodologia": [5, 6, 7, 8, 12],
+      "documentos": [],
+      "entradas": ["formato", "gerados", "base_externa", "conferencia_referencias"],
+      "saidas": ["material_gerado"],
+      "scripts": [],
+      "conferencias": [],
+      "ia": [
+        "Ler inteiras as transcrições conferidas e as bases antes de escrever.",
+        "Escrever a teoria fundamental, depois o dicionário e a ficha de cada item, na grade do formato, com a chamada de cada fato como a conferência das referências mostra."
+      ],
+      "pessoa": [
+        "Decidir o recorte.",
+        "Ler cada documento contra as fontes."
+      ]
+    },
+    {
+      "id": "cartoes",
+      "nome": "Cartões e provas",
+      "metodologia": [9],
+      "documentos": [],
+      "entradas": ["material_gerado", "gerados", "base_externa"],
+      "saidas": ["material_gerado", "provas"],
+      "scripts": ["confere_cartoes.py"],
+      "conferencias": ["conferencia_cartoes"],
+      "ia": [
+        "Gerar cada planilha de pergunta a partir do dicionário e da ficha, com a coluna \"fonte\" só com as chamadas e o lugar.",
+        "Gerar a prova de cada cartão: a pergunta igual à da planilha, os trechos letra por letra e a afirmação.",
+        "Rodar confere_cartoes.py, resolver cada ERRO e ticar \"IA\" em cada cartão conferido."
+      ],
+      "pessoa": [
+        "Conferir cada cartão contra o trecho e ticar \"pessoa\"."
+      ]
+    },
+    {
+      "id": "baralho",
+      "nome": "Baralho do Anki",
+      "metodologia": [10],
+      "documentos": [],
+      "entradas": ["material_gerado", "estilo_cartao"],
+      "saidas": ["baralhos"],
+      "scripts": ["montar_deck.py"],
+      "conferencias": [],
+      "ia": [
+        "Gerar os baralhos com montar_deck.py."
+      ],
+      "pessoa": [
+        "Importar os baralhos no Anki e ver se os cartões aparecem como na planilha."
+      ]
+    },
+    {
+      "id": "raiz",
+      "nome": "Documentos de raiz",
+      "metodologia": [13, 14],
+      "documentos": ["modelo-documentos-raiz/LEIA-ME.md"],
+      "entradas": ["material_gerado", "referencias"],
+      "saidas": [],
+      "scripts": [],
+      "conferencias": [],
+      "ia": [
+        "Copiar os quatro documentos de modelo-documentos-raiz para a raiz do projeto e preencher cada colchete."
+      ],
+      "pessoa": [
+        "Escrever o aviso do recorte e a origem do material.",
+        "Escolher o contato para relatar erros."
+      ]
+    },
+    {
+      "id": "auditoria",
+      "nome": "Análise mecânica e análise humana",
+      "metodologia": [11, 16],
+      "documentos": [],
+      "entradas": [],
+      "saidas": [],
+      "scripts": ["validar_dados.py", "conferencia.py", "referencias.py", "base_externa.py", "confere_cartoes.py"],
+      "conferencias": ["conferencia_imagens", "conferencia_referencias", "conferencia_trechos", "conferencia_cartoes"],
+      "ia": [
+        "Rodar todos os scripts, resolver cada ERRO e apontar à pessoa toda parte sem o tique dela."
+      ],
+      "pessoa": [
+        "Fazer a análise humana do checklist de auditoria.",
+        "Dar o tique final em cada parte de cada conferência."
+      ]
+    }
+  ]
+}

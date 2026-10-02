@@ -501,11 +501,12 @@ JSON nem aceita comentário.
 
 ## 15. Checklist: adicionando uma disciplina nova
 
-1. Prepare o projeto: copie `modelo-dados/projeto.json` e `modelo-dados/estilo-cartao.css`
-   pra raiz dele — o primeiro é o mapa de onde fica cada coisa, e os scripts tiram todo
-   caminho dali (se mudar uma pasta de lugar, mude também o `.gitignore`, pra o material
-   de terceiros continuar fora do GitHub); o segundo é a aparência dos cartões — e
-   ative o hook de commit: copie
+1. Prepare o projeto: copie `modelo-dados/projeto.json`, `modelo-dados/estilo-cartao.css`
+   e `modelo-dados/fluxo-ia.json` pra raiz dele — o primeiro é o mapa de onde fica cada
+   coisa, e os scripts tiram todo caminho dali (se mudar uma pasta de lugar, mude também
+   o `.gitignore`, pra o material de terceiros continuar fora do GitHub); o segundo é a
+   aparência dos cartões; o terceiro é o método em dados, que a IA lê (ver
+   [Trabalhar com uma IA](trabalhar-com-ia.md)) — e ative o hook de commit: copie
    `.githooks/` pra raiz do projeto novo, adicione `.githooks/` ao `.gitignore` desse
    projeto (a pasta é ferramenta local de quem mantém, não faz parte do pacote
    versionado de cada disciplina — só é versionada aqui, no modelo, que é a fonte de
