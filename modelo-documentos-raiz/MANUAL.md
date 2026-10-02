@@ -31,7 +31,8 @@ O manual está organizado em níveis, do mais simples ao mais detalhado.
 2. Importe os arquivos de `anki-decks/` — são arquivos `.apkg`, o formato que o Anki
    usa para empacotar um baralho pronto. Arraste o arquivo pra dentro da janela do
    Anki, ou use o menu Arquivo > Importar dentro do Anki.
-3. Cada arquivo vira um grupo dentro do Anki, organizado por [item específico/tópico].
+3. No Anki, os cartões aparecem numa pasta com o nome da disciplina, e dentro dela uma
+   pasta pra cada arquivo[, separada por [item específico/tópico]].
 
 ### Atualizando o baralho depois de editar as planilhas
 

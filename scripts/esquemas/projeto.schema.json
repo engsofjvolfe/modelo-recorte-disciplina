@@ -3,13 +3,24 @@
   "$id": "projeto.schema.json",
   "title": "Caminhos do projeto",
   "type": "object",
-  "required": ["versao_schema", "prefixo_planilhas", "resolucao_imagens", "nome_licenca_conteudo", "caminhos"],
+  "required": ["versao_schema", "prefixo_planilhas", "resolucao_imagens", "nome_licenca_conteudo",
+               "colunas_ocultas", "coluna_subdecks", "caminhos"],
   "additionalProperties": true,
   "properties": {
     "versao_schema": { "const": 1 },
     "prefixo_planilhas": { "$ref": "#/$defs/texto" },
     "resolucao_imagens": { "type": "integer" },
     "nome_licenca_conteudo": { "$ref": "#/$defs/texto" },
+    "colunas_ocultas": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "not": { "enum": ["pergunta", "resposta", "fonte"] } }
+    },
+    "coluna_subdecks": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "minLength": 1, "not": { "enum": ["pergunta", "resposta", "fonte"] } }
+      ]
+    },
     "caminhos": {
       "type": "object",
       "additionalProperties": true,

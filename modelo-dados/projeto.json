@@ -3,6 +3,8 @@
   "prefixo_planilhas": "perguntas-",
   "resolucao_imagens": 80,
   "nome_licenca_conteudo": "CC BY-NC-SA 4.0",
+  "colunas_ocultas": ["ordem"],
+  "coluna_subdecks": null,
   "caminhos": {
     "formato": "docs/formato.json",
     "fontes": "docs/fontes.json",

@@ -8,7 +8,10 @@ arquivado de outra disciplina nao e conteudo ativo e nao deve ser descoberta aqu
 script e agnostico de disciplina, de nome de coluna e de caminho: nenhum nome de
 disciplina, item, arquivo ou pasta fica fixado no codigo. As pastas, o prefixo das
 planilhas e o arquivo de estilo dos cartoes vem do projeto.json ("material_gerado",
-"baralhos", "prefixo_planilhas" e "estilo_cartao").
+"baralhos", "prefixo_planilhas" e "estilo_cartao"), assim como as colunas que ficam
+guardadas sem aparecer ("colunas_ocultas") e a coluna que separa os cartoes de uma
+planilha em subdecks ("coluna_subdecks", ou null); o nome da disciplina vem do formato
+("formato").
 O contrato estavel e minimo:
 
   1. o nome do arquivo comeca com o prefixo das planilhas e termina em ".csv";
@@ -16,19 +19,20 @@ O contrato estavel e minimo:
      coluna que o script realmente exige, porque sao intrinsecos a qualquer cartao de
      revisao, nao especificos de nenhuma disciplina.
 
-Qualquer outra coluna (disciplina, tipo_pergunta, fonte, ordem, ou qualquer nome que a
-disciplina preferir) e opcional e vira campo do cartao automaticamente, com o nome que
-a propria coluna tiver -- nao exige nenhuma mudanca neste script. Uma coluna
-"disciplina", se presente, organiza os cartoes em subdecks por valor distinto; se
-ausente, todos os cartoes desse CSV vao para um unico deck. Uma coluna "fonte" (a
+Qualquer outra coluna e opcional e vira campo do cartao automaticamente, com o nome que
+a propria coluna tiver -- nao exige nenhuma mudanca neste script. Uma coluna "fonte" (a
 citacao da fonte do fato, que a metodologia pede em toda planilha), se presente,
 aparece no verso, abaixo da resposta.
 
-Cada arquivo processado vira seu proprio pacote .apkg (nomeado a partir do proprio nome
-do arquivo). O modelo de nota (campos e template do cartao) e construido a partir do
-cabecalho de cada CSV -- CSVs com conjuntos de coluna diferentes ganham modelos
-diferentes automaticamente, cada um com ID deterministico a partir do proprio conjunto
-de colunas.
+No Anki, os cartoes ficam num deck com o nome da disciplina e, dentro dele, um deck por
+planilha (o nome do arquivo sem o prefixo); com "coluna_subdecks", um subdeck por valor
+dessa coluna. O ID de cada deck sai de um hash do nome completo dele, entao planilhas e
+disciplinas diferentes nunca caem no mesmo deck. Cada arquivo processado vira seu
+proprio pacote .apkg. O modelo de nota (campos e template do cartao) e construido a
+partir do cabecalho de cada CSV -- CSVs com conjuntos de coluna diferentes ganham
+modelos diferentes automaticamente, cada um com ID deterministico a partir do proprio
+conjunto de colunas. Planilha sem "pergunta" ou "resposta" aparece com ERRO e fica sem
+pacote.
 
 Uso (de qualquer pasta dentro do projeto):
     python scripts/montar_deck.py              # gera um .apkg para cada CSV encontrado
@@ -40,6 +44,7 @@ Uso (de qualquer pasta dentro do projeto):
 import argparse
 import csv
 import hashlib
+import json
 import re
 import sys
 import unicodedata
@@ -49,11 +54,6 @@ import genanki
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comum import acha_projeto, planilhas  # noqa: E402
-
-# Coluna com papel de bastidor: se existir, vira campo do cartao (pra nao perder a
-# informacao), mas nao aparece na linha de metadados do cartao -- so pra nao poluir a
-# tela com numero de ordem toda vez. Nao e exigida.
-COLUNAS_SO_CAMPO = {"ordem"}
 
 # Coluna com a citacao da fonte do fato: se existir, aparece no verso, abaixo da
 # resposta, e nao na linha de metadados da frente.
@@ -73,18 +73,19 @@ def campo_anki(nome_coluna):
     return "".join(p.capitalize() for p in re.split(r"[_\s]+", nome_coluna) if p) or "Campo"
 
 
-def construir_modelo(colunas_extra, rotulo, estilo):
+def construir_modelo(colunas_extra, rotulo, estilo, ocultas):
     """Monta um genanki.Model com campos Pergunta, Resposta, mais um campo pra cada
     coluna extra que o CSV realmente tiver -- nenhum nome de coluna e exigido pra isso
     funcionar. CSVs com conjuntos de coluna diferentes ganham modelos diferentes, cada
     um com ID deterministico a partir do proprio conjunto de colunas, entao o mesmo
     "formato" de CSV sempre reusa o mesmo modelo ao reimportar. O nome do modelo vem do
-    nome da planilha, e o estilo do cartao, do arquivo de estilo do projeto."""
+    nome da planilha, e o estilo do cartao, do arquivo de estilo do projeto. As colunas
+    ocultas viram campo (pra nao perder a informacao), mas nao aparecem na frente."""
     campos_extra = [campo_anki(c) for c in colunas_extra]
     campos_visiveis = [
         campo_anki(c)
         for c in colunas_extra
-        if c.lower() not in COLUNAS_SO_CAMPO and c.lower() != COLUNA_FONTE
+        if c.lower() not in ocultas and c.lower() != COLUNA_FONTE
     ]
     campo_fonte = next(
         (campo_anki(c) for c in colunas_extra if c.lower() == COLUNA_FONTE), None
@@ -127,21 +128,22 @@ def id_estavel(nome, minimo=1_000_000_000, maximo=1_999_999_999):
     return minimo + (int(digest, 16) % (maximo - minimo))
 
 
-def nomes_a_partir_do_arquivo(caminho_csv: Path, prefixo: str):
-    """"<prefixo>nucleo-dicionarios.csv" -> familia "Nucleo", nome de saida
-    "Nucleo-Dicionarios". Tira o prefixo (se existir) e capitaliza cada palavra
-    separada por hifen -- funciona pra qualquer nome de arquivo novo."""
+def nome_a_partir_do_arquivo(caminho_csv: Path, prefixo: str):
+    """"<prefixo>nucleo-dicionarios.csv" -> "Nucleo-Dicionarios". Tira o prefixo (se
+    existir) e capitaliza cada palavra separada por hifen -- funciona pra qualquer nome
+    de arquivo novo."""
     nome = caminho_csv.stem
     if prefixo and nome.startswith(prefixo):
         nome = nome[len(prefixo):]
     partes = [p for p in nome.split("-") if p] or [caminho_csv.stem]
-    familia = partes[0].capitalize()
-    nome_saida = "-".join(p.capitalize() for p in partes)
-    return familia, nome_saida
+    return "-".join(p.capitalize() for p in partes)
 
 
-def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str, estilo: str):
-    familia, nome_saida = nomes_a_partir_do_arquivo(caminho_csv, prefixo)
+def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str, estilo: str, disciplina: str,
+                  ocultas, coluna_subdecks):
+    """Grava o .apkg da planilha; devolve False, sem gravar nada, se faltar coluna exigida."""
+    nome_saida = nome_a_partir_do_arquivo(caminho_csv, prefixo)
+    deck_da_planilha = f"{disciplina}::{nome_saida}"
 
     decks = {}  # chave de deck normalizada -> genanki.Deck, criado sob demanda
     total_cartoes = 0
@@ -150,29 +152,23 @@ def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str, estilo: st
         leitor = csv.DictReader(f)
         colunas = leitor.fieldnames or []
         if "pergunta" not in colunas or "resposta" not in colunas:
-            raise ValueError(
-                f'{caminho_csv.name}: precisa ter uma coluna "pergunta" e uma '
-                f'"resposta" -- sao os dois unicos nomes de coluna exigidos '
-                f"(colunas encontradas: {colunas})."
-            )
+            print(f'ERRO: {caminho_csv.name} precisa ter uma coluna "pergunta" e uma "resposta" '
+                  f"(colunas encontradas: {', '.join(colunas) or 'nenhuma'}) -- baralho não gerado")
+            return False
         colunas_extra = [c for c in colunas if c not in ("pergunta", "resposta")]
-        modelo = construir_modelo(colunas_extra, nome_saida, estilo)
-        tem_disciplina = "disciplina" in colunas
+        modelo = construir_modelo(colunas_extra, nome_saida, estilo, ocultas)
+        tem_subdecks = bool(coluna_subdecks) and coluna_subdecks in colunas
 
         for linha in leitor:
-            disciplina = linha.get("disciplina", "").strip()
-
             nota = genanki.Note(
                 model=modelo,
                 fields=[linha["pergunta"].strip(), linha["resposta"].strip()]
                 + [linha[c].strip() for c in colunas_extra],
             )
 
-            if tem_disciplina:
-                chave_deck = normalizar(disciplina)
-                nome_deck = f"{familia}::{disciplina.capitalize()}" if disciplina else familia
-            else:
-                chave_deck, nome_deck = "", familia
+            valor = linha.get(coluna_subdecks, "").strip() if tem_subdecks else ""
+            chave_deck = normalizar(valor)
+            nome_deck = f"{deck_da_planilha}::{valor.capitalize()}" if valor else deck_da_planilha
             if chave_deck not in decks:
                 decks[chave_deck] = genanki.Deck(id_estavel(nome_deck), nome_deck)
             decks[chave_deck].add_note(nota)
@@ -184,8 +180,9 @@ def montar_pacote(caminho_csv: Path, pasta_saida: Path, prefixo: str, estilo: st
     pacote.write_to_file(caminho_saida)
 
     print(f"Deck gerado: {caminho_saida}")
-    print(f"  Subdecks: {', '.join(d.name for d in decks.values())}")
+    print(f"  Decks: {', '.join(d.name for d in decks.values())}")
     print(f"  Total de cartoes: {total_cartoes}")
+    return True
 
 
 def main(argv=None):
@@ -209,10 +206,16 @@ def main(argv=None):
     if not arquivo_estilo.exists():
         raise SystemExit(f"o arquivo de estilo dos cartoes nao existe: {arquivo_estilo} -- "
                          "copie modelo-dados/estilo-cartao.css do modelo")
+    arquivo_formato = projeto.caminho("formato")
+    if not arquivo_formato.exists():
+        raise SystemExit(f"o formato da disciplina nao existe: {arquivo_formato} -- é dele que vem o nome "
+                         "da disciplina no Anki")
+    disciplina = json.loads(arquivo_formato.read_text(encoding="utf-8"))["disciplina"]
     estilo = arquivo_estilo.read_text(encoding="utf-8")
-    for caminho in csvs:
-        montar_pacote(caminho, projeto.caminho("baralhos"), prefixo, estilo)
-    return 0
+    ocultas = {c.lower() for c in projeto.valor("colunas_ocultas")}
+    gerados = [montar_pacote(caminho, projeto.caminho("baralhos"), prefixo, estilo, disciplina, ocultas,
+                             projeto.valor("coluna_subdecks")) for caminho in csvs]
+    return 0 if all(gerados) else 1
 
 
 if __name__ == "__main__":

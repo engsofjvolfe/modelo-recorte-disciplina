@@ -302,7 +302,7 @@ organizado em linhas e colunas como uma tabela (abre e edita no Excel, no Google
 Sheets, ou como texto comum), com uma pergunta por linha. Nomeie o arquivo começando
 sempre com a mesma primeira parte, em toda planilha do projeto — por exemplo,
 `perguntas-` no início de `perguntas-fundamentos.csv` e de `perguntas-nucleo.csv`.
-Assim, o script da [seção 10](#10-peça-um-script-em-vez-de-escrever-um) sabe quais
+Assim, o script da [seção 10](#10-gere-o-baralho-com-o-script-do-modelo) sabe quais
 arquivos são planilhas de pergunta só pelo nome, sem que ninguém precise listar cada
 arquivo um por um dentro do código.
 
@@ -342,7 +342,7 @@ fonte trata como possibilidade? Essa conferência é sua, não da IA — é o qu
 nada ficou de fora.
 
 Uma vez com a planilha pronta e conferida, o baralho do Anki será gerado automaticamente
-por um script criado e acionado por você (veja seção 10). Você pode editar um cartão direto dentro do app Anki — mas se
+pelo script do modelo, acionado por você (veja seção 10). Você pode editar um cartão direto dentro do app Anki — mas se
 depois você mudar a planilha (ou o dicionário/ficha de origem) e rodar o script de
 novo, o cartão é gerado de novo a partir da planilha, e essa edição feita direto no
 Anki não sobrevive em caso de enviar novamente o baralho recriado pelo script para o app. Ou seja: enquanto você for regenerando o baralho a partir da
@@ -352,7 +352,7 @@ Então se você precisa modificar um baralho, saiba qual o cartão ou quais os c
 
 ---
 
-## 10. Peça um script, em vez de escrever um
+## 10. Gere o baralho com o script do modelo
 
 Depois que a planilha da seção 9 existe, falta um último passo mecânico: ler cada linha
 dela e montar o arquivo `.apkg` que o Anki importa. Esse passo é sempre o mesmo tipo de
@@ -361,12 +361,16 @@ computador que faz um trabalho automático e repetitivo), em vez de à mão: rod
 script de novo, o baralho inteiro é reconstruído em segundos toda vez que a planilha
 mudar.
 
-Você não precisa saber programar pra ter esse script, nem entender tecnicamente tudo
-que a instrução abaixo pede — ela é pra copiar e enviar, não pra decifrar. Envie-a pra
-um assistente de IA: o mesmo que te ajudou a escrever o conteúdo, um assistente de IA
-integrado ao editor de código, ou um assistente de IA comum na internet. Se um script
-assim já existir (reaproveitado de outra disciplina), use-o sem editar, antes de pedir
-um novo.
+O modelo já traz esse script, o `scripts/montar_deck.py`: use-o sem editar (o
+[README dos scripts](scripts/README.md) diz como rodar). No Anki, os cartões aparecem
+numa pasta com o nome da disciplina, tirado do formato, e dentro dela uma pasta pra cada
+planilha, de modo que planilhas e disciplinas diferentes nunca se misturam.
+
+Se um dia você precisar de um script diferente, não precisa saber programar pra ter um,
+nem entender tecnicamente tudo que a instrução abaixo pede — ela é pra copiar e enviar,
+não pra decifrar. Envie-a pra um assistente de IA: o mesmo que te ajudou a escrever o
+conteúdo, um assistente de IA integrado ao editor de código, ou um assistente de IA comum
+na internet. Ela descreve o que o script do modelo faz, e o novo tem de fazer o mesmo.
 
 > Escreva um script em Python que:
 > 1. Encontre sozinho, na pasta do material gerado que o `projeto.json` do projeto
@@ -377,16 +381,20 @@ um novo.
 >    cartão por linha. Toda planilha tem uma coluna `pergunta` (frente do cartão) e uma
 >    `resposta` (verso). Qualquer outra coluna que existir no arquivo também deve virar
 >    um campo do cartão, com esse mesmo nome — os nomes dessas colunas variam de
->    planilha pra planilha, e o script não deve esperar nenhum nome específico. A única
->    exceção é a coluna `fonte`, com a citação do fato: se existir, ela aparece no
->    verso, abaixo da resposta.
+>    planilha pra planilha, e o script não deve esperar nenhum nome específico. As
+>    exceções: a coluna `fonte`, com a citação do fato, aparece no verso, abaixo da
+>    resposta; as colunas que o `projeto.json` lista em `colunas_ocultas` ficam no
+>    cartão sem aparecer; e a coluna que ele indica em `coluna_subdecks` separa os
+>    cartões em pastas, uma pra cada valor.
 > 3. Não escreva, em nenhum lugar do código, o nome de uma disciplina, de um item
 >    específico, um caminho de pasta ou uma quantidade de perguntas fixada — descubra
 >    tudo a partir do `projeto.json` e do que
 >    existir nos arquivos a cada execução, pra funcionar com uma planilha nova sem
 >    precisar editar o código.
-> 4. Gere o identificador de cada baralho (o ID que o Anki usa internamente)
->    automaticamente, a partir de um hash do nome do arquivo — nunca escolhido à mão.
+> 4. Ponha os cartões num baralho com o nome da disciplina, que vem do formato da
+>    disciplina, e dentro dele um baralho pra cada planilha, e gere o identificador de
+>    cada um (o ID que o Anki usa internamente) automaticamente, a partir de um hash do
+>    nome completo dele — nunca escolhido à mão.
 
 O que essa instrução garante, em termos simples: se você adicionar uma planilha nova,
 com colunas de nomes diferentes das que usa hoje, e rodar o script de novo, ele gera os
@@ -533,7 +541,7 @@ JSON nem aceita comentário.
 7. Gere as planilhas a partir do dicionário/ficha, com a prova de cada cartão, rode a
    conferência dos cartões e confira se as planilhas cobrem tudo que deveriam cobrir
    (seção 9).
-8. Reaproveite um script existente, ou peça um novo (seção 10), pra gerar o baralho.
+8. Gere o baralho com o script do modelo (seção 10).
 9. Atualize as quatro seções correspondentes nos quatro documentos de navegação raiz
    (seção 13).
 10. Faça a auditoria de consistência (seção 16) antes de considerar a disciplina pronta.

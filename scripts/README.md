@@ -298,11 +298,16 @@ Usa só o Python: não precisa instalar nada.
 
 **Pra que serve.** Transforma cada planilha de perguntas (no modelo, os arquivos
 `perguntas-*.csv` de `docs/material-gerado/`) num baralho pronto pra importar no Anki —
-um arquivo `.apkg`, que aparece em `anki-decks/`. As colunas `pergunta` e `resposta` são
-obrigatórias; qualquer outra vira campo do cartão. Uma coluna `disciplina` separa os
-cartões em grupos; `ordem` fica guardada sem aparecer; e a `fonte`, com a citação do
-fato, aparece atrás do cartão, embaixo da resposta. A aparência dos cartões vem do
-arquivo de estilo do projeto (no modelo, `estilo-cartao.css`).
+um arquivo `.apkg`, que aparece em `anki-decks/`. No Anki, os cartões ficam numa pasta
+com o nome da disciplina, que vem do formato da disciplina, e dentro dela uma pasta pra
+cada planilha: planilhas e disciplinas diferentes nunca se misturam. As colunas
+`pergunta` e `resposta` são obrigatórias; qualquer outra vira campo do cartão, e a
+`fonte`, com a citação do fato, aparece atrás do cartão, embaixo da resposta. Duas coisas
+você escolhe no `projeto.json`: em `colunas_ocultas`, as colunas que ficam guardadas no
+cartão sem aparecer (no modelo, `ordem`); e em `coluna_subdecks`, uma coluna que separa
+os cartões de cada planilha em pastas menores, uma pra cada valor que aparece nela — ou
+`null`, pra não separar. A aparência dos cartões vem do arquivo de estilo do projeto (no
+modelo, `estilo-cartao.css`).
 
 **Quando usar.** Com as planilhas prontas e conferidas, e de novo sempre que uma
 planilha mudar.
@@ -314,8 +319,10 @@ planilha mudar.
 Também dá pra gerar só uma planilha (`python scripts/montar_deck.py [parte do nome]`) ou
 só ver quais seriam usadas, sem gerar nada (`python scripts/montar_deck.py --listar`).
 
-**O que aparece.** Cada baralho gerado, com quantos cartões tem. Pra usar, abra o Anki e
-arraste o arquivo `.apkg` pra dentro dele (ou use o menu **Arquivo → Importar**).
+**O que aparece.** Cada baralho gerado, com as pastas e quantos cartões tem. Uma planilha
+sem a coluna `pergunta` ou `resposta` aparece com `ERRO` e fica sem baralho. Pra usar,
+abra o Anki e arraste o arquivo `.apkg` pra dentro dele (ou use o menu
+**Arquivo → Importar**).
 
 Precisa da biblioteca `genanki`.
 
