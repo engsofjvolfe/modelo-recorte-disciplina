@@ -36,9 +36,13 @@ basta entregá-lo.
    novo no começo de cada conversa nova, com o pedido: "Releia este arquivo inteiro
    antes de continuar." O próprio arquivo pede isso à IA.
 
-Se a IA não estiver no repositório do modelo, entregue também, em cada etapa, o
+Se a IA não consegue abrir os arquivos do modelo, entregue também, em cada etapa, o
 documento do modelo que ela indica (a seção da metodologia, o Descubra seu modelo, as
 regras da ABNT).
+
+E se você travar em qualquer passo — abrir o terminal, rodar um script, entender uma
+mensagem que apareceu na tela —, peça ajuda à própria IA: descreva o que você fez e o
+que apareceu, e peça o passo a passo pro seu computador.
 
 ## Etapa por etapa
 
@@ -49,11 +53,12 @@ tique que vale é o seu: nada está conferido sem ele (ver a
 ### 1. Preparar o projeto
 
 - **Peça:** que copie do modelo pra pasta principal do projeto a pasta `scripts/`
-  inteira, o `.gitignore`, o `LICENSE` e o `LICENSE-CONTENT.txt`, e, de `modelo-dados/`,
-  o `projeto.json`, o `estilo-cartao.css` e o `fluxo-ia.json`.
-- **Confira depois:** se os caminhos do `projeto.json` são as pastas que você quer.
-- **Sempre seu:** ativar o hook de commit na sua máquina (ver o
-  [README do hook](.githooks/README.md)).
+  inteira, a lista do que nunca vai pro GitHub (`.gitignore`), os dois arquivos de
+  licença (`LICENSE` e `LICENSE-CONTENT.txt`) e, de `modelo-dados/`, o mapa do projeto
+  (`projeto.json`), o estilo dos cartões (`estilo-cartao.css`) e o `fluxo-ia.json`.
+- **Confira depois:** se as pastas que o mapa do projeto indica são as que você quer.
+- **Se você guarda o projeto no GitHub:** pode ativar a conferência das mensagens, que é
+  opcional (ver o [README dela](.githooks/README.md)).
 
 ### 2. Formato da disciplina
 
@@ -61,7 +66,8 @@ tique que vale é o seu: nada está conferido sem ele (ver a
   tiver, a ementa.
 - **Peça:** que proponha cada resposta do [Descubra seu modelo](DESCUBRA-SEU-MODELO.md),
   dizendo por que ela cabe, ou não, nesse curso e nesse nível.
-- **Confira depois:** se o `formato.json` tem só as respostas que você aceitou.
+- **Confira depois:** se o arquivo de formato (`formato.json`) tem só as respostas que
+  você aceitou.
 - **Sempre seu:** cada resposta. A IA propõe; você decide.
 
 ### 3. Transcrição da aula
@@ -75,10 +81,10 @@ tique que vale é o seu: nada está conferido sem ele (ver a
 
 ### 4. Referências das fontes
 
-- **Peça:** que preencha os dados de cada fonte no `fontes.json`, como estão na folha de
-  rosto ou na página do documento, e gere as referências.
+- **Peça:** que preencha os dados de cada fonte no arquivo de fontes (`fontes.json`), como
+  estão na folha de rosto ou na página do documento, e gere as referências.
 - **Confira depois:** cada referência e a chamada dela, na conferência das referências,
-  contra a fonte. As [regras da ABNT](regras-abnt.md) dizem o que cada campo leva.
+  contra a fonte. As [regras da ABNT](regras-abnt.md) dizem o que cada informação leva.
 - **Sempre seu:** a escolha do *et al.* e o tique de cada referência.
 
 ### 5. Material de fora
@@ -110,12 +116,12 @@ tique que vale é o seu: nada está conferido sem ele (ver a
 
 ### 8. Baralho
 
-- **Peça:** que gere os baralhos com o `montar_deck.py`.
+- **Peça:** que gere os baralhos com o script `montar_deck.py`.
 - **Confira depois:** no Anki, se os cartões aparecem como na planilha.
 
-### 9. Documentos de raiz
+### 9. Documentos de apresentação
 
-- **Peça:** que copie e preencha os quatro documentos de
+- **Peça:** que copie pra pasta principal do projeto e preencha os quatro documentos de
   [`modelo-documentos-raiz/`](modelo-documentos-raiz/LEIA-ME.md).
 - **Sempre seu:** o aviso do recorte, a origem do material e o contato pra relatar erros.
 
@@ -123,8 +129,8 @@ tique que vale é o seu: nada está conferido sem ele (ver a
 
 - **Peça:** que rode todos os scripts, resolva cada linha `ERRO` ou `FALTA` e aponte toda
   parte das conferências que ainda não tem o seu tique.
-- **Sempre seu:** o tique final em cada parte e a análise humana do checklist de
-  auditoria.
+- **Sempre seu:** o tique final em cada parte e a análise humana da lista de revisão
+  da [seção 16 da metodologia](metodologia-de-conteudo.md#16-checklist-auditando-uma-disciplina-existente).
 
 ## O que é sempre seu
 

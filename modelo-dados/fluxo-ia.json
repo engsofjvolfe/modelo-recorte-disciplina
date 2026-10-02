@@ -21,7 +21,8 @@
     "Nada de disciplina vai para o código dos scripts: o que muda de um projeto para outro fica nos arquivos de dados.",
     "O script recolhe e confere o que é mecânico, a IA julga na curadoria e a pessoa julga na aceitação.",
     "Uma linha ERRO ou FALTA de script se resolve antes de ticar.",
-    "Mensagem de commit: um título e um parágrafo em prosa, sem lista."
+    "Se o projeto é guardado no GitHub, cada mensagem que descreve uma mudança tem um título e um parágrafo em prosa, sem lista.",
+    "Fale com a pessoa em palavras simples: ela pode não saber programar. Explique cada termo técnico na primeira vez e, quando ela travar, dê o passo a passo pro computador dela."
   ],
   "etapas": [
     {
@@ -39,7 +40,7 @@
       ],
       "pessoa": [
         "Decidir onde fica cada pasta, no projeto.json.",
-        "Ativar o hook de commit na própria máquina."
+        "Se guarda o projeto no GitHub, decidir se ativa a conferência das mensagens, que é opcional."
       ]
     },
     {
@@ -170,7 +171,7 @@
     },
     {
       "id": "raiz",
-      "nome": "Documentos de raiz",
+      "nome": "Documentos de apresentação",
       "metodologia": [13, 14],
       "documentos": ["modelo-documentos-raiz/LEIA-ME.md"],
       "entradas": ["material_gerado", "referencias"],
@@ -178,7 +179,7 @@
       "scripts": [],
       "conferencias": [],
       "ia": [
-        "Copiar os quatro documentos de modelo-documentos-raiz para a raiz do projeto e preencher cada colchete."
+        "Copiar os quatro documentos de modelo-documentos-raiz para a pasta principal do projeto e preencher cada trecho entre colchetes."
       ],
       "pessoa": [
         "Escrever o aviso do recorte e a origem do material.",

@@ -16,9 +16,10 @@ costuma dar acesso). Os exemplos daqui são inventados.
 
 Cada regra diz também quem cuida dela:
 
-- **o script**: o `referencias.py` faz sozinho, a partir dos dados;
-- **os dados**: você, ou a IA, escreve do jeito certo no `fontes.json`, e o script usa como
-  está;
+- **o script**: o `referencias.py`, um pequeno programa que vem pronto no modelo, faz
+  sozinho, a partir dos dados;
+- **os dados**: você, ou a IA, escreve do jeito certo no arquivo de fontes (o
+  `fontes.json`, explicado no fim deste documento), e o script usa como está;
 - **o texto**: quem escreve o material segue a regra ao citar.
 
 E quem confere é sempre uma pessoa: a conferência das referências mostra cada referência
@@ -233,10 +234,14 @@ substituiu a edição de 2018.
 
 ## Como preencher o `fontes.json`
 
-O arquivo começa com o campo `et_al` e uma lista `fontes`, uma entrada por fonte. Os
-campos de cada fonte:
+O arquivo de fontes, `fontes.json`, é um arquivo de texto com os dados de cada fonte,
+organizados de um jeito que o script consegue ler: cada informação tem um nome entre
+aspas, dois-pontos e o valor. Copie o modelo dele, `modelo-dados/fontes.json`, e troque
+cada trecho entre colchetes; a IA que você usa pode preencher pra você, e você confere
+depois. O arquivo começa com a escolha do `et_al` e uma lista `fontes`, uma entrada por
+fonte. As informações de cada fonte:
 
-| Campo | O que vai | Item da norma |
+| Informação | O que vai | Item da norma |
 | --- | --- | --- |
 | `chave` | Um código curto, sem espaço, o mesmo que o registro da transcrição usa | — |
 | `tipo` | `monografia` (livro, guia, manual, página, material de aula), `parte` (capítulo), `artigo` (de periódico) ou `outro` | 6023: 7.1, 7.3, 7.7.5 |
@@ -256,13 +261,13 @@ campos de cada fonte:
 
 E, no topo do arquivo:
 
-| Campo | O que vai | Item da norma |
+| Informação | O que vai | Item da norma |
 | --- | --- | --- |
-| `et_al` | `true` pra citar e referenciar só o primeiro de quatro autores ou mais, seguido de *et al.*; `false` pra pôr todos | 6023: 8.1.1.2; 10520: 6.1.2 |
+| `et_al` | `true` (sim) pra citar e referenciar só o primeiro de quatro autores ou mais, seguido de *et al.*; `false` (não) pra pôr todos | 6023: 8.1.1.2; 10520: 6.1.2 |
 
-Depois de preencher, rode `python scripts/validar_dados.py docs/fontes.json` pra conferir
-a forma do arquivo, e `python scripts/referencias.py` pra gerar as referências e a
-conferência (ver o [README dos scripts](scripts/README.md)).
+Depois de preencher, rode o script `validar_dados.py`, que confere se o arquivo está bem
+preenchido, e o `referencias.py`, que gera as referências e a conferência delas. O
+[README dos scripts](scripts/README.md) diz, passo a passo, como rodar cada um.
 
 ## Referências
 

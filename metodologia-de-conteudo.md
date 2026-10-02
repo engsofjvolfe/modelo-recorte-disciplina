@@ -469,29 +469,30 @@ duas coisas é aceitável sob a desculpa do recorte.
 
 ---
 
-## 13. Escreva os quatro documentos de navegação raiz
+## 13. Escreva os quatro documentos de apresentação
 
-Acompanhe toda disciplina de quatro documentos na raiz do projeto, com papéis fixos que
-não mudam de disciplina pra disciplina — só o conteúdo dentro de cada seção muda (veja
-[LEIA-ME](modelo-documentos-raiz/LEIA-ME.md) antes de adicionar os documentos):
+Acompanhe toda disciplina de quatro documentos na pasta principal do projeto, com papéis
+fixos que não mudam de disciplina pra disciplina — só o conteúdo dentro de cada seção
+muda (veja o [LEIA-ME](modelo-documentos-raiz/LEIA-ME.md) antes de adicionar os
+documentos):
 
 | Documento | Papel fixo |
 |---|---|
-| `README.md` | Documentação técnica: o que é o projeto, aviso sobre o recorte, como o material foi feito (o que é mecânico e o que é julgamento), origem do material, licença, estrutura de arquivos, como usar, referências. |
+| `README.md` | Apresentação do projeto: o que é, aviso sobre o recorte, como o material foi feito (o que é mecânico e o que é julgamento), origem do material, licença, onde fica cada arquivo, como usar, referências. |
 | `INDICE.md` | Índice do projeto: lista e linka os documentos que existem (teoria fundamental, dicionário, ficha, planilhas, fontes), sem explicação. |
 | `MANUAL.md` (ou equivalente não técnico) | Guia em níveis, sem jargão, pra quem só quer estudar. Abra com o aviso do recorte e tenha um canal pra reportar erro. |
 | `NOTICE.md` | Mapa de licenciamento: qual licença cobre qual categoria de arquivo, e a exceção do material de terceiros. |
 
-O índice da raiz lista documentos, não itens de dentro deles: cada documento de
+O índice do projeto lista documentos, não itens de dentro deles: cada documento de
 conteúdo (teoria fundamental, dicionário, ficha) mantém seu próprio índice interno, no
 topo do próprio arquivo, se tiver itens ou seções suficientes pra precisar de um. Sem
-essa distinção, o índice da raiz cresce junto com o conteúdo e acaba duplicando a
+essa distinção, o índice do projeto cresce junto com o conteúdo e acaba repetindo a
 estrutura de cada documento dentro de si mesmo.
 
-Existe um esqueleto pronto desses quatro arquivos em `modelo-documentos-raiz/`, na raiz
-deste repositório-modelo — copie-os pra raiz do projeto da disciplina nova e preencha
-os colchetes, em vez de escrever cada um do zero (o `LEIA-ME.md` de dentro dessa pasta
-explica a convenção com mais detalhe).
+Existe um esqueleto pronto desses quatro arquivos em `modelo-documentos-raiz/`, na pasta
+principal deste modelo — copie-os pra pasta principal do projeto da disciplina nova e
+preencha os trechos entre colchetes, em vez de escrever cada um do zero (o `LEIA-ME.md` de
+dentro dessa pasta explica como, com mais detalhe).
 
 Ao adicionar uma disciplina nova a um projeto que já tem essa estrutura, edite as
 seções desses quatro documentos com o conteúdo novo — não crie uma segunda versão
@@ -519,27 +520,25 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
 
 Em todo arquivo de código e todo documento de conteúdo, indique de forma breve qual
 licença o cobre — um comentário de uma ou duas linhas no topo do código, uma linha no
-fim do documento de conteúdo. Deixe as planilhas e os arquivos de dados (JSON) fora
-dessa regra: um comentário quebraria a leitura de quem abre o arquivo como tabela, e o
-JSON nem aceita comentário.
+fim do documento de conteúdo. Deixe as planilhas e os arquivos de dados (os `.json`, que
+guardam informação pros scripts) fora dessa regra: um comentário quebraria a leitura de
+quem abre a planilha como tabela, e o arquivo `.json` nem aceita comentário.
 
 ---
 
 ## 15. Checklist: adicionando uma disciplina nova
 
-1. Prepare o projeto: copie pra raiz dele, do modelo, a pasta `scripts/` inteira (com
-   `esquemas/` e `normas/`, sem mudar o nome de nada dela), o `.gitignore`, o `LICENSE` e o `LICENSE-CONTENT.txt`, e
-   `modelo-dados/projeto.json`, `modelo-dados/estilo-cartao.css` e
-   `modelo-dados/fluxo-ia.json` — o `projeto.json` é o mapa de onde fica cada coisa, e os
-   scripts tiram todo caminho dali (se mudar uma pasta de lugar, mude também o
-   `.gitignore`, pra o material de terceiros continuar fora do GitHub); o estilo é a
-   aparência dos cartões; o fluxo é o método em dados, que a IA lê (ver
-   [Trabalhar com uma IA](trabalhar-com-ia.md)) — e ative o hook de commit: copie
-   `.githooks/` pra raiz do projeto novo, adicione `.githooks/` ao `.gitignore` desse
-   projeto (a pasta é ferramenta local de quem mantém, não faz parte do pacote
-   versionado de cada disciplina — só é versionada aqui, no modelo, que é a fonte de
-   onde ela é copiada) e rode `git config core.hooksPath .githooks` mais `git config
-   commit.template .githooks/commit-template.txt` uma vez (ver `.githooks/README.md`).
+1. Prepare o projeto: crie a pasta principal dele e copie pra ela, do modelo, a pasta
+   `scripts/` inteira (sem mudar o nome de nada dela), os dois arquivos de licença
+   (`LICENSE` e `LICENSE-CONTENT.txt`), a lista do que nunca vai pro GitHub
+   (`.gitignore`) e, de `modelo-dados/`, o mapa do projeto (`projeto.json`), o estilo dos
+   cartões (`estilo-cartao.css`) e o método em dados (`fluxo-ia.json`, que a IA lê — ver
+   [Trabalhar com uma IA](trabalhar-com-ia.md)). É do mapa do projeto que os scripts
+   tiram todo caminho; se você mudar uma pasta de lugar ali, mude também a lista do que
+   nunca vai pro GitHub, pra o material de terceiros continuar de fora. Se travar em
+   algum passo, peça ajuda à IA que você usa. Se você guarda o projeto no GitHub, pode
+   ativar também a conferência das mensagens, que é opcional (ver o
+   [README dela](.githooks/README.md)).
 2. Guarde o material de aula original por convenção e decida o formato da disciplina
    (seção 1): o nome do elo central do dicionário e os nomes dos eixos da ficha — tome
    essa decisão de forma explícita, sem herdar de outra disciplina — gravados em
@@ -559,8 +558,7 @@ JSON nem aceita comentário.
    conferência dos cartões e confira se as planilhas cobrem tudo que deveriam cobrir
    (seção 9).
 8. Gere o baralho com o script do modelo (seção 10).
-9. Atualize as quatro seções correspondentes nos quatro documentos de navegação raiz
-   (seção 13).
+9. Atualize as seções correspondentes nos quatro documentos de apresentação (seção 13).
 10. Faça a auditoria de consistência (seção 16) antes de considerar a disciplina pronta.
 
 ## 16. Checklist: auditando uma disciplina existente
@@ -580,7 +578,7 @@ JSON nem aceita comentário.
 3. Procure um termo definido em teoria fundamental que algum item usa implicitamente
    sem citar pelo nome em nenhum documento desse item.
 4. Procure um arquivo cujo nome não corresponda a nenhuma das funções da seção 5.
-5. Confira se os quatro documentos de navegação raiz têm as mesmas seções que outras
+5. Confira se os quatro documentos de apresentação têm as mesmas seções que outras
    disciplinas já cobertas, mesmo que o conteúdo ainda seja "isto não foi feito ainda".
 6. Procure um fato do material original que não apareça em nenhum documento gerado.
 7. Confira a planilha de perguntas linha por linha contra o dicionário/ficha de origem
