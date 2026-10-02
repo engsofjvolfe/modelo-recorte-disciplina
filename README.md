@@ -12,8 +12,9 @@ O método deste modelo usa IA na produção do material: propor o formato da dis
 redigir os documentos, gerar as planilhas de pergunta e, quando for preciso, escrever um
 script novo (seções 2 a 10 da [metodologia](metodologia-de-conteudo.md)). O que a IA produz não vira material final
 direto: passa primeiro por uma análise mecânica, a que um script consegue fazer, e depois
-pela análise humana, contra o material de origem. A escolha do recorte, a decisão sobre
-cada fato e a palavra final são de uma pessoa.
+pela análise humana, contra o material de origem (o que é uma e o que é outra em cada
+etapa está na [seção 11 da metodologia](metodologia-de-conteudo.md#11-confira-primeiro-o-script-depois-a-pessoa)).
+A escolha do recorte, a decisão sobre cada fato e a palavra final são de uma pessoa.
 
 Qualquer assistente de IA serve. Como usá-lo — gratuito ou pago, sozinho ou com
 agentes trabalhando em equipe — é decisão de quem segue o modelo. Este repositório não

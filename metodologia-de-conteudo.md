@@ -460,7 +460,7 @@ não mudam de disciplina pra disciplina — só o conteúdo dentro de cada seç�
 
 | Documento | Papel fixo |
 |---|---|
-| `README.md` | Documentação técnica: o que é o projeto, aviso sobre o recorte, origem do material, licença, estrutura de arquivos, como usar, referências. |
+| `README.md` | Documentação técnica: o que é o projeto, aviso sobre o recorte, como o material foi feito (o que é mecânico e o que é julgamento), origem do material, licença, estrutura de arquivos, como usar, referências. |
 | `INDICE.md` | Índice do projeto: lista e linka os documentos que existem (teoria fundamental, dicionário, ficha, planilhas, fontes), sem explicação. |
 | `MANUAL.md` (ou equivalente não técnico) | Guia em níveis, sem jargão, pra quem só quer estudar. Abra com o aviso do recorte e tenha um canal pra reportar erro. |
 | `NOTICE.md` | Mapa de licenciamento: qual licença cobre qual categoria de arquivo, e a exceção do material de terceiros. |

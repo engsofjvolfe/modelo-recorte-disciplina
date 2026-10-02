@@ -25,6 +25,23 @@ específica de uma disciplina de graduação:
   fatos clinicamente ou tecnicamente relevantes devem ser conferidos com a bibliografia
   oficial da disciplina antes de uma prova.
 
+## Como este material foi feito
+
+Parte do trabalho pode ter sido feita por processos automáticos, e a parte mais difícil
+— transcrever as aulas, redigir os documentos, gerar as perguntas — pode ter sido feita
+com ajuda de IA. Cada parte do trabalho é uma de duas coisas:
+
+- **Mecânica:** feita por um programa, sempre do mesmo jeito, sem julgar o conteúdo —
+  montar as referências, conferir se cada trecho citado está na fonte, montar os cartões
+  do Anki.
+- **Julgamento:** de uma pessoa, contra a fonte — escolher o recorte, decidir cada fato
+  e conferir, por último, cada página transcrita, cada referência e cada cartão.
+
+[Diga em que etapas a IA entrou neste projeto, ou que ela não foi usada.] O que é
+mecânico e o que é julgamento em cada etapa está explicado na metodologia do
+projeto-modelo `modelo-recorte-disciplina`, seção 11 ("Confira: primeiro o script,
+depois a pessoa").
+
 ## Origem do conteúdo
 
 O material de [disciplina] original que serviu de base para este núcleo está em

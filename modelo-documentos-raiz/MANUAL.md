@@ -4,11 +4,13 @@ Este manual explica como usar este material, do jeito mais rápido possível. N�
 documentação técnica — é um guia para quem só quer estudar, sem precisar entender a
 estrutura interna do projeto inteiro.
 
-## Antes de tudo: isto foi feito por uma pessoa só, à mão
+## Antes de tudo: isto foi feito por uma pessoa só
 
-Todo o material deste projeto — texto ou resposta — foi selecionado e escrito de forma
-manual e subjetiva por quem organizou o projeto. Não é uma revisão sistemática, não
-passou por banca revisora, e não foi gerado por um processo automatizado. Na prática:
+Todo o material deste projeto — texto ou resposta — foi selecionado e conferido, de forma
+subjetiva, por quem organizou o projeto. Parte do trabalho foi feita por programas e com
+ajuda de IA; o que foi mecânico e o que foi julgamento está explicado no
+[README.md](README.md#como-este-material-foi-feito). Não é uma revisão sistemática e não
+passou por banca revisora. Na prática:
 
 - Pode ter erro em qualquer parte — texto ou resposta.
 - A escolha de quais assuntos entraram, e a profundidade de cada um, foi um julgamento
@@ -84,7 +86,7 @@ item.
 
 ## Nível 4 — Erros e como colaborar
 
-Este material é curadoria manual de uma pessoa só — pode ter erro. Encontrou um erro ou
+Este material é curadoria de uma pessoa só — pode ter erro. Encontrou um erro ou
 tem uma sugestão melhor? Mande um e-mail para **[endereço de contato]**, incluindo:
 
 1. **No assunto:** o nome do item + qual parte está errada.
