@@ -19,8 +19,10 @@ O script recolhe, a IA julga na curadoria, a pessoa julga na aceitacao:
      "repetida" (com a frase que ela repete), "fora-do-recorte" ou "nao-e-conteudo";
   4. cada subtopico da grade do formato da disciplina fica marcado como "aula", "fonte"
      ou "lacuna";
-  5. o script grava a base do item (so as frases "usa", literais, com a citacao e a
-     pagina, e o registro das fontes no topo) e a conferencia dos trechos: cada pagina
+  5. sem nenhum erro nos dados do item, o script grava a base do item (so as frases
+     "usa", literais, com a citacao e a pagina, e o registro das fontes no topo); com
+     erro, a base fica so com o aviso de que nao foi gerada. E grava a conferencia dos
+     trechos: cada pagina
      (ou documento, quando nao ha paginas), com a imagem quando e PDF, as frases e a
      classe de cada uma, e as caixas de tique "IA" e "pessoa".
 
@@ -209,8 +211,13 @@ def descricao(classe):
     return texto
 
 
-def grava_base(dados, formato, grade, partes, lugares, raiz, saida):
+def grava_base(dados, formato, grade, partes, lugares, raiz, saida, com_erro):
     item = next((i for i in formato["itens"] if i["id"] == dados["item"]), {"nome": dados["item"]})
+    if com_erro:
+        saida.parent.mkdir(parents=True, exist_ok=True)
+        saida.write_text(f"# Base de trechos do material de fora — {item['nome']}\n\nBase não gerada: os dados do "
+                         "item têm erro. Resolva cada ERRO e rode o base_externa.py de novo.\n", encoding="utf-8")
+        return
     registro, vistos = [], set()
     for lugar in lugares:
         if lugar["fonte"] not in vistos:
@@ -303,7 +310,7 @@ def processa(projeto, arquivo_dados, formato, anteriores):
     grade = unidades_da_grade(formato)
     erros += confere(dados, grade, partes, any(i["id"] == dados["item"] for i in formato["itens"]))
     base = projeto.caminho_com("base_externa", dados["item"])
-    grava_base(dados, formato, grade, partes, lugares, raiz, base)
+    grava_base(dados, formato, grade, partes, lugares, raiz, base, bool(erros))
     saida = projeto.caminho("conferencia_trechos")
     bloco, cont = bloco_do_item(dados, arquivo_dados, base, partes, lugares, raiz, saida, anteriores,
                                 projeto.pasta_de_imagens(saida), projeto.valor("resolucao_imagens"))

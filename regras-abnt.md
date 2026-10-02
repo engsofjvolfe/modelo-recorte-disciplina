@@ -137,9 +137,10 @@ substituiu a edição de 2018.
 - Os elementos seguem uma ordem fixa pra cada tipo de documento (6.1, 6.2). *O script.*
 - Um elemento complementar (número de páginas, ISBN, série...) usado numa referência
   entra em todas as do mesmo tipo (6.8). *Os dados.*
-- O que você acrescenta — "Disponível em:", "Acesso em:", as notas — vai no idioma do seu
-  texto, não no da fonte (6.5). *O script* pras duas expressões e pro mês da data de
-  acesso, que sai no idioma do formato da disciplina; *os dados* pras notas.
+- O que você acrescenta vai no idioma do seu texto, não no da fonte (6.5). As expressões
+  "Disponível em:" e "Acesso em:" são as da própria norma e saem sempre assim (6.6); o
+  mês da data de acesso sai no idioma do formato da disciplina. *O script.* As notas vão
+  no idioma do texto. *Os dados.*
 
 ### Autoria
 

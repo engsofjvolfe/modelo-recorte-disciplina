@@ -43,3 +43,8 @@ ao meio entre "título" e "descrição" ainda passa, porque isso é sentido, nã
 sentido não é mecanizável por regex. O que o hook mecaniza é só o que é checável sem
 julgamento: existe título, existe separador, não tem lista, o marcador do template foi
 substituído.
+
+---
+
+*Este documento está licenciado sob [CC BY-NC-SA 4.0](../LICENSE-CONTENT.txt); o
+`commit-msg`, que é código, sob [GPL-3.0](../LICENSE).*

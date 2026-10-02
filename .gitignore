@@ -1,11 +1,11 @@
 # === Material de terceiros — NUNCA versionar (ver NOTICE.md) ===
-# Material de aula de terceiros (PDFs de slides ou equivalente) e copias do material
-# de fora que completa a aula. Nao e nosso para redistribuir; fica so localmente. Isto
-# nao e uma pendencia a resolver depois — e uma regra de proveniencia permanente (ver
-# secoes 2, 4 e 14 da metodologia de conteudo).
-docs/material-base/*.pdf
-docs/material-base/gerados-ocr
-docs/material-base/fontes-externas
+# Material de aula de terceiros (PDFs de slides ou equivalente), a transcricao dele,
+# copias do material de fora que completa a aula e tudo o que se gera a partir deles:
+# tudo na pasta do material de base, menos o README dela. Nao e nosso para
+# redistribuir; fica so localmente. Isto nao e uma pendencia a resolver depois — e uma
+# regra de proveniencia permanente (ver secoes 2, 4 e 14 da metodologia de conteudo).
+docs/material-base/*
+!docs/material-base/README.md
 
 # === Python ===
 __pycache__/

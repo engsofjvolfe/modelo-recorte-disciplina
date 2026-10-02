@@ -14,5 +14,13 @@ o modelo dos documentos que vão pra raiz do projeto da disciplina nova — ver 
   `INDICE.md` só depois de escrever o conteúdo (seção 5 da metodologia), porque os
   links dele apontam pros documentos que você acabou de escrever.
 
+- Os caminhos que aparecem nos quatro arquivos (`docs/material-gerado/`, `docs/FONTES.md`,
+  `anki-decks/` e os outros) são os do modelo. Se o `projeto.json` do seu projeto puser
+  alguma pasta em outro lugar, troque o caminho também nesses arquivos.
+
 Este arquivo (`LEIA-ME.md`) é o único conteúdo desta pasta que não é copiado — ele
 existe só pra documentar a convenção da pasta.
+
+---
+
+*Este documento está licenciado sob [CC BY-NC-SA 4.0](../LICENSE-CONTENT.txt).*

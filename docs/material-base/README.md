@@ -7,7 +7,7 @@ pendência a resolver depois (ver seção 14 da
 [metodologia de conteúdo](../../metodologia-de-conteudo.md)):
 
 - **Nunca é versionada, publicada ou redistribuída** — o `.gitignore` da raiz já exclui
-  `*.pdf` e as subpastas `gerados-ocr/` e `fontes-externas/` daqui.
+  tudo o que está aqui dentro, menos este README.
 - A referência de cada material — as aulas e o de fora — sai dos dados em
   `docs/fontes.json` e vai pro `docs/FONTES.md`, que são versionados: o que fica de fora
   é a cópia, não a referência.
@@ -31,3 +31,7 @@ pendência a resolver depois (ver seção 14 da
 
 Este arquivo (`README.md`) é o único conteúdo desta pasta que deve ser versionado — ele
 existe só para documentar a convenção, mesmo quando a pasta está vazia.
+
+---
+
+*Este documento está licenciado sob [CC BY-NC-SA 4.0](../../LICENSE-CONTENT.txt).*

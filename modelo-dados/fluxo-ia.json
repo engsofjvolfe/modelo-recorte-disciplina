@@ -19,7 +19,7 @@
     "Nenhum caminho é escrito de memória: todo caminho sai do projeto.json.",
     "Nada de disciplina vai para o código dos scripts: o que muda de um projeto para outro fica nos arquivos de dados.",
     "O script recolhe e confere o que é mecânico, a IA julga na curadoria e a pessoa julga na aceitação.",
-    "Uma linha ERRO de script se resolve antes de ticar.",
+    "Uma linha ERRO ou FALTA de script se resolve antes de ticar.",
     "Mensagem de commit: um título e um parágrafo em prosa, sem lista."
   ],
   "etapas": [
@@ -33,7 +33,7 @@
       "scripts": ["validar_dados.py"],
       "conferencias": [],
       "ia": [
-        "Copiar para a raiz do projeto, se a pessoa autorizar, o projeto.json, o estilo-cartao.css e este arquivo, de modelo-dados.",
+        "Copiar do modelo para a raiz do projeto, se a pessoa autorizar, a pasta scripts inteira, o .gitignore, o LICENSE e o LICENSE-CONTENT.txt, e, de modelo-dados, o projeto.json, o estilo-cartao.css e este arquivo.",
         "Conferir o projeto.json com validar_dados.py."
       ],
       "pessoa": [
@@ -194,7 +194,7 @@
       "scripts": ["validar_dados.py", "conferencia.py", "referencias.py", "base_externa.py", "confere_cartoes.py"],
       "conferencias": ["conferencia_imagens", "conferencia_referencias", "conferencia_trechos", "conferencia_cartoes"],
       "ia": [
-        "Rodar todos os scripts, resolver cada ERRO e apontar à pessoa toda parte sem o tique dela."
+        "Rodar todos os scripts, resolver cada ERRO e cada FALTA e apontar à pessoa toda parte sem o tique dela."
       ],
       "pessoa": [
         "Fazer a análise humana do checklist de auditoria.",

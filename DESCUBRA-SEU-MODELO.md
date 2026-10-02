@@ -76,7 +76,8 @@ O gerador de baralho (`scripts/montar_deck.py`) só exige duas colunas por nome:
 chamada `pergunta` e outra `resposta`. A metodologia pede mais uma em toda planilha, a
 `fonte`, com a citação de cada fato, que o gerador mostra no verso do cartão (seções 3
 e 9 da metodologia). Qualquer outra coluna que você criar vira parte do cartão
-automaticamente, com o nome que você escolheu.
+automaticamente, com o nome que você escolheu; no Anki, o nome aparece sem o sublinhado
+e com cada palavra em maiúscula (`tipo_pergunta` vira `TipoPergunta`).
 
 ---
 

@@ -3,12 +3,13 @@
   "$id": "projeto.schema.json",
   "title": "Caminhos do projeto",
   "type": "object",
-  "required": ["versao_schema", "prefixo_planilhas", "resolucao_imagens", "caminhos"],
+  "required": ["versao_schema", "prefixo_planilhas", "resolucao_imagens", "nome_licenca_conteudo", "caminhos"],
   "additionalProperties": true,
   "properties": {
     "versao_schema": { "const": 1 },
     "prefixo_planilhas": { "$ref": "#/$defs/texto" },
     "resolucao_imagens": { "type": "integer" },
+    "nome_licenca_conteudo": { "$ref": "#/$defs/texto" },
     "caminhos": {
       "type": "object",
       "additionalProperties": true,

@@ -171,13 +171,14 @@ def main(argv=None):
     (paginas, ia, pessoa, sem_pessoa), problemas_de_registro, registrados = gera(
         transcricoes, saida, projeto.raiz, projeto.pasta_de_imagens(saida), projeto.valor("resolucao_imagens"))
     for arq, situacao in problemas_de_registro:
-        print(f"REGISTRO: {arq.name} -- PDF registrado: {SITUACAO[situacao]}")
-    for pdf in sorted(projeto.caminho("material_base").glob("*.pdf")):
-        if pdf.resolve() not in registrados:
-            print(f"aviso: {pdf.name} nao e a fonte registrada de nenhuma transcricao")
+        print(f"ERRO: {arq.name} -- PDF registrado: {SITUACAO[situacao]}")
+    sem_transcricao = [pdf for pdf in sorted(projeto.caminho("material_base").glob("*.pdf"))
+                       if pdf.resolve() not in registrados]
+    for pdf in sem_transcricao:
+        print(f"ERRO: {pdf.name} não é a fonte registrada de nenhuma transcrição")
     print(f"{paginas} páginas | tique da IA: {ia} | tique da pessoa: {pessoa} | sem tique da pessoa: {sem_pessoa}")
     print(f"arquivo: {saida}")
-    return 1 if problemas_de_registro else 0
+    return 1 if problemas_de_registro or sem_transcricao else 0
 
 
 if __name__ == "__main__":

@@ -23,8 +23,8 @@ sem prova, prova sem cartao, pergunta repetida; coluna fonte sem chamada, texto 
 nao e chamada de nenhuma fonte, chamada sem lugar, lugar que a fonte nao tem; trecho que
 nao esta, letra por letra, em nenhum dos lugares citados, e lugar citado sem nenhum
 trecho; prova "categorica" com trecho que a base do material de fora marca como
-possibilidade. Na comparacao, so contam as letras: espacos, quebras de linha e marcas de
-destaque nao.
+possibilidade. Na comparacao, a quantidade de espacos, as quebras de linha e as marcas de
+destaque nao contam; letras e pontuacao contam.
 
 A conferencia mostra cada cartao com a pergunta, a resposta, a fonte, os trechos e onde
 cada um foi achado, e as caixas de tique "IA" e "pessoa"; o cartao que a fonte trata

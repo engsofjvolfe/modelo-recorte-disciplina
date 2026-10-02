@@ -13,7 +13,7 @@ de pasta em pasta a partir de onde o script e chamado (ou pelo arquivo indicado 
 "projeto.json" e a unica coisa fixa: e por ele que o script reconhece o projeto.
 
 Registro da fonte, no topo do documento gerado (uma linha por fonte; a chave e a mesma
-da referencia da fonte em docs/fontes.json):
+da referencia da fonte no arquivo de fontes do projeto):
     ---
     fonte <CHAVE>: <caminho relativo a raiz do projeto> | sha256: <64 hexadecimais>
     ---

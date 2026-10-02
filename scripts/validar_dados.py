@@ -15,7 +15,7 @@ para "#/$defs/...". Alem disso, uma regra fixa: numa lista de objetos que tem o 
 "id" ou "chave", nenhum id e nenhuma chave se repete. Campos que o schema nao conhece
 sao aceitos sem conferir (o formato pode crescer).
 
-Uso:
+Uso (os caminhos de exemplo sao os do modelo; no projeto, valem os do projeto.json):
     python scripts/validar_dados.py docs/formato.json
     python scripts/validar_dados.py DADOS.json --schema OUTRO.schema.json
 Sai com codigo 1 se houver qualquer erro.

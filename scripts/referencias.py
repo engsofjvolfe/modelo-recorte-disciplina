@@ -15,7 +15,8 @@ arquivo contra o schema dele, formata cada fonte pela ABNT NBR 6023 e grava:
 
 Os caminhos vem do projeto.json: "fontes", "referencias", "conferencia_referencias",
 "gerados", "licenca_conteudo", "imagens" e "formato" (de onde vem o idioma do texto, que
-e o da data de acesso), e a resolucao das imagens, de "resolucao_imagens". A abreviatura
+e o da data de acesso); a resolucao das imagens, de "resolucao_imagens"; e o nome da
+licenca do conteudo, do rodape do arquivo de referencias, de "nome_licenca_conteudo". A abreviatura
 dos meses em cada idioma vem de normas/meses.json, na pasta deste script.
 
 A copia de cada fonte e achada pelo registro no topo dos documentos gerados (ver
@@ -101,8 +102,8 @@ def ponto(texto):
 
 def autor(a):
     if "entidade" in a:
-        texto = ". ".join([a["entidade"][0].upper()] + a["entidade"][1:])
-        return texto + (f" ({a['qualificador']})" if a.get("qualificador") else "")
+        primeiro = a["entidade"][0].upper() + (f" ({a['qualificador']})" if a.get("qualificador") else "")
+        return ". ".join([primeiro] + a["entidade"][1:])
     return a["sobrenome"].upper() + (f", {a['prenomes']}" if a.get("prenomes") else "")
 
 
@@ -278,9 +279,9 @@ def copias_registradas(transcricoes, raiz):
     return out
 
 
-def grava_fontes_md(refs, saida, licenca):
+def grava_fontes_md(refs, saida, licenca, nome_licenca):
     corpo = ["# Referências", ""] + [linha for _, r in refs for linha in (r, "")]
-    corpo += ["---", "", f"*Este documento está licenciado sob [CC BY-NC-SA 4.0]({link(licenca, saida)}).*"]
+    corpo += ["---", "", f"*Este documento está licenciado sob [{nome_licenca}]({link(licenca, saida)}).*"]
     saida.parent.mkdir(parents=True, exist_ok=True)
     saida.write_text("\n".join(corpo) + "\n", encoding="utf-8")
 
@@ -362,7 +363,7 @@ def roda(projeto, chave_nova=None):
         for e in erros:
             print(f"ERRO em {e}")
         return 1
-    grava_fontes_md(refs, saida, projeto.caminho("licenca_conteudo"))
+    grava_fontes_md(refs, saida, projeto.caminho("licenca_conteudo"), projeto.valor("nome_licenca_conteudo"))
     copias = copias_registradas(transcricoes, projeto.raiz) if transcricoes.exists() else {}
     sem_pessoa = grava_conferencia(refs, chamadas, lista, copias, conferencia,
                                    projeto.pasta_de_imagens(conferencia), projeto.valor("resolucao_imagens"))

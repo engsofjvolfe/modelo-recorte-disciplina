@@ -182,7 +182,8 @@ filtro, separado em frases, cada uma com um código; a IA classifica cada frase 
 repetida, fora do recorte ou não é conteúdo —, e o script grava a base do item, só com
 as frases usadas, letra por letra, com a citação e a página. Ele recusa frase sem classe,
 subtópico sem marca, subtópico do material de fora sem frase nenhuma e frase usada onde
-a aula já cobre. A base e a conferência dela — cada página com as frases e a classe de
+a aula já cobre ou num subtópico marcado como lacuna, e não grava a base enquanto houver
+erro. A base e a conferência dela — cada página com as frases e a classe de
 cada uma, com tique da IA e da pessoa — ficam fora do controle de versão; o arquivo de
 dados, que só tem códigos e decisões, é versionado. É contra essa base que se confere
 cada fato tirado do material de fora, e frase que a fonte trata como possibilidade entra
@@ -416,8 +417,8 @@ primeira passada, e a da pessoa, que é sempre o último elo.
 | Cada frase do material de fora e a classe dela | A página da fonte | `base_externa.py` | `CONFERENCIA-TRECHOS.md` |
 | Cada cartão | O trecho da prova, no lugar que a citação diz | `confere_cartoes.py` | `CONFERENCIA-CARTOES.md` |
 
-Uma linha `ERRO` de um script se resolve antes de ticar: ela diz o que falta ou não bate
-nos dados. O script nunca diz se um conteúdo está certo — isso é a análise humana, parte
+Uma linha `ERRO` ou `FALTA` de um script se resolve antes de ticar: ela diz o que falta
+ou não bate nos dados. O script nunca diz se um conteúdo está certo — isso é a análise humana, parte
 por parte nas conferências e, no fim, na auditoria da
 [seção 16](#16-checklist-auditando-uma-disciplina-existente). Nada vale como conferido
 sem o tique da pessoa, e o tique sai sozinho se a parte mudar depois dele.
@@ -453,7 +454,7 @@ não mudam de disciplina pra disciplina — só o conteúdo dentro de cada seç�
 |---|---|
 | `README.md` | Documentação técnica: o que é o projeto, aviso sobre o recorte, origem do material, licença, estrutura de arquivos, como usar, referências. |
 | `INDICE.md` | Índice do projeto: lista e linka os documentos que existem (teoria fundamental, dicionário, ficha, planilhas, fontes), sem explicação. |
-| `MANUAL.md` (ou equivalente não técnico) | Guia em níveis, sem jargão, pra quem só quer estudar. Abra com o aviso do recorte e feche com um canal pra reportar erro. |
+| `MANUAL.md` (ou equivalente não técnico) | Guia em níveis, sem jargão, pra quem só quer estudar. Abra com o aviso do recorte e tenha um canal pra reportar erro. |
 | `NOTICE.md` | Mapa de licenciamento: qual licença cobre qual categoria de arquivo, e a exceção do material de terceiros. |
 
 O índice da raiz lista documentos, não itens de dentro deles: cada documento de
@@ -501,11 +502,13 @@ JSON nem aceita comentário.
 
 ## 15. Checklist: adicionando uma disciplina nova
 
-1. Prepare o projeto: copie `modelo-dados/projeto.json`, `modelo-dados/estilo-cartao.css`
-   e `modelo-dados/fluxo-ia.json` pra raiz dele — o primeiro é o mapa de onde fica cada
-   coisa, e os scripts tiram todo caminho dali (se mudar uma pasta de lugar, mude também
-   o `.gitignore`, pra o material de terceiros continuar fora do GitHub); o segundo é a
-   aparência dos cartões; o terceiro é o método em dados, que a IA lê (ver
+1. Prepare o projeto: copie pra raiz dele, do modelo, a pasta `scripts/` inteira (com
+   `esquemas/` e `normas/`), o `.gitignore`, o `LICENSE` e o `LICENSE-CONTENT.txt`, e
+   `modelo-dados/projeto.json`, `modelo-dados/estilo-cartao.css` e
+   `modelo-dados/fluxo-ia.json` — o `projeto.json` é o mapa de onde fica cada coisa, e os
+   scripts tiram todo caminho dali (se mudar uma pasta de lugar, mude também o
+   `.gitignore`, pra o material de terceiros continuar fora do GitHub); o estilo é a
+   aparência dos cartões; o fluxo é o método em dados, que a IA lê (ver
    [Trabalhar com uma IA](trabalhar-com-ia.md)) — e ative o hook de commit: copie
    `.githooks/` pra raiz do projeto novo, adicione `.githooks/` ao `.gitignore` desse
    projeto (a pasta é ferramenta local de quem mantém, não faz parte do pacote
@@ -541,7 +544,8 @@ JSON nem aceita comentário.
 
 1. Rode `python scripts/validar_dados.py` em cada arquivo de dados do projeto, e
    `conferencia.py`, `referencias.py`, `base_externa.py` e `confere_cartoes.py`: nenhum
-   deles pode deixar linha `ERRO` (ver a [seção 11](#11-confira-primeiro-o-script-depois-a-pessoa)).
+   deles pode deixar linha `ERRO` nem `FALTA` (ver a
+   [seção 11](#11-confira-primeiro-o-script-depois-a-pessoa)).
 
 ### Análise humana
 

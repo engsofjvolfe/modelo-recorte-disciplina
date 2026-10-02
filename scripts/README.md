@@ -30,12 +30,15 @@ Você precisa de três coisas. Faça uma vez só, no seu computador.
    material de terceiros fora do GitHub. No mesmo arquivo ficam a resolução das imagens
    das conferências e o nome da pasta onde elas são gravadas. Copie junto o
    [`modelo-dados/estilo-cartao.css`](../modelo-dados/estilo-cartao.css): é a aparência
-   dos cartões do Anki (cores, tamanho da letra), e você pode mudá-la ali.
+   dos cartões do Anki (cores, tamanho da letra), e você pode mudá-la ali. E copie a
+   pasta `scripts/` inteira, com as subpastas `esquemas/` e `normas/`: são os próprios
+   scripts e os arquivos que eles leem.
 3. **Dois complementos**, só pra alguns scripts:
    - pro `montar_deck.py`, a biblioteca `genanki`: no terminal, digite
      `pip install genanki` (ou `pip3 install genanki`) e aperte Enter;
-   - pro `conferencia.py`, e pro `referencias.py` quando a fonte é PDF, o Poppler, que é
-     o que transforma uma página de PDF em imagem: no Linux, `sudo apt install
+   - pro `conferencia.py` e o `base_externa.py`, e pro `referencias.py` e o
+     `registrar_fonte.py` quando a fonte é PDF, o Poppler, que é o que lê o texto de uma
+     página de PDF e a transforma em imagem: no Linux, `sudo apt install
      poppler-utils`; no Mac, `brew install poppler`; no Windows, siga as instruções do
      Poppler pra Windows, ou peça à IA que você usa o passo a passo pro seu computador.
 
@@ -114,7 +117,8 @@ ela veio e a chave da fonte — a mesma chave da referência dela no `fontes.jso
 este script roda sozinho no fim: se a chave ainda não tem referência, aparece
 `FALTA REFERÊNCIA`; se há referências sem o tique da pessoa, aparece `CONFERIR`.
 
-Usa só o Python: não precisa instalar nada.
+Precisa do Poppler quando a fonte é PDF, porque o `referencias.py`, que ele roda, mostra a
+primeira página dela.
 
 ## `referencias.py` — monta as referências e a conferência delas
 
@@ -137,8 +141,9 @@ fonte com quatro autores ou mais aparece só com o primeiro, seguido de *et al.*
 todos; o campo `idioma` de cada fonte diz em que língua sai o mês da data, e é
 obrigatório quando a data tem mês; e o campo `participacao` (`org.`, `coord.`...) diz que
 os autores organizaram a obra. O mês da data de acesso sai no idioma do texto, que vem
-do formato da disciplina (`docs/formato.json`, no modelo). A abreviatura dos meses de
-cada idioma fica em `scripts/normas/meses.json`, copiada da tabela da norma.
+do formato da disciplina (`docs/formato.json`, no modelo). As expressões "Disponível em:"
+e "Acesso em:" são as da norma e saem sempre assim. A abreviatura dos meses de cada
+idioma fica em `scripts/normas/meses.json`: são as abreviaturas que a norma adota.
 
 **Quando usar.** Sempre que mudar o `fontes.json`. O `registrar_fonte.py` já roda este
 script sozinho.
@@ -168,8 +173,10 @@ material, e de novo sempre que uma transcrição mudar.
 
     python scripts/conferencia.py
 
-**O que aparece.** Quantas páginas há e quantas ainda estão sem o tique da pessoa. O
-arquivo gerado (no modelo, `CONFERENCIA-COM-IMAGEM.md`, na pasta das transcrições) fica
+**O que aparece.** Quantas páginas há e quantas ainda estão sem o tique da pessoa. Uma
+linha `ERRO` aparece pra transcrição sem registro, com mais de uma fonte registrada ou
+cujo PDF mudou ou não existe, e pra PDF da pasta do material de base que não é a fonte de
+nenhuma transcrição. O arquivo gerado (no modelo, `CONFERENCIA-COM-IMAGEM.md`, na pasta das transcrições) fica
 melhor de ler na visualização do VSCode: abra o arquivo e aperte `Ctrl+Shift+V`.
 
 Precisa do Poppler.
@@ -189,9 +196,12 @@ pessoa confere.
    do item no nome (por exemplo, `docs/bases/AG1.json`), e preencha:
    - em `lugares`, cada fonte lida: a chave da referência dela, o arquivo e as páginas
      do arquivo que foram lidas (em PDF). Em `desloca`, quanto somar à página do arquivo
-     pra chegar ao número impresso — se a página 47 do arquivo tem impresso "45", é `-2`;
+     pra chegar ao número impresso — se a página 47 do arquivo tem impresso "45", é `-2`.
+     Se a diferença não for a mesma em todas as páginas, use `impressas`, com o número
+     impresso de cada página do arquivo: `{"47": "45", "48": "xii"}`;
    - em `cobertura`, cada subtópico da grade do formato da disciplina: `aula` (a aula
-     cobre), `fonte` (vem do material de fora) ou `lacuna` (nenhuma fonte cobre).
+     cobre), `fonte` (vem do material de fora) ou `lacuna` (nenhuma fonte cobre). Um eixo
+     sem subtópicos é marcado pelo id do próprio eixo.
 2. Rode o script. Na primeira vez, todas as frases aparecem como **sem classe** no
    arquivo de conferência, cada uma com um código, como `GUIA-2020:p47:3f2a91c0`: uma
    frase da página 47 do arquivo da fonte GUIA-2020. O final do código é uma impressão
@@ -219,8 +229,9 @@ os tiques de todos os itens continuam nela.
 
 **O que aparece.** Uma linha `ERRO` pra tudo o que falta ou se contradiz: frase sem
 classe, subtópico sem marca, subtópico marcado como `fonte` sem nenhuma frase usada,
-frase usada num subtópico que a aula já cobre. O script não julga se a classe está certa
-— isso é a conferência. Logo depois aparece o resultado das referências: este script
+frase usada num subtópico que a aula já cobre ou que está marcado como `lacuna`. Com
+`ERRO`, a base do item não é gravada: o arquivo dela fica só com esse aviso. O script não
+julga se a classe está certa — isso é a conferência. Logo depois aparece o resultado das referências: este script
 também roda o `referencias.py`, porque a base registra as fontes que usa.
 
 Precisa do Poppler quando alguma fonte é PDF.
@@ -274,7 +285,8 @@ IA e da pessoa.
 sem cartão (a pergunta mudou só de um lado), chamada que não é de nenhuma fonte, lugar
 que a fonte não tem, trecho que não está no lugar citado, lugar citado sem trecho, prova
 que diz que a fonte afirma quando a base marca o trecho como possibilidade. Na
-comparação só contam as letras: espaços, quebras de linha e marcas de destaque não. No
+comparação, a quantidade de espaços, as quebras de linha e as marcas de destaque
+(itálico, negrito) não contam; as letras e a pontuação contam. No
 fim, quantos cartões há, quantos têm erro e quantos estão sem o tique da pessoa. A
 conferência (no modelo, `CONFERENCIA-CARTOES.md`, na pasta das transcrições) mostra cada
 cartão com a pergunta, a resposta, a fonte, os trechos e onde cada um foi achado. Se o

@@ -48,8 +48,9 @@ tique que vale é o seu: nada está conferido sem ele (ver a
 
 ### 1. Preparar o projeto
 
-- **Peça:** que copie pra pasta principal do projeto o `projeto.json`, o
-  `estilo-cartao.css` e o `fluxo-ia.json`, de `modelo-dados/`.
+- **Peça:** que copie do modelo pra pasta principal do projeto a pasta `scripts/`
+  inteira, o `.gitignore`, o `LICENSE` e o `LICENSE-CONTENT.txt`, e, de `modelo-dados/`,
+  o `projeto.json`, o `estilo-cartao.css` e o `fluxo-ia.json`.
 - **Confira depois:** se os caminhos do `projeto.json` são as pastas que você quer.
 - **Sempre seu:** ativar o hook de commit na sua máquina (ver o
   [README do hook](.githooks/README.md)).
@@ -120,8 +121,8 @@ tique que vale é o seu: nada está conferido sem ele (ver a
 
 ### 10. Conferência final
 
-- **Peça:** que rode todos os scripts, resolva cada linha `ERRO` e aponte toda parte das
-  conferências que ainda não tem o seu tique.
+- **Peça:** que rode todos os scripts, resolva cada linha `ERRO` ou `FALTA` e aponte toda
+  parte das conferências que ainda não tem o seu tique.
 - **Sempre seu:** o tique final em cada parte e a análise humana do checklist de
   auditoria.
 

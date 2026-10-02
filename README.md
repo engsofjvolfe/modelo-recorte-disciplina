@@ -57,7 +57,8 @@ arquivo que a IA lê pra seguir as etapas.
 - **[Scripts](scripts/README.md)** — os programas que fazem a parte mecânica do método,
   sempre do mesmo jeito: em que etapa cada um entra e como rodá-lo.
 - **[Hook de commit](.githooks/README.md)** — confere a forma de cada mensagem de commit,
-  um título e um parágrafo em prosa, pra que o histórico do projeto se leia como texto.
+  um título, uma linha em branco e a descrição em prosa, sem lista, pra que o histórico
+  do projeto se leia como texto.
 - **[Licença do código](LICENSE)** e **[licença do conteúdo](LICENSE-CONTENT.txt)** — a
   GPL-3.0 vale pro código; a CC BY-NC-SA 4.0, pro resto.
 
