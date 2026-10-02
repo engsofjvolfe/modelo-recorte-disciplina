@@ -9,8 +9,8 @@ comece pelos dois primeiros itens da lista abaixo, nessa ordem.
 
 O método deste modelo usa IA na produção do material: propor o formato da disciplina
 (no [Descubra seu modelo](DESCUBRA-SEU-MODELO.md)), transcrever o material de aula,
-redigir os documentos, gerar as planilhas de pergunta e escrever os scripts (seções 5 a 7
-da [metodologia](metodologia-de-conteudo.md)). O que a IA produz não vira material final
+redigir os documentos, gerar as planilhas de pergunta e escrever os scripts (seções 2 a
+10 da [metodologia](metodologia-de-conteudo.md)). O que a IA produz não vira material final
 direto: passa primeiro por uma análise mecânica, a que um script consegue fazer, e depois
 pela análise humana, contra o material de origem. A escolha do recorte, a decisão sobre
 cada fato e a palavra final são de uma pessoa.

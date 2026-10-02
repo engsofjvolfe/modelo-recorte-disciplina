@@ -2,8 +2,8 @@
 
 Esta pasta recebe o material de aula original da disciplina (PDFs de slides ou
 equivalente) e, na subpasta `fontes-externas/`, as cópias do material de fora usado onde
-a aula não cobre um eixo (ver seção 5 da metodologia). Regra permanente, não uma
-pendência a resolver depois (ver seção 10 da
+a aula não cobre um eixo (ver seção 4 da metodologia). Regra permanente, não uma
+pendência a resolver depois (ver seção 14 da
 [metodologia de conteúdo](../../metodologia-de-conteudo.md)):
 
 - **Nunca é versionada, publicada ou redistribuída** — o `.gitignore` da raiz já exclui
@@ -13,9 +13,9 @@ pendência a resolver depois (ver seção 10 da
   é a cópia, não a referência.
 - A transcrição literal do material de aula (OCR ou equivalente) e a base de trechos
   literais do material de fora vão em `gerados-ocr/` — são a base contra a qual se
-  confere tudo o que se escreve, e também nunca são versionadas (ver seção 5 da
+  confere tudo o que se escreve, e também nunca são versionadas (ver as seções 2 e 4 da
   metodologia). Ali ficam também a base de cada item, `[item]-fontes-externas.md`; a
-  prova dos cartões de cada planilha, na subpasta `provas/` (ver seção 6 da
+  prova dos cartões de cada planilha, na subpasta `provas/` (ver seção 9 da
   metodologia); e os quatro arquivos de conferência, com as imagens deles na subpasta
   `imagens/`: o das transcrições contra a imagem de cada página,
   `CONFERENCIA-COM-IMAGEM.md`, gerado por `scripts/conferencia.py`; o das referências
@@ -26,7 +26,7 @@ pendência a resolver depois (ver seção 10 da
 - Os caminhos daqui são os do modelo. Em cada projeto, quem diz onde fica cada coisa é o
   `projeto.json` da raiz (ver o [README dos scripts](../../scripts/README.md)).
 - Antes de escrever qualquer coisa em `docs/material-gerado/`, leia este material
-  inteiro, sem ferramenta que corte ou resuma automaticamente o texto (ver seção 5 da
+  inteiro, sem ferramenta que corte ou resuma automaticamente o texto (ver seção 2 da
   metodologia).
 
 Este arquivo (`README.md`) é o único conteúdo desta pasta que deve ser versionado — ele

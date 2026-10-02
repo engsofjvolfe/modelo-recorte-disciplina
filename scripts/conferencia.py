@@ -17,7 +17,7 @@ pelo nome dos arquivos: uma transcricao registra uma fonte so. O arquivo gerado 
 cada transcricao, se o PDF registrado ainda e o mesmo, se mudou depois do registro ou se
 nao existe.
 
-Convencao da transcricao (secao 5 da metodologia): o registro da fonte no topo e uma
+Convencao da transcricao (secao 2 da metodologia): o registro da fonte no topo e uma
 secao por pagina, com o titulo "## <como a citacao chama a pagina> (arquivo p. <posicao
 no PDF>)" -- por exemplo, "## p. 12 (arquivo p. 14)" ou "## slide 3 (arquivo p. 3)".
 Pagina sem texto nenhum fica com a secao e a marca "[sem texto]".

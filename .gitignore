@@ -2,7 +2,7 @@
 # Material de aula de terceiros (PDFs de slides ou equivalente) e copias do material
 # de fora que completa a aula. Nao e nosso para redistribuir; fica so localmente. Isto
 # nao e uma pendencia a resolver depois — e uma regra de proveniencia permanente (ver
-# secoes 5 e 10 da metodologia de conteudo).
+# secoes 2, 4 e 14 da metodologia de conteudo).
 docs/material-base/*.pdf
 docs/material-base/gerados-ocr
 docs/material-base/fontes-externas

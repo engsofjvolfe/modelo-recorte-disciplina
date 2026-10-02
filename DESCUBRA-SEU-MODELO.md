@@ -12,7 +12,7 @@ Para ver esse formato aplicado numa disciplina real e concreta, veja:
 ## O que é estável entre disciplinas
 
 - Existe conteúdo que é teoria geral, sem ligação com um item específico — isso é
-  sempre um documento próprio (ver `metodologia-de-conteudo.md`, seção 1A).
+  sempre um documento próprio (ver `metodologia-de-conteudo.md`, seção 5A).
 - Quando existe um item que se repete e que alguém precisa aprender individualmente,
   contar esse item de dois jeitos — uma história em cadeia, e uma tabela seca com os
   mesmos fatos — permite estudar de duas formas sem duplicar o trabalho de escrever.
@@ -70,12 +70,12 @@ Confira o arquivo com `python scripts/validar_dados.py docs/formato.json`. É de
 arquivo que sai a grade do que cada item precisa ter, antes de qualquer material ser
 escrito. Se a sua disciplina precisar de um dado que o formato ainda não tem, acrescente
 o campo: o arquivo aceita campos novos, e os scripts ignoram o que não conhecem.
-Registre a mudança na metodologia (seção 13), pra que o formato cresça no modelo também.
+Registre a mudança na metodologia (seção 17), pra que o formato cresça no modelo também.
 
 O gerador de baralho (`scripts/montar_deck.py`) só exige duas colunas por nome: uma
 chamada `pergunta` e outra `resposta`. A metodologia pede mais uma em toda planilha, a
-`fonte`, com a citação de cada fato, que o gerador mostra no verso do cartão (seção 5
-da metodologia). Qualquer outra coluna que você criar vira parte do cartão
+`fonte`, com a citação de cada fato, que o gerador mostra no verso do cartão (seções 3
+e 9 da metodologia). Qualquer outra coluna que você criar vira parte do cartão
 automaticamente, com o nome que você escolheu.
 
 ---
