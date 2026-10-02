@@ -18,6 +18,7 @@
     "Material de terceiros nunca entra no controle de versão nem é publicado: o material de aula, as transcrições, as cópias e a base do material de fora, as provas dos cartões e os arquivos de conferência.",
     "Nenhum caminho é escrito de memória: todo caminho sai do projeto.json.",
     "Nunca renomeie a pasta scripts, nada dentro dela nem o projeto.json: é por esses nomes que os scripts se acham.",
+    "A pasta do material de base é a pasta protegida: nunca muda de nome nem de lugar, e toda fonte fica dentro dela. Se uma fonte estiver fora, os scripts oferecem levá-la; só use --mover depois que a pessoa autorizar.",
     "Nada de disciplina vai para o código dos scripts: o que muda de um projeto para outro fica nos arquivos de dados.",
     "O script recolhe e confere o que é mecânico, a IA julga na curadoria e a pessoa julga na aceitação.",
     "Uma linha ERRO ou FALTA de script se resolve antes de ticar.",
@@ -40,7 +41,7 @@
       ],
       "pessoa": [
         "Decidir onde fica cada pasta, no projeto.json.",
-        "Se guarda o projeto no GitHub, decidir se ativa a conferência das mensagens, que é opcional."
+        "Se guarda o projeto no GitHub, decidir se ativa a conferência das mensagens e a proteção das fontes, que é opcional."
       ]
     },
     {
@@ -103,7 +104,7 @@
       "metodologia": [4],
       "documentos": [],
       "entradas": ["formato", "gerados"],
-      "saidas": ["bases", "base_externa"],
+      "saidas": ["fontes_externas", "bases", "base_externa"],
       "scripts": ["base_externa.py"],
       "conferencias": ["conferencia_trechos"],
       "ia": [
@@ -193,7 +194,8 @@
       "documentos": [],
       "entradas": [],
       "saidas": [],
-      "scripts": ["validar_dados.py", "conferencia.py", "referencias.py", "base_externa.py", "confere_cartoes.py"],
+      "scripts": ["validar_dados.py", "conferencia.py", "referencias.py", "base_externa.py", "confere_cartoes.py",
+                  "protege_fontes.py"],
       "conferencias": ["conferencia_imagens", "conferencia_referencias", "conferencia_trechos", "conferencia_cartoes"],
       "ia": [
         "Rodar todos os scripts, resolver cada ERRO e cada FALTA e apontar à pessoa toda parte sem o tique dela."

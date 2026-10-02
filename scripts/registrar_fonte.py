@@ -14,12 +14,18 @@ Formato, no topo do documento:
     fonte AULA-1: docs/material-base/AULA.pdf | sha256: <64 algarismos hexadecimais>
     ---
 
+A fonte tem de ficar na pasta protegida (no projeto.json, "material_base"), que nunca e
+publicada. Se estiver fora, o script mostra de onde pra onde ela iria, pergunta e, se a
+pessoa confirmar, leva a fonte pra la antes de registrar; com --mover, leva sem
+perguntar (pra quando a pessoa ja autorizou). Se ela nao for, nada e registrado.
+
 Depois de registrar, roda as referencias (referencias.py): gera de novo o arquivo de
 referencias e a conferencia delas, avisa se a chave ainda nao tem referencia e lista as
 referencias que faltam conferir.
 
 Uso (de qualquer pasta dentro do projeto):
     python scripts/registrar_fonte.py DOCUMENTO.md ARQUIVO_DE_ORIGEM CHAVE
+    python scripts/registrar_fonte.py DOCUMENTO.md ARQUIVO_DE_ORIGEM CHAVE --mover
     python scripts/registrar_fonte.py DOCUMENTO.md ARQUIVO_DE_ORIGEM CHAVE --projeto projeto.json
 """
 
@@ -29,7 +35,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from comum import LINHA_FONTE, acha_projeto, impressao, separa_registro  # noqa: E402
+from comum import LINHA_FONTE, acha_projeto, dentro, impressao, leva_para, separa_registro  # noqa: E402
 
 
 def registra(documento, fonte, chave, raiz):
@@ -49,6 +55,8 @@ def main(argv=None):
     p.add_argument("documento", type=Path, help="documento gerado (.md)")
     p.add_argument("fonte", type=Path, help="arquivo de origem")
     p.add_argument("chave", help="chave da fonte, a mesma da referencia dela no arquivo de fontes")
+    p.add_argument("--mover", action="store_true",
+                   help="leva a fonte pra pasta protegida sem perguntar, se ela estiver fora")
     p.add_argument("--projeto", type=Path, help="projeto.json (padrao: o primeiro achado subindo a partir daqui)")
     a = p.parse_args(argv)
     if not a.fonte.exists():
@@ -56,7 +64,13 @@ def main(argv=None):
     if any(c.isspace() for c in a.chave):
         raise SystemExit("a chave nao pode ter espaco")
     projeto = acha_projeto(a.projeto)
-    print(registra(a.documento, a.fonte, a.chave, projeto.raiz))
+    fonte = a.fonte
+    if not dentro(fonte, projeto.caminho("material_base")):
+        fonte = leva_para(fonte, projeto.caminho("material_base"), a.mover)
+        if fonte is None:
+            raise SystemExit("ERRO: a fonte precisa ficar na pasta protegida antes de ser registrada; nada foi "
+                             "registrado")
+    print(registra(a.documento, fonte, a.chave, projeto.raiz))
 
     # gancho: o registro puxa as referencias e a conferencia delas
     import referencias

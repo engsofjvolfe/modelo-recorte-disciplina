@@ -78,14 +78,16 @@ O GitHub é um site que guarda um projeto na internet e o histórico de cada mud
 Você não precisa dele pra usar o modelo. Se usar, duas coisas daqui servem pra você:
 
 - **A lista do que nunca vai pro GitHub** — o arquivo `.gitignore`, que já vem pronto
-  pra deixar de fora todo o material de aula e o material de fora.
-- **[A conferência das mensagens](.githooks/README.md)** — cada vez que você grava uma
-  versão do projeto pra mandar ao GitHub, escreve uma mensagem dizendo o que mudou. Este
-  verificador, opcional, confere se a mensagem tem um título e uma explicação em texto
+  pra deixar de fora a pasta do material de base, onde fica todo o material de aula e o
+  material de fora.
+- **[A conferência das mensagens e a proteção das fontes](.githooks/README.md)** — cada
+  vez que você grava uma versão do projeto pra mandar ao GitHub, escreve uma mensagem
+  dizendo o que mudou. Ativada uma vez, ela barra a versão que levar uma fonte, mesmo
+  copiada com outro nome, e confere se a mensagem tem um título e uma explicação em texto
   corrido, pra que o histórico do projeto se leia como uma história.
 
 ---
 
 *Este modelo está licenciado sob [CC BY-NC-SA 4.0](LICENSE-CONTENT.txt) — exceto os
-programas (os scripts da pasta `scripts/` e o verificador de mensagens da pasta
-`.githooks/`), sob [GPL-3.0](LICENSE).*
+programas (os scripts da pasta `scripts/` e os verificadores da pasta `.githooks/`), sob
+[GPL-3.0](LICENSE).*

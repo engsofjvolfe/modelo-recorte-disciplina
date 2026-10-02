@@ -11,6 +11,7 @@
     "referencias": "docs/FONTES.md",
     "licenca_conteudo": "LICENSE-CONTENT.txt",
     "material_base": "docs/material-base",
+    "fontes_externas": "docs/material-base/fontes-externas",
     "gerados": "docs/material-base/gerados-ocr",
     "conferencia_imagens": "docs/material-base/gerados-ocr/CONFERENCIA-COM-IMAGEM.md",
     "conferencia_referencias": "docs/material-base/gerados-ocr/CONFERENCIA-REFERENCIAS.md",

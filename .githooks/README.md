@@ -1,4 +1,4 @@
-# Conferência das mensagens (opcional, pra quem usa o GitHub)
+# Conferência das mensagens e proteção das fontes (opcional, pra quem usa o GitHub)
 
 Você só precisa disto se guarda o projeto no GitHub, um site que guarda o projeto na
 internet e o histórico de cada mudança nele. Quem não usa o GitHub pode ignorar esta
@@ -8,8 +8,15 @@ pasta.
 
 Pra mandar uma mudança ao GitHub, você grava uma versão do projeto no seu computador — o
 programa que faz isso, o *git*, chama cada versão gravada de *commit* — e escreve uma
-mensagem dizendo o que mudou. Esta pasta traz duas coisas que ajudam a escrever essa
-mensagem sempre do mesmo jeito:
+mensagem dizendo o que mudou. Esta pasta traz três coisas que entram em ação nessa hora:
+
+- **Uma proteção das fontes** (o arquivo `pre-commit`): antes de aceitar a versão, ela
+  roda o script `protege_fontes.py` e barra a versão que levar um arquivo da pasta
+  protegida (a do material de base) ou uma cópia de uma fonte, mesmo com outro nome e em
+  outra pasta. Assim, nenhum material de terceiros vai pro GitHub por engano (ver o
+  [README dos scripts](../scripts/README.md)).
+
+As outras duas ajudam a escrever a mensagem sempre do mesmo jeito:
 
 - **Um esqueleto da mensagem** (o arquivo `commit-template.txt`): quando você vai gravar
   uma versão, o editor já abre com o lugar do título e o lugar da explicação marcados,
@@ -34,9 +41,9 @@ mensagem sempre do mesmo jeito:
        git config core.hooksPath .githooks
        git config commit.template .githooks/commit-template.txt
 
-A primeira liga o verificador; a segunda liga o esqueleto. A partir daí, toda vez que
-você gravar uma versão, o esqueleto aparece e a mensagem é conferida antes de ser
-aceita. Isso vale só no seu computador: quem copiar o projeto do GitHub pra outro
+A primeira liga a proteção das fontes e o verificador; a segunda liga o esqueleto. A
+partir daí, toda vez que você gravar uma versão, as fontes são conferidas, o esqueleto
+aparece e a mensagem é conferida antes de a versão ser aceita. Isso vale só no seu computador: quem copiar o projeto do GitHub pra outro
 computador precisa digitar as duas linhas de novo lá. Se travar, peça ajuda à IA que você
 usa.
 
@@ -56,5 +63,6 @@ em branco, não tem lista, o esqueleto foi substituído.
 
 ---
 
-*Este documento está licenciado sob [CC BY-NC-SA 4.0](../LICENSE-CONTENT.txt); o
-verificador (`commit-msg`), que é programa, sob [GPL-3.0](../LICENSE).*
+*Este documento está licenciado sob [CC BY-NC-SA 4.0](../LICENSE-CONTENT.txt); a
+proteção (`pre-commit`) e o verificador (`commit-msg`), que são programas, sob
+[GPL-3.0](../LICENSE).*

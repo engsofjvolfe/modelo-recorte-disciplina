@@ -41,8 +41,15 @@ fonte e PDF.
 Roda sempre todos os itens que tem arquivo de dados: a conferencia e um arquivo so, e os
 tiques de um item so continuam nela se o item for gerado de novo junto com os outros.
 
+A copia de cada fonte tem de ficar na pasta protegida ("material_base"). Se um lugar
+declara uma fonte fora dela, o script mostra de onde pra onde ela iria (a pasta
+"fontes_externas"), pergunta e, se a pessoa confirmar, leva a fonte e corrige o caminho
+no arquivo de dados do item; com --mover, leva sem perguntar. Se ela nao for, o item nao
+e gerado.
+
 Uso (de qualquer pasta dentro do projeto):
     python scripts/base_externa.py
+    python scripts/base_externa.py --mover
     python scripts/base_externa.py --projeto projeto.json
 """
 
@@ -50,13 +57,14 @@ import argparse
 import hashlib
 import html
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from comum import (acha_projeto, ancora, assinatura, caixas, comando, imagem, impressao, link,  # noqa: E402
-                   marca, tiques_anteriores, tiques_da_parte)
+from comum import (acha_projeto, ancora, assinatura, caixas, comando, dentro, imagem, impressao,  # noqa: E402
+                   leva_para, link, marca, tiques_anteriores, tiques_da_parte)
 from validar_dados import PASTA_ESQUEMAS, erros_de  # noqa: E402
 
 CLASSES = {
@@ -286,13 +294,37 @@ def bloco_do_item(dados, arquivo_dados, base, partes, lugares, raiz, saida, ante
     return corpo, cont
 
 
-def processa(projeto, arquivo_dados, formato, anteriores):
+def leva_lugares(projeto, lugares, sem_perguntar):
+    """Leva pra pasta das copias do material de fora cada fonte declarada que esteja fora
+    da pasta protegida, e muda o caminho dela nos lugares. Devolve quantos caminhos
+    mudaram, ou None se alguma fonte ficou fora."""
+    raiz, protegida, novos = projeto.raiz, projeto.caminho("material_base"), {}
+    for lugar in lugares:
+        if lugar["arquivo"] not in novos:
+            arquivo = raiz / lugar["arquivo"]
+            if not arquivo.exists() or dentro(arquivo, protegida):
+                continue
+            novo = leva_para(arquivo, projeto.caminho("fontes_externas"), sem_perguntar)
+            if novo is None:
+                return None
+            novos[lugar["arquivo"]] = Path(os.path.relpath(novo, raiz)).as_posix()
+        lugar["arquivo"] = novos[lugar["arquivo"]]
+    return len(novos)
+
+
+def processa(projeto, arquivo_dados, formato, anteriores, sem_perguntar):
     dados = json.loads(arquivo_dados.read_text(encoding="utf-8"))
     schema = json.loads((PASTA_ESQUEMAS / "base.schema.json").read_text(encoding="utf-8"))
     erros = erros_de(dados, schema, schema)
     if erros:
         return None, [f"{arquivo_dados.name}: {e}" for e in erros]
     raiz, lugares = projeto.raiz, dados["lugares"]
+    movidos = leva_lugares(projeto, lugares, sem_perguntar)
+    if movidos is None:
+        return None, [f"{arquivo_dados.name}: uma fonte declarada está fora da pasta protegida e não foi "
+                      "levada pra dentro; nada foi gerado pra este item"]
+    if movidos:
+        arquivo_dados.write_text(json.dumps(dados, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     erros = []
     for lugar in lugares:
         arquivo = raiz / lugar["arquivo"]
@@ -319,6 +351,8 @@ def processa(projeto, arquivo_dados, formato, anteriores):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description="Monta a base de trechos do material de fora e a conferência dela.")
+    p.add_argument("--mover", action="store_true",
+                   help="leva pra pasta protegida, sem perguntar, a fonte declarada que estiver fora dela")
     p.add_argument("--projeto", type=Path, help="projeto.json (padrao: o primeiro achado subindo a partir daqui)")
     a = p.parse_args(argv)
     projeto = acha_projeto(a.projeto)
@@ -331,19 +365,25 @@ def main(argv=None):
         raise SystemExit("nenhum arquivo de dados de base encontrado")
     saida = projeto.caminho("conferencia_trechos")
     anteriores = tiques_anteriores(saida)
-    resumo, corpo, todos_erros = [], [], []
+    resumo, corpo, todos_erros, sem_bloco = [], [], [], []
     totais = [0, 0, 0, 0]
     for arquivo_dados in arquivos:
-        if not arquivo_dados.exists():
-            todos_erros.append(f"arquivo de dados não existe: {arquivo_dados}")
-            continue
-        resultado, erros = processa(projeto, arquivo_dados, formato, anteriores)
+        resultado, erros = processa(projeto, arquivo_dados, formato, anteriores, a.mover)
         todos_erros += erros
-        if resultado:
-            item, bloco, (partes, ia, pessoa, sem_classe) = resultado
-            corpo += bloco
-            totais = [a + b for a, b in zip(totais, (partes, ia, pessoa, sem_classe))]
-            resumo.append(f"| [{item}](#{ancora(item)}) | {partes} | {sem_classe} | {ia} | {pessoa} | {partes - pessoa} |")
+        if not resultado:
+            sem_bloco.append(arquivo_dados.name)
+            continue
+        item, bloco, (partes, ia, pessoa, sem_classe) = resultado
+        corpo += bloco
+        totais = [a + b for a, b in zip(totais, (partes, ia, pessoa, sem_classe))]
+        resumo.append(f"| [{item}](#{ancora(item)}) | {partes} | {sem_classe} | {ia} | {pessoa} | {partes - pessoa} |")
+    for e in todos_erros:
+        print("ERRO:", e)
+    if sem_bloco:
+        # a conferencia e um arquivo so: regrava-la sem um item apagaria os tiques dele
+        print(f"A conferência não foi refeita, pra não perder os tiques de {', '.join(sem_bloco)}: "
+              "resolva os erros acima e rode de novo.")
+        return 1
     cabecalho = ["# Conferência dos trechos do material de fora", "",
                  "| Item | Partes | Frases sem classe | Tique da IA | Tique da pessoa | Sem tique da pessoa |",
                  "| :--- | ---: | ---: | ---: | ---: | ---: |"] + resumo
@@ -351,8 +391,6 @@ def main(argv=None):
                      f"**{totais[0] - totais[2]}** |")
     saida.parent.mkdir(parents=True, exist_ok=True)
     saida.write_text("\n".join(cabecalho + corpo) + "\n", encoding="utf-8")
-    for e in todos_erros:
-        print("ERRO:", e)
     print(f"{totais[0]} parte(s) | frases sem classe: {totais[3]} | sem tique da pessoa: {totais[0] - totais[2]}")
     print(f"conferência: {saida}")
 

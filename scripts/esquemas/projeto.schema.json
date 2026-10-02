@@ -24,8 +24,8 @@
     "caminhos": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["formato", "fontes", "referencias", "licenca_conteudo", "material_base", "gerados",
-                   "conferencia_imagens", "conferencia_referencias", "material_gerado", "baralhos",
+      "required": ["formato", "fontes", "referencias", "licenca_conteudo", "material_base", "fontes_externas",
+                   "gerados", "conferencia_imagens", "conferencia_referencias", "material_gerado", "baralhos",
                    "bases", "base_externa", "conferencia_trechos", "provas", "conferencia_cartoes", "imagens",
                    "estilo_cartao"],
       "properties": {
@@ -33,24 +33,34 @@
         "fontes": { "$ref": "#/$defs/texto" },
         "referencias": { "$ref": "#/$defs/texto" },
         "licenca_conteudo": { "$ref": "#/$defs/texto" },
-        "material_base": { "$ref": "#/$defs/texto" },
-        "gerados": { "$ref": "#/$defs/texto" },
-        "conferencia_imagens": { "$ref": "#/$defs/texto" },
-        "conferencia_referencias": { "$ref": "#/$defs/texto" },
+        "material_base": { "$ref": "#/$defs/pasta_protegida" },
+        "fontes_externas": { "$ref": "#/$defs/protegido" },
+        "gerados": { "$ref": "#/$defs/protegido" },
+        "conferencia_imagens": { "$ref": "#/$defs/protegido" },
+        "conferencia_referencias": { "$ref": "#/$defs/protegido" },
         "material_gerado": { "$ref": "#/$defs/texto" },
         "baralhos": { "$ref": "#/$defs/texto" },
         "bases": { "$ref": "#/$defs/modelo_por_item" },
-        "base_externa": { "$ref": "#/$defs/modelo_por_item" },
-        "conferencia_trechos": { "$ref": "#/$defs/texto" },
-        "provas": { "type": "string", "pattern": "\\{planilha\\}" },
-        "conferencia_cartoes": { "$ref": "#/$defs/texto" },
-        "imagens": { "$ref": "#/$defs/texto" },
+        "base_externa": { "allOf": [ { "$ref": "#/$defs/protegido" }, { "$ref": "#/$defs/modelo_por_item" } ] },
+        "conferencia_trechos": { "$ref": "#/$defs/protegido" },
+        "provas": { "allOf": [ { "$ref": "#/$defs/protegido" }, { "type": "string", "pattern": "\\{planilha\\}" } ] },
+        "conferencia_cartoes": { "$ref": "#/$defs/protegido" },
+        "imagens": { "$ref": "#/$defs/protegido" },
         "estilo_cartao": { "$ref": "#/$defs/texto" }
       }
     }
   },
   "$defs": {
     "texto": { "type": "string", "minLength": 1 },
-    "modelo_por_item": { "type": "string", "pattern": "\\{item\\}" }
+    "modelo_por_item": { "type": "string", "pattern": "\\{item\\}" },
+    "pasta_protegida": {
+      "description": "a pasta do material de terceiros: nunca muda de nome nem de lugar",
+      "const": "docs/material-base"
+    },
+    "protegido": {
+      "description": "tudo o que tem texto de terceiros fica dentro da pasta protegida",
+      "type": "string",
+      "pattern": "^docs/material-base/"
+    }
   }
 }

@@ -1,10 +1,11 @@
 # Material de base (nunca publicado)
 
-Esta pasta recebe o material de aula original da disciplina (PDFs de slides ou
-equivalente) e, na subpasta `fontes-externas/`, as cópias do material de fora usado onde
-a aula não cobre um eixo (ver seção 4 da metodologia). É uma regra permanente, não uma
-pendência a resolver depois (ver seção 14 da
-[metodologia de conteúdo](../../metodologia-de-conteudo.md)):
+Esta é a pasta protegida. Ela recebe o material de aula original da disciplina (PDFs de
+slides ou equivalente) e, na subpasta `fontes-externas/`, as cópias do material de fora
+usado onde a aula não cobre um eixo (ver seção 4 da metodologia). Ela nunca muda de nome
+nem de lugar: é assim que a lista do que nunca vai pro GitHub e os scripts sabem sempre
+onde está o material de terceiros. É uma regra permanente, não uma pendência a resolver
+depois (ver seção 14 da [metodologia de conteúdo](../../metodologia-de-conteudo.md)):
 
 - **Nada daqui é publicado nem repassado**, em lugar nenhum: esse material não é de quem
   mantém o projeto. Se você guarda o projeto no GitHub, a lista do que nunca vai pra lá
@@ -28,8 +29,11 @@ pendência a resolver depois (ver seção 14 da
     contra a prova deles (`CONFERENCIA-CARTOES.md`, feito pelo `confere_cartoes.py`). Os
     scripts são os pequenos programas do modelo; o
     [README deles](../../scripts/README.md) diz como rodar cada um.
-- Os caminhos daqui são os do modelo. Em cada projeto, quem diz onde fica cada coisa é o
-  mapa do projeto, o `projeto.json` da pasta principal.
+- Se uma fonte estiver em outro lugar, o script que a registra (o `registrar_fonte.py`,
+  pras aulas) ou o da base do material de fora (o `base_externa.py`) pergunta se pode
+  trazê-la pra cá; e o `protege_fontes.py` confere que nenhuma ficou de fora.
+- As subpastas daqui são as do modelo. Em cada projeto, quem diz onde fica cada coisa
+  dentro desta pasta é o mapa do projeto, o `projeto.json` da pasta principal.
 - Antes de escrever qualquer coisa em `docs/material-gerado/`, leia este material
   inteiro, sem ferramenta que corte ou resuma automaticamente o texto (ver seção 2 da
   metodologia).

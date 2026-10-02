@@ -55,12 +55,13 @@ precisa ter, o que a aula cobre e onde falta, antes de qualquer material ser esc
 
 ## 2. Trate as fontes da aula
 
-Guarde o material de aula original da disciplina — slides, apostila, ou o que for —
-numa pasta própria (`material-base/`, por convenção). Essa pasta carrega um arquivo
-pequeno e próprio dela, `docs/material-base/README.md`, que só documenta a convenção
-dessa pasta específica. Nunca publique a pasta `material-base/`: quem olha o projeto de
-fora normalmente não vai ver o conteúdo dela nem saber o que tem lá — ela existe só no
-seu computador, pra você, enquanto organiza aquela disciplina.
+Guarde o material de aula original da disciplina — slides, apostila, ou o que for — na
+pasta do material de base, `docs/material-base/`. É a pasta protegida: tudo o que é de
+terceiros fica nela, e ela nunca é publicada nem muda de nome ou de lugar. Ela carrega um
+arquivo pequeno e próprio dela, `docs/material-base/README.md`, que só explica como a
+pasta funciona. Quem olha o projeto de fora normalmente não vai ver o conteúdo dela nem
+saber o que tem lá — ela existe só no seu computador, pra você, enquanto organiza aquela
+disciplina. O `protege_fontes.py` confere que nenhuma fonte ficou fora dela.
 
 Faça uma transcrição integral e literal desse material, usando OCR se ele estiver
 digitalizado como imagem ou PDF escaneado (OCR é uma tecnologia que lê o texto de uma
@@ -100,7 +101,8 @@ coluna), porque um item solto pode mudar de sentido. Não entra nada que não es
 escrito: nem descrição de imagem, nem explicação, nem correção. Guarde a transcrição em
 `docs/material-base/gerados-ocr/` e, assim que ela for criada, registre no topo dela de
 qual arquivo veio, com `python scripts/registrar_fonte.py [transcrição] [arquivo
-original] [chave]`. A chave é a mesma da referência dessa fonte (ver a
+original] [chave]` — se o arquivo original estiver fora da pasta protegida, o script
+oferece levá-lo pra lá antes de registrar. A chave é a mesma da referência dessa fonte (ver a
 [seção 3](#3-cite-cada-fonte-conforme-a-abnt)); o script grava a chave, o caminho do
 arquivo e a impressão digital dele — um código calculado a partir do conteúdo do
 arquivo, que muda se o arquivo mudar —, e em seguida atualiza as referências. É esse
@@ -180,9 +182,10 @@ Se o material de aula não trouxer o que algum eixo da ficha pede pra um item (v
 completa a aula, não a substitui: use-o só onde a aula não chega. Vale a mesma regra da
 aula: o fato tem de estar escrito nesse material, nunca deduzido.
 
-Guarde uma cópia de cada material de fora junto do material de aula, numa subpasta
-própria (`docs/material-base/fontes-externas/`, por convenção), também sem publicar: ele
-também não é de quem mantém o projeto. Dê a cada cópia
+Guarde uma cópia de cada material de fora junto do material de aula, na subpasta das
+cópias do material de fora, `docs/material-base/fontes-externas/`, dentro da pasta
+protegida: ele também não é de quem mantém o projeto. Se a cópia estiver em outro lugar,
+o `base_externa.py` oferece levá-la pra lá. Dê a cada cópia
 um nome que comece pela entrada e pelo ano da referência dela, pra achar o arquivo a
 partir da citação.
 
@@ -513,10 +516,10 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
 - **Material de terceiros** (o material de aula original, sua transcrição literal, as
   cópias do material de fora, a base de trechos dele e a prova dos cartões — ver as
   seções [2](#2-trate-as-fontes-da-aula), [4](#4-complete-a-aula-com-material-de-fora) e
-  [9](#9-cartões-de-revisão-espaçada)):
+  [9](#9-cartões-de-revisão-espaçada)), tudo na pasta protegida:
   não coloque sob nenhuma licença deste projeto, porque quem mantém o projeto não é
-  quem escreveu esse material. Nunca disponibilize publicamente, de forma permanente —
-  não "por enquanto".
+  quem escreveu esse material. Nunca publique, de forma permanente — não "por
+  enquanto".
 
 Em todo arquivo de código e todo documento de conteúdo, indique de forma breve qual
 licença o cobre — um comentário de uma ou duas linhas no topo do código, uma linha no
@@ -534,11 +537,11 @@ quem abre a planilha como tabela, e o arquivo `.json` nem aceita comentário.
    (`.gitignore`) e, de `modelo-dados/`, o mapa do projeto (`projeto.json`), o estilo dos
    cartões (`estilo-cartao.css`) e o método em dados (`fluxo-ia.json`, que a IA lê — ver
    [Trabalhar com uma IA](trabalhar-com-ia.md)). É do mapa do projeto que os scripts
-   tiram todo caminho; se você mudar uma pasta de lugar ali, mude também a lista do que
-   nunca vai pro GitHub, pra o material de terceiros continuar de fora. Se travar em
-   algum passo, peça ajuda à IA que você usa. Se você guarda o projeto no GitHub, pode
-   ativar também a conferência das mensagens, que é opcional (ver o
-   [README dela](.githooks/README.md)).
+   tiram todo caminho; só a pasta do material de base nunca muda, e por isso a lista do
+   que nunca vai pro GitHub a deixa sempre de fora. Se travar em algum passo, peça ajuda
+   à IA que você usa. Se você guarda o projeto no GitHub, ative também a conferência das
+   mensagens e a proteção das fontes: é opcional, mas é ela que barra uma fonte que ia
+   pro GitHub por engano (ver o [README dela](.githooks/README.md)).
 2. Guarde o material de aula original por convenção e decida o formato da disciplina
    (seção 1): o nome do elo central do dicionário e os nomes dos eixos da ficha — tome
    essa decisão de forma explícita, sem herdar de outra disciplina — gravados em
@@ -566,8 +569,8 @@ quem abre a planilha como tabela, e o arquivo `.json` nem aceita comentário.
 ### Análise mecânica
 
 1. Rode `python scripts/validar_dados.py` em cada arquivo de dados do projeto, e
-   `conferencia.py`, `referencias.py`, `base_externa.py` e `confere_cartoes.py`: nenhum
-   deles pode deixar linha `ERRO` nem `FALTA` (ver a
+   `conferencia.py`, `referencias.py`, `base_externa.py`, `confere_cartoes.py` e
+   `protege_fontes.py`: nenhum deles pode deixar linha `ERRO` nem `FALTA` (ver a
    [seção 11](#11-confira-primeiro-o-script-depois-a-pessoa)).
 
 ### Análise humana

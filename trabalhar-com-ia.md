@@ -57,8 +57,11 @@ tique que vale é o seu: nada está conferido sem ele (ver a
   licença (`LICENSE` e `LICENSE-CONTENT.txt`) e, de `modelo-dados/`, o mapa do projeto
   (`projeto.json`), o estilo dos cartões (`estilo-cartao.css`) e o `fluxo-ia.json`.
 - **Confira depois:** se as pastas que o mapa do projeto indica são as que você quer.
-- **Se você guarda o projeto no GitHub:** pode ativar a conferência das mensagens, que é
-  opcional (ver o [README dela](.githooks/README.md)).
+- **Se você guarda o projeto no GitHub:** ative a conferência das mensagens e a proteção
+  das fontes. É opcional, mas é ela que barra uma fonte que ia pro GitHub por engano (ver
+  o [README dela](.githooks/README.md)).
+- **Sempre seu:** autorizar a IA a mover uma fonte pra pasta protegida, quando um script
+  perguntar.
 
 ### 2. Formato da disciplina
 

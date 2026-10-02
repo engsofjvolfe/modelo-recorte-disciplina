@@ -11,7 +11,9 @@ sempre de uma pessoa.
 Nenhum script tem nada de disciplina dentro dele, nem caminho de pasta: o que muda de um
 projeto pra outro fica nos arquivos de dados do projeto. Os únicos nomes fixos são os do
 próprio motor — a pasta `scripts/`, tudo o que está dentro dela e o `projeto.json` — e
-eles nunca se mudam: é por esses nomes que os scripts se acham uns aos outros.
+eles nunca se mudam: é por esses nomes que os scripts se acham uns aos outros. A pasta do
+material de base, `docs/material-base`, também nunca muda de nome nem de lugar: é a pasta
+protegida, onde fica todo o material de terceiros (ver o `protege_fontes.py`, abaixo).
 
 ## Antes da primeira vez
 
@@ -27,10 +29,10 @@ Você precisa de três coisas. Faça uma vez só, no seu computador.
    [`modelo-dados/projeto.json`](../modelo-dados/projeto.json) pra pasta principal do
    projeto da sua disciplina. Ele diz aos scripts onde fica cada coisa: onde estão as
    aulas, onde ficam as transcrições, onde sai o baralho. Se um dia você mudar uma pasta
-   de lugar, muda só nesse arquivo — nenhum script precisa ser mexido. Se você guarda o
-   projeto no GitHub e a pasta mudada for a do material de base, mude também a lista do
-   que nunca vai pra lá (o arquivo `.gitignore`), pra o material de terceiros continuar de
-   fora. No mesmo arquivo ficam a resolução das imagens
+   de lugar, muda só nesse arquivo — nenhum script precisa ser mexido. A única que não
+   muda é a do material de base, `docs/material-base`, e tudo o que fica dentro dela: é
+   por ter nome e lugar fixos que a lista do que nunca vai pro GitHub (o arquivo
+   `.gitignore`) a deixa sempre de fora. No mesmo arquivo ficam a resolução das imagens
    das conferências e o nome da pasta onde elas são gravadas. Copie junto o
    [`modelo-dados/estilo-cartao.css`](../modelo-dados/estilo-cartao.css): é a aparência
    dos cartões do Anki (cores, tamanho da letra), e você pode mudá-la ali. E copie a
@@ -75,6 +77,7 @@ como `docs/formato.json`, são os do modelo; no seu projeto, valem os do `projet
 | Quando a aula não cobre um eixo de um item | `base_externa.py`, que também roda o `referencias.py` |
 | Com as planilhas de pergunta e as provas dos cartões prontas | `confere_cartoes.py` |
 | Com as planilhas de pergunta prontas e conferidas | `montar_deck.py` |
+| Antes de publicar o projeto (e sozinho, antes de cada versão mandada ao GitHub, se a conferência das mensagens estiver ativa) | `protege_fontes.py` |
 
 ## `validar_dados.py` — confere um arquivo de dados
 
@@ -119,6 +122,11 @@ pode ter erro de digitação.
 ela veio e a chave da fonte — a mesma chave da referência dela no `fontes.json`:
 
     python scripts/registrar_fonte.py docs/material-base/gerados-ocr/AULA-1.md docs/material-base/AULA-1.pdf AULA-1
+
+Se o arquivo da fonte estiver fora da pasta protegida (a do material de base, que nunca
+é publicada), o script mostra pra onde ele iria e pergunta: digite `s` pra mover. Se ele
+não for, nada é registrado. Pra mover sem a pergunta — por exemplo, quando é a IA que
+roda o script e você já autorizou —, acrescente `--mover` no fim do comando.
 
 **O que aparece.** A linha gravada e, logo depois, o resultado do `referencias.py`, que
 este script roda sozinho no fim: se a chave ainda não tem referência, aparece
@@ -202,7 +210,9 @@ pessoa confere.
 1. Copie [`modelo-dados/base.json`](../modelo-dados/base.json) pra `docs/bases/`, com o id
    do item no nome (por exemplo, `docs/bases/AG1.json`), e preencha:
    - em `lugares`, cada fonte lida: a chave da referência dela, o arquivo e as páginas
-     do arquivo que foram lidas (em PDF). Em `desloca`, quanto somar à página do arquivo
+     do arquivo que foram lidas (em PDF). Se o arquivo estiver fora da pasta protegida,
+     o script pergunta se pode levá-lo pra pasta das cópias do material de fora e corrige
+     o caminho aqui; `--mover`, no fim do comando, leva sem perguntar. Em `desloca`, quanto somar à página do arquivo
      pra chegar ao número impresso — se a página 47 do arquivo tem impresso "45", é `-2`.
      Se a diferença não for a mesma em todas as páginas, use `impressas`, com o número
      impresso de cada página do arquivo: `{"47": "45", "48": "xii"}`;
@@ -237,11 +247,41 @@ os tiques de todos os itens continuam nela.
 **O que aparece.** Uma linha `ERRO` pra tudo o que falta ou se contradiz: frase sem
 classe, subtópico sem marca, subtópico marcado como `fonte` sem nenhuma frase usada,
 frase usada num subtópico que a aula já cobre ou que está marcado como `lacuna`. Com
-`ERRO`, a base do item não é gravada: o arquivo dela fica só com esse aviso. O script não
-julga se a classe está certa — isso é a conferência. Logo depois aparece o resultado das referências: este script
+`ERRO`, a base do item não é gravada: o arquivo dela fica só com esse aviso. Se um item
+nem puder ser lido — por exemplo, porque uma fonte dele ficou fora da pasta protegida —,
+a conferência não é refeita, pra não perder os tiques dele: resolva o erro e rode de novo.
+O script não julga se a classe está certa — isso é a conferência. Logo depois aparece o resultado das referências: este script
 também roda o `referencias.py`, porque a base registra as fontes que usa.
 
 Precisa do Poppler quando alguma fonte é PDF.
+
+## `protege_fontes.py` — confere que nenhuma fonte pode ser publicada
+
+**Pra que serve.** O material de terceiros — as aulas, as transcrições, as cópias do
+material de fora e tudo o que traz texto delas — fica numa pasta só, a pasta protegida
+(`docs/material-base`), que nunca é publicada e nunca muda de nome nem de lugar. Este
+script confere se alguma fonte registrada ficou fora dela e, se você usa o GitHub, se a
+lista do que nunca vai pra lá deixa a pasta de fora.
+
+Se a conferência das mensagens estiver ativa (ver o
+[README dela](../.githooks/README.md)), ele também roda sozinho antes de cada versão
+gravada pra mandar ao GitHub, e barra a versão que levar um arquivo da pasta protegida ou
+uma cópia de uma fonte — mesmo com outro nome e em outra pasta, porque ele compara a
+impressão digital de cada arquivo com a de cada fonte.
+
+**Quando usar.** Sempre antes de publicar o projeto. Com a conferência das mensagens
+ativa, ele roda sozinho a cada versão.
+
+**Como rodar.**
+
+    python scripts/protege_fontes.py
+
+**O que aparece.** "Nenhuma fonte fora da pasta protegida." ou uma linha `ERRO` pra cada
+problema, dizendo o que fazer. Quando é ele que barra uma versão, a mensagem diz como
+tirar o arquivo dela sem apagá-lo do seu computador.
+
+Usa só o Python; a parte do GitHub usa o git, o programa que guarda as versões, que quem
+usa o GitHub já tem.
 
 ## Como ticar uma conferência
 

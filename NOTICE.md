@@ -6,8 +6,8 @@ modelo usa duas licenças, para dois tipos de arquivo.
 ## 1. Programas — GPL-3.0
 
 Os scripts (os pequenos programas da pasta [`scripts/`](scripts/), os arquivos `.py`) e
-o verificador de mensagens da pasta `.githooks/` (o arquivo
-[`commit-msg`](.githooks/commit-msg)) estão sob a GNU General Public License v3.0. Texto
+os verificadores da pasta `.githooks/` (os arquivos [`pre-commit`](.githooks/pre-commit)
+e [`commit-msg`](.githooks/commit-msg)) estão sob a GNU General Public License v3.0. Texto
 completo em [`LICENSE`](LICENSE). Eles podem ser usados, estudados, mudados e repassados
 livremente, mas qualquer versão mudada também precisa continuar sob a mesma licença,
 aberta pra todo mundo, com o código dos programas disponível.
