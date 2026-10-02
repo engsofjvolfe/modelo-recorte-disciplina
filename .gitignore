@@ -39,7 +39,6 @@ _media_apkg_tmp/
 *.swo
 
 # === Ferramentas de IA (configs/cache locais, nao para versionar) ===
-.claude/settings.local.json
 .cursor/
 .continue/
 .aider*

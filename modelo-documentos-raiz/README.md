@@ -53,7 +53,7 @@ completo em [`NOTICE.md`](NOTICE.md):
 | Parte | Licença | Significa que... |
 |---|---|---|
 | Código (`scripts/*.py`) | [GPL-3.0](LICENSE) | Pode usar/modificar/redistribuir, mas derivados também precisam ficar abertos |
-| Conteúdo (documentos de teoria, dicionário, ficha) | [CC BY-NC-SA 4.0](LICENSE-CONTENT.txt) | Pode usar/adaptar com crédito, sem fins comerciais, mantendo a mesma licença |
+| Conteúdo (tudo o que não é código nem material de terceiros: documentos, planilhas, referências, dados) | [CC BY-NC-SA 4.0](LICENSE-CONTENT.txt) | Pode usar/adaptar com crédito, sem fins comerciais, mantendo a mesma licença |
 | Material de terceiros em `docs/material-base/` | Nenhuma — são de terceiros | Não redistribuir; fica fora do controle de versão |
 
 ## Estrutura do projeto
@@ -66,6 +66,7 @@ completo em [`NOTICE.md`](NOTICE.md):
 | [`docs/formato.json`](docs/formato.json) | O formato da disciplina: curso, nível, itens, eixos, elos e colunas dos cartões |
 | [`docs/bases/`](docs/bases/) | Um arquivo por item: o que foi lido do material de fora, a decisão sobre cada frase e a cobertura de cada subtópico (só códigos e decisões; o texto fica fora do controle de versão) |
 | [`projeto.json`](projeto.json) | O mapa do projeto: onde fica cada coisa; os scripts tiram todo caminho daqui |
+| [`fluxo-ia.json`](fluxo-ia.json) | O método em dados, que a IA lê pra seguir as etapas (copiado do projeto-modelo) |
 | [`estilo-cartao.css`](estilo-cartao.css) | A aparência dos cartões no Anki |
 | [`INDICE.md`](INDICE.md) | Índice com um link para cada documento; os itens ficam no índice interno de cada um |
 | [`MANUAL.md`](MANUAL.md) | Guia rápido e não técnico de como usar o material e como colaborar |

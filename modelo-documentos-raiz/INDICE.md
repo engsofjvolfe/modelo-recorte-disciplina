@@ -26,3 +26,6 @@ projeto; o [MANUAL.md](MANUAL.md) é um guia rápido e não técnico de uso.
 ---
 
 _Voltar ao [README.md](README.md)_
+
+*Este documento está licenciado sob [CC BY-NC-SA 4.0](LICENSE-CONTENT.txt). Ver
+[NOTICE.md](NOTICE.md) para detalhes.*

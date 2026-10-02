@@ -5,8 +5,8 @@ uma exceção para material de terceiros.
 
 ## 1. Código (scripts Python) — GPL-3.0
 
-Todo script Python deste repositório — [`scripts/montar_deck.py`](scripts/montar_deck.py)
-[e outros, se houver] — está sob a GNU General Public License v3.0. Texto completo em
+Todo script Python deste repositório — os arquivos `.py` de [`scripts/`](scripts/) — está
+sob a GNU General Public License v3.0. Texto completo em
 [`LICENSE`](LICENSE). O código pode ser usado, estudado, modificado e redistribuído
 livremente, mas qualquer trabalho derivado também precisa continuar sob GPL-3.0 e vir
 com o código-fonte disponível.
@@ -26,8 +26,9 @@ comerciais, e qualquer versão adaptada mantenha a mesma licença.
 ## 3. Material de terceiros — fora de qualquer licença deste projeto
 
 Os arquivos em [`docs/material-base/`](docs/material-base/) — o material de aula, a
-transcrição literal dele, as cópias do material de fora em `fontes-externas/` e a base
-de trechos literais dele — não são cobertos por nenhuma das licenças acima. [Origem do
+transcrição literal dele, as cópias do material de fora em `fontes-externas/`, a base
+de trechos literais dele e a prova dos cartões — não são cobertos por nenhuma das
+licenças acima. [Origem do
 material: material de aula de qual disciplina/instituição, se quem mantém o
 repositório é ou não o autor, e de onde vem o material de fora, se houver.] Por isso:
 

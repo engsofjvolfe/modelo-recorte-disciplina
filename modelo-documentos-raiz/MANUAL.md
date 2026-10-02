@@ -95,3 +95,8 @@ Não precisa formalidade — quanto mais direto, mais rápido dá pra revisar.
 
 Para detalhes técnicos (estrutura de pastas, licença, avisos sobre o recorte), veja o
 **[README.md](README.md)**.
+
+---
+
+*Este documento está licenciado sob [CC BY-NC-SA 4.0](LICENSE-CONTENT.txt). Ver
+[NOTICE.md](NOTICE.md) para detalhes.*
