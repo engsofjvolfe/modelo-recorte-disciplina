@@ -9,7 +9,9 @@ sem inventar nada. O que um script não faz é julgar se um conteúdo está cert
 sempre de uma pessoa.
 
 Nenhum script tem nada de disciplina dentro dele, nem caminho de pasta: o que muda de um
-projeto pra outro fica nos arquivos de dados do projeto.
+projeto pra outro fica nos arquivos de dados do projeto. Os únicos nomes fixos são os do
+próprio motor — a pasta `scripts/`, tudo o que está dentro dela e o `projeto.json` — e
+eles nunca se mudam: é por esses nomes que os scripts se acham uns aos outros.
 
 ## Antes da primeira vez
 
@@ -32,7 +34,7 @@ Você precisa de três coisas. Faça uma vez só, no seu computador.
    [`modelo-dados/estilo-cartao.css`](../modelo-dados/estilo-cartao.css): é a aparência
    dos cartões do Anki (cores, tamanho da letra), e você pode mudá-la ali. E copie a
    pasta `scripts/` inteira, com as subpastas `esquemas/` e `normas/`: são os próprios
-   scripts e os arquivos que eles leem.
+   scripts e os arquivos que eles leem. Não mude o nome dela nem de nada lá dentro.
 3. **Dois complementos**, só pra alguns scripts:
    - pro `montar_deck.py`, a biblioteca `genanki`: no terminal, digite
      `pip install genanki` (ou `pip3 install genanki`) e aperte Enter;

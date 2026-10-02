@@ -511,7 +511,7 @@ JSON nem aceita comentário.
 ## 15. Checklist: adicionando uma disciplina nova
 
 1. Prepare o projeto: copie pra raiz dele, do modelo, a pasta `scripts/` inteira (com
-   `esquemas/` e `normas/`), o `.gitignore`, o `LICENSE` e o `LICENSE-CONTENT.txt`, e
+   `esquemas/` e `normas/`, sem mudar o nome de nada dela), o `.gitignore`, o `LICENSE` e o `LICENSE-CONTENT.txt`, e
    `modelo-dados/projeto.json`, `modelo-dados/estilo-cartao.css` e
    `modelo-dados/fluxo-ia.json` — o `projeto.json` é o mapa de onde fica cada coisa, e os
    scripts tiram todo caminho dali (se mudar uma pasta de lugar, mude também o

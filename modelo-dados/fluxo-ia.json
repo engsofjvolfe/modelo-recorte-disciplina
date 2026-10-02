@@ -17,6 +17,7 @@
     "Fato que a fonte trata como possibilidade entra com a ressalva escrita, nunca como certeza.",
     "Material de terceiros nunca entra no controle de versão nem é publicado: o material de aula, as transcrições, as cópias e a base do material de fora, as provas dos cartões e os arquivos de conferência.",
     "Nenhum caminho é escrito de memória: todo caminho sai do projeto.json.",
+    "Nunca renomeie a pasta scripts, nada dentro dela nem o projeto.json: é por esses nomes que os scripts se acham.",
     "Nada de disciplina vai para o código dos scripts: o que muda de um projeto para outro fica nos arquivos de dados.",
     "O script recolhe e confere o que é mecânico, a IA julga na curadoria e a pessoa julga na aceitação.",
     "Uma linha ERRO ou FALTA de script se resolve antes de ticar.",
