@@ -27,16 +27,18 @@ Você precisa de três coisas. Faça uma vez só, no seu computador.
    [`modelo-dados/projeto.json`](../modelo-dados/projeto.json) pra pasta principal do
    projeto da sua disciplina. Ele diz aos scripts onde fica cada coisa: onde estão as
    aulas, onde ficam as transcrições, onde sai o baralho. Se um dia você mudar uma pasta
-   de lugar, muda só nesse arquivo — nenhum script precisa ser mexido. Só lembre de mudar
-   também o `.gitignore`, se a pasta mudada for a do material de base: é ele que mantém o
-   material de terceiros fora do GitHub. No mesmo arquivo ficam a resolução das imagens
+   de lugar, muda só nesse arquivo — nenhum script precisa ser mexido. Se você guarda o
+   projeto no GitHub e a pasta mudada for a do material de base, mude também a lista do
+   que nunca vai pra lá (o arquivo `.gitignore`), pra o material de terceiros continuar de
+   fora. No mesmo arquivo ficam a resolução das imagens
    das conferências e o nome da pasta onde elas são gravadas. Copie junto o
    [`modelo-dados/estilo-cartao.css`](../modelo-dados/estilo-cartao.css): é a aparência
    dos cartões do Anki (cores, tamanho da letra), e você pode mudá-la ali. E copie a
    pasta `scripts/` inteira, com as subpastas `esquemas/` e `normas/`: são os próprios
    scripts e os arquivos que eles leem. Não mude o nome dela nem de nada lá dentro.
 3. **Dois complementos**, só pra alguns scripts:
-   - pro `montar_deck.py`, a biblioteca `genanki`: no terminal, digite
+   - pro `montar_deck.py`, a biblioteca `genanki`, um complemento do Python que sabe
+     montar os arquivos do Anki: no terminal, digite
      `pip install genanki` (ou `pip3 install genanki`) e aperte Enter;
    - pro `conferencia.py` e o `base_externa.py`, e pro `referencias.py` e o
      `registrar_fonte.py` quando a fonte é PDF, o Poppler, que é o que lê o texto de uma
@@ -47,13 +49,16 @@ Você precisa de três coisas. Faça uma vez só, no seu computador.
 ## Como rodar um script
 
 1. **Abra o terminal.** O terminal é a janela onde se digita um comando em vez de clicar.
-   No VSCode: menu **Terminal → Novo Terminal** (ou as teclas `` Ctrl+` ``). Ele abre
-   embaixo, já dentro da pasta do projeto.
+   No VSCode (um editor gratuito, onde se abre a pasta do projeto): menu
+   **Terminal → Novo Terminal** (ou as teclas `` Ctrl+` ``). Ele abre embaixo, já dentro
+   da pasta do projeto. Se você usa outro programa, peça à IA o passo a passo pra abrir o
+   terminal na pasta do projeto no seu computador.
 2. **Digite o comando** que aparece na seção do script, aqui embaixo, e aperte Enter.
    Você pode estar em qualquer pasta dentro do projeto: o script sobe de pasta em pasta
    até achar o `projeto.json`, e calcula todo o resto a partir dali.
 3. **Leia o que aparece.** O script sempre diz o que fez. Uma linha que começa com
-   `ERRO`, `FALTA` ou `CONFERIR` pede alguma coisa sua e diz o quê.
+   `ERRO`, `FALTA` ou `CONFERIR` pede alguma coisa sua e diz o quê. Se não entender o que
+   apareceu, copie a mensagem pra IA que você usa e peça ajuda.
 
 Os comandos usam `scripts/...` porque os scripts ficam na pasta `scripts` do projeto. Se
 eles estiverem em outro lugar, troque pelo caminho de onde estão. Os caminhos de exemplo,
@@ -308,7 +313,7 @@ cada planilha: planilhas e disciplinas diferentes nunca se misturam. As colunas
 você escolhe no `projeto.json`: em `colunas_ocultas`, as colunas que ficam guardadas no
 cartão sem aparecer (no modelo, `ordem`); e em `coluna_subdecks`, uma coluna que separa
 os cartões de cada planilha em pastas menores, uma pra cada valor que aparece nela — ou
-`null`, pra não separar. A aparência dos cartões vem do arquivo de estilo do projeto (no
+`null` (escrito assim, sem aspas, quer dizer "nenhuma"), pra não separar. A aparência dos cartões vem do arquivo de estilo do projeto (no
 modelo, `estilo-cartao.css`).
 
 **Quando usar.** Com as planilhas prontas e conferidas, e de novo sempre que uma

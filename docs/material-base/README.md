@@ -1,36 +1,41 @@
-# Material de base (nunca versionado)
+# Material de base (nunca publicado)
 
 Esta pasta recebe o material de aula original da disciplina (PDFs de slides ou
 equivalente) e, na subpasta `fontes-externas/`, as cópias do material de fora usado onde
-a aula não cobre um eixo (ver seção 4 da metodologia). Regra permanente, não uma
+a aula não cobre um eixo (ver seção 4 da metodologia). É uma regra permanente, não uma
 pendência a resolver depois (ver seção 14 da
 [metodologia de conteúdo](../../metodologia-de-conteudo.md)):
 
-- **Nunca é versionada, publicada ou redistribuída** — o `.gitignore` da raiz já exclui
-  tudo o que está aqui dentro, menos este README.
-- A referência de cada material — as aulas e o de fora — sai dos dados em
-  `docs/fontes.json` e vai pro `docs/FONTES.md`, que são versionados: o que fica de fora
-  é a cópia, não a referência.
-- A transcrição literal do material de aula (OCR ou equivalente) e a base de trechos
-  literais do material de fora vão em `gerados-ocr/` — são a base contra a qual se
-  confere tudo o que se escreve, e também nunca são versionadas (ver as seções 2 e 4 da
-  metodologia). Ali ficam também a base de cada item, `[item]-fontes-externas.md`; a
-  prova dos cartões de cada planilha, na subpasta `provas/` (ver seção 9 da
-  metodologia); e os quatro arquivos de conferência, com as imagens deles na subpasta
-  `imagens/`: o das transcrições contra a imagem de cada página,
-  `CONFERENCIA-COM-IMAGEM.md`, gerado por `scripts/conferencia.py`; o das referências
-  contra a cópia de cada fonte, `CONFERENCIA-REFERENCIAS.md`, gerado por
-  `scripts/referencias.py`; o das frases do material de fora, `CONFERENCIA-TRECHOS.md`,
-  gerado por `scripts/base_externa.py`; e o dos cartões contra a prova deles,
-  `CONFERENCIA-CARTOES.md`, gerado por `scripts/confere_cartoes.py`.
+- **Nada daqui é publicado nem repassado**, em lugar nenhum: esse material não é de quem
+  mantém o projeto. Se você guarda o projeto no GitHub, a lista do que nunca vai pra lá
+  (o arquivo `.gitignore`, na pasta principal do projeto) já deixa de fora tudo o que
+  está aqui dentro, menos este README.
+- A referência de cada material — as aulas e o de fora — sai do arquivo de fontes
+  (`docs/fontes.json`) e vai pra lista de referências (`docs/FONTES.md`), que podem ser
+  publicados: o que fica de fora é a cópia, não a referência.
+- A transcrição do material de aula, letra por letra, e a base de trechos do material de
+  fora ficam em `gerados-ocr/` — são a base contra a qual se confere tudo o que se
+  escreve, e também nunca são publicadas (ver as seções 2 e 4 da metodologia). Ali ficam
+  também:
+  - a base de cada item, `[item]-fontes-externas.md`;
+  - a prova dos cartões de cada planilha, na subpasta `provas/` (ver seção 9 da
+    metodologia);
+  - os quatro arquivos de conferência, com as imagens deles na subpasta `imagens/`: o das
+    transcrições contra a imagem de cada página (`CONFERENCIA-COM-IMAGEM.md`, feito pelo
+    script `conferencia.py`); o das referências contra a cópia de cada fonte
+    (`CONFERENCIA-REFERENCIAS.md`, feito pelo `referencias.py`); o das frases do material
+    de fora (`CONFERENCIA-TRECHOS.md`, feito pelo `base_externa.py`); e o dos cartões
+    contra a prova deles (`CONFERENCIA-CARTOES.md`, feito pelo `confere_cartoes.py`). Os
+    scripts são os pequenos programas do modelo; o
+    [README deles](../../scripts/README.md) diz como rodar cada um.
 - Os caminhos daqui são os do modelo. Em cada projeto, quem diz onde fica cada coisa é o
-  `projeto.json` da raiz (ver o [README dos scripts](../../scripts/README.md)).
+  mapa do projeto, o `projeto.json` da pasta principal.
 - Antes de escrever qualquer coisa em `docs/material-gerado/`, leia este material
   inteiro, sem ferramenta que corte ou resuma automaticamente o texto (ver seção 2 da
   metodologia).
 
-Este arquivo (`README.md`) é o único conteúdo desta pasta que deve ser versionado — ele
-existe só para documentar a convenção, mesmo quando a pasta está vazia.
+Este arquivo (`README.md`) é o único desta pasta que pode ser publicado — ele existe só
+pra explicar como a pasta funciona, mesmo quando ela está vazia.
 
 ---
 

@@ -1,50 +1,60 @@
-# Hook + template de commit
+# Conferência das mensagens (opcional, pra quem usa o GitHub)
 
-Este diretório contém dois arquivos que trabalham juntos:
+Você só precisa disto se guarda o projeto no GitHub, um site que guarda o projeto na
+internet e o histórico de cada mudança nele. Quem não usa o GitHub pode ignorar esta
+pasta.
 
-- **`commit-template.txt`** — um esqueleto (título + descrição com marcadores
-  `SUBSTITUA-...`) que o git carrega automaticamente no editor assim que você roda
-  `git commit` (sem `-m`), antes de você escrever qualquer coisa.
-- **`commit-msg`** — um hook que verifica, de forma mecânica, só a **estrutura** da
-  mensagem final — nunca se ela é precisa, verdadeira ou bem escrita. Isso continua
-  sendo julgamento de quem commita; o hook só barra a mensagem que:
-  - não tem título (primeira linha vazia);
-  - o título é, ele próprio, um bullet/item de lista (`- corrigido X`, `1. corrigido X`...);
-  - não tem uma linha em branco separando título de descrição;
-  - a descrição usa bullets/lista (`-`, `*`, `•`, `1.`, `2)`...) em vez de prosa corrida;
-  - ainda contém algum marcador `SUBSTITUA-...` do template, ou seja, o título/descrição
-    não foi de fato escrito por cima do esqueleto.
+## O que é
 
-## Como ativar num projeto novo
+Pra mandar uma mudança ao GitHub, você grava uma versão do projeto no seu computador — o
+programa que faz isso, o *git*, chama cada versão gravada de *commit* — e escreve uma
+mensagem dizendo o que mudou. Esta pasta traz duas coisas que ajudam a escrever essa
+mensagem sempre do mesmo jeito:
 
-Copie esta pasta (`.githooks/`) para a raiz do projeto da disciplina e rode, uma vez,
-dentro dele:
+- **Um esqueleto da mensagem** (o arquivo `commit-template.txt`): quando você vai gravar
+  uma versão, o editor já abre com o lugar do título e o lugar da explicação marcados,
+  com as palavras `SUBSTITUA-...`, pra você escrever por cima.
+- **Um verificador** (o arquivo `commit-msg`): antes de aceitar a versão, ele confere só
+  a forma da mensagem — nunca se ela está certa ou bem escrita, que é julgamento de quem
+  escreve. Ele recusa a mensagem que:
+  - não tem título (a primeira linha está vazia);
+  - tem um título que é um item de lista (`- corrigido X`, `1. corrigido X`...);
+  - não tem uma linha em branco entre o título e a explicação;
+  - explica em lista (`-`, `*`, `•`, `1.`, `2)`...) em vez de texto corrido;
+  - ainda tem alguma palavra `SUBSTITUA-...` do esqueleto, ou seja, não foi escrita por
+    cima dele.
 
-    git config core.hooksPath .githooks
-    git config commit.template .githooks/commit-template.txt
+## Como ativar
 
-A partir daí, todo `git commit` (sem `-m`) já abre o editor com o esqueleto do template
-pronto pra preencher, e todo commit — com ou sem `-m` — passa pela checagem estrutural
-antes de ser aceito. Isso vale só localmente, por clone — git não versiona nenhuma dessas
-duas configurações, então quem clonar o repositório precisa rodar os dois comandos de
-novo na própria máquina.
+1. Copie esta pasta (`.githooks/`) pra pasta principal do projeto da disciplina.
+2. Abra o terminal (a janela onde se digita um comando — o
+   [README dos scripts](../scripts/README.md) mostra como) dentro da pasta do projeto e
+   digite estas duas linhas, uma de cada vez, apertando Enter depois de cada uma:
+
+       git config core.hooksPath .githooks
+       git config commit.template .githooks/commit-template.txt
+
+A primeira liga o verificador; a segunda liga o esqueleto. A partir daí, toda vez que
+você gravar uma versão, o esqueleto aparece e a mensagem é conferida antes de ser
+aceita. Isso vale só no seu computador: quem copiar o projeto do GitHub pra outro
+computador precisa digitar as duas linhas de novo lá. Se travar, peça ajuda à IA que você
+usa.
 
 ## Por que existe
 
-Um commit escrito como lista item-por-item (um bullet por arquivo alterado) parece
-organizado num commit pequeno, mas não escala: à medida que o projeto cresce, cada
-commit tem que decidir de novo "quanto detalhe cabe aqui", e isso não converge para um
-padrão. O formato título + descrição em prosa corrida evita esse inventário.
+Uma mensagem escrita como lista, um item por arquivo mudado, parece organizada numa
+mudança pequena, mas não cresce bem: a cada mudança é preciso decidir de novo quanto
+detalhe cabe, e o histórico fica sem um padrão. Título mais explicação em texto corrido
+faz o histórico do projeto se ler como uma história.
 
-O template resolve a parte de guiar quem escreve (mostra a forma esperada antes de
-qualquer texto existir); o hook resolve a parte de barrar o que foge da forma depois de
-escrito. Nenhum dos dois garante que o conteúdo é preciso ou coerente — uma frase cortada
-ao meio entre "título" e "descrição" ainda passa, porque isso é sentido, não forma, e
-sentido não é mecanizável por regex. O que o hook mecaniza é só o que é checável sem
-julgamento: existe título, existe separador, não tem lista, o marcador do template foi
-substituído.
+O esqueleto guia quem escreve, mostrando a forma antes de qualquer texto existir; o
+verificador recusa o que foge da forma depois de escrito. Nenhum dos dois garante que o
+conteúdo está certo: uma frase cortada ao meio entre o título e a explicação ainda passa,
+porque isso é sentido, não forma, e sentido nenhum programa confere sozinho. O que o
+verificador confere é só o que dá pra conferir sem julgar: existe título, existe a linha
+em branco, não tem lista, o esqueleto foi substituído.
 
 ---
 
 *Este documento está licenciado sob [CC BY-NC-SA 4.0](../LICENSE-CONTENT.txt); o
-`commit-msg`, que é código, sob [GPL-3.0](../LICENSE).*
+verificador (`commit-msg`), que é programa, sob [GPL-3.0](../LICENSE).*

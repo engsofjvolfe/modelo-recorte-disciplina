@@ -39,13 +39,18 @@ O manual está organizado em níveis, do mais simples ao mais detalhado.
 ### Atualizando o baralho depois de editar as planilhas
 
 As perguntas de cada cartão ficam guardadas em planilhas (arquivos `.csv`, texto
-simples com colunas separadas por vírgula) dentro de `docs/material-gerado/` — editáveis
-direto no VSCode como texto, ou no Excel/Google Sheets. Depois de editar:
+simples com colunas separadas por vírgula) dentro de `docs/material-gerado/` — dá pra
+mudar no Excel, no Google Sheets ou num editor de texto, como o VSCode (um editor
+gratuito, onde se abre a pasta do projeto). Depois de mudar:
 
-1. No VSCode, abra o terminal: menu **Terminal → Novo Terminal** (ou o atalho `` Ctrl+` ``).
+1. No VSCode, abra o terminal, a janela onde se digita um comando: menu
+   **Terminal → Novo Terminal** (ou o atalho `` Ctrl+` ``).
 2. Digite `python scripts/montar_deck.py` e aperte Enter.
 3. Os arquivos `.apkg` dentro de `anki-decks/` são substituídos pelos novos; basta
    importar de novo no Anki para ver as mudanças.
+
+O [README dos scripts](scripts/README.md) explica esses passos com mais calma. Se travar,
+peça ajuda a uma IA: diga o que você fez e o que apareceu na tela.
 
 ## Nível 2 — De onde isso veio
 
@@ -53,7 +58,7 @@ O projeto tem duas pastas de conteúdo bem diferentes:
 
 **`docs/material-base/`** — o material de aula original e, onde a aula não cobre um
 ponto, as cópias do material de fora usado (as referências de tudo estão em
-`docs/FONTES.md`). Nunca é versionada nem redistribuída (ver [NOTICE.md](NOTICE.md)) —
+`docs/FONTES.md`). Nunca é publicada nem repassada (ver [NOTICE.md](NOTICE.md)) —
 fica só localmente.
 
 **`docs/material-gerado/`** — todo o conteúdo do material original reescrito e
