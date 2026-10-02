@@ -61,7 +61,8 @@ arquivo que a IA lê pra seguir as etapas.
   um título, uma linha em branco e a descrição em prosa, sem lista, pra que o histórico
   do projeto se leia como texto.
 - **[Licença do código](LICENSE)** e **[licença do conteúdo](LICENSE-CONTENT.txt)** — a
-  GPL-3.0 vale pro código; a CC BY-NC-SA 4.0, pro resto.
+  GPL-3.0 vale pro código; a CC BY-NC-SA 4.0, pro resto. O [NOTICE.md](NOTICE.md) diz
+  qual vale pra qual arquivo.
 
 ---
 

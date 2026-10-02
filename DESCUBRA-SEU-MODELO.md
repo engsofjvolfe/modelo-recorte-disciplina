@@ -5,10 +5,6 @@ elos o dicionário tem, quantos eixos a ficha tem, que colunas a planilha de per
 precisa. Nenhum desses números é fornecido aqui — cada disciplina responde essas
 perguntas pra si mesma, a partir do próprio material.
 
-Para ver esse formato aplicado numa disciplina real e concreta, veja:
-
-**[recorte-parasitologia no GitHub — link a preencher quando o repositório for publicado]**
-
 ## O que é estável entre disciplinas
 
 - Existe conteúdo que é teoria geral, sem ligação com um item específico — isso é
