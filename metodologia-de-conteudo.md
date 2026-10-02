@@ -293,12 +293,26 @@ escritos, seção 1) pra um assistente de IA, com uma instrução como esta:
 > mesmo tipo de pergunta pra todos os itens se isso deixar de fora um fato importante e
 > específico de um item em particular. Para a teoria fundamental, gere uma pergunta pra
 > cada conceito testável, já que cada conceito aparece uma única vez. Não invente
-> nenhum fato que não esteja no texto do dicionário/ficha fornecido.
+> nenhum fato que não esteja no texto do dicionário/ficha fornecido. Na coluna `fonte`,
+> ponha só as chamadas, cada uma com a página ou o slide. Gere também a prova de cada
+> pergunta, no arquivo de prova: a pergunta igual à da planilha, o trecho da
+> transcrição ou da base do material de fora que diz o fato, copiado letra por letra, e
+> se a fonte afirma (`categorica`) ou trata como possibilidade (`possibilidade`).
 
-Depois de gerada, confira a planilha à mão, lado a lado com o dicionário e a ficha: ela
-cobre tudo que deveria cobrir, sem inventar nem perder nada, e cada cartão traz a
-citação certa? Essa conferência é sua,
-não da IA — é o que garante que nada ficou de fora.
+A prova fica num arquivo por planilha, copiado de `modelo-dados/prova.json`. Como ela
+tem texto de terceiros, fica com o material de base, fora do controle de versão
+(`docs/material-base/gerados-ocr/provas/`, por convenção). Quando a fonte trata o fato
+como possibilidade, a resposta do cartão diz isso: nenhum cartão apresenta como certo o
+que a fonte não afirma. `python scripts/confere_cartoes.py` confere cada cartão contra a
+prova — se o trecho está, letra por letra, no lugar que a citação do cartão diz, e se
+não falta prova pra nenhum cartão nem cartão pra nenhuma prova — e gera a conferência dos
+cartões, com tique da IA e da pessoa.
+
+Depois, confira a planilha lado a lado com o dicionário e a ficha, e cada cartão na
+conferência dos cartões: a planilha cobre tudo que deveria cobrir, sem inventar nem
+perder nada? A resposta de cada cartão diz o que o trecho diz, com a ressalva quando a
+fonte trata como possibilidade? Essa conferência é sua, não da IA — é o que garante que
+nada ficou de fora.
 
 Uma vez com a planilha pronta e conferida, o baralho do Anki será gerado automaticamente
 por um script criado e acionado por você (veja seção 7). Você pode editar um cartão direto dentro do app Anki — mas se
@@ -419,8 +433,8 @@ Trate cada uma dessas três categorias com um papel fixo, independente de discip
   de fontes, e os documentos de metodologia): escolha uma licença de conteúdo que exija
   dar crédito.
 - **Material de terceiros** (o material de aula original, sua transcrição literal, as
-  cópias do material de fora e a base de trechos dele — ver
-  [seção 5](#5-trate-as-fontes)):
+  cópias do material de fora, a base de trechos dele e a prova dos cartões — ver as
+  seções [5](#5-trate-as-fontes) e [6](#6-cartões-de-revisão-espaçada)):
   não coloque sob nenhuma licença deste projeto, porque quem mantém o projeto não é
   quem escreveu esse material. Nunca disponibilize publicamente, de forma permanente —
   não "por enquanto".
@@ -457,8 +471,8 @@ JSON nem aceita comentário.
 5. Escreva dicionário e ficha por item, citando os termos de teoria fundamental que se
    aplicam a cada um. Onde a aula não cobrir um eixo, complete com material de fora,
    guardado, com base de trechos e citado como diz a seção 5.
-6. Gere as planilhas a partir do dicionário/ficha, e confira se cobrem tudo que
-   deveriam cobrir.
+6. Gere as planilhas a partir do dicionário/ficha, com a prova de cada cartão, rode a
+   conferência dos cartões e confira se as planilhas cobrem tudo que deveriam cobrir.
 7. Atualize as quatro seções correspondentes nos quatro documentos de navegação raiz.
 8. Reaproveite um script existente, ou peça um novo (seção 7), pra gerar o material.
 9. Faça a auditoria de consistência (seção 12) antes de considerar a disciplina pronta.
@@ -476,7 +490,8 @@ JSON nem aceita comentário.
 6. Procure um fato do material original que não apareça em nenhum documento gerado.
 7. Confira a planilha de perguntas linha por linha contra o dicionário/ficha de origem
    — procure um fato inventado que não está na fonte, ou um fato da fonte que ficou de
-   fora.
+   fora — e veja se cada cartão tem prova, sem erro e com o tique da pessoa, na
+   conferência dos cartões.
 8. Confira as citações: todo fato tirado de uma fonte, em qualquer documento ou cartão,
    cita essa fonte; toda citação tem a referência em `docs/FONTES.md`; toda referência
    de lá é citada em algum lugar e tem o tique da pessoa na conferência das referências;

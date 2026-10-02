@@ -63,12 +63,14 @@ como `docs/formato.json`, são os do modelo; no seu projeto, valem os do `projet
 | Sempre que mudar os dados das fontes | `referencias.py` |
 | Com as transcrições prontas, antes de escrever o material | `conferencia.py` |
 | Quando a aula não cobre um eixo de um item | `base_externa.py`, que também roda o `referencias.py` |
+| Com as planilhas de pergunta e as provas dos cartões prontas | `confere_cartoes.py` |
 | Com as planilhas de pergunta prontas e conferidas | `montar_deck.py` |
 
 ## `validar_dados.py` — confere um arquivo de dados
 
 **Pra que serve.** Os arquivos de dados do projeto (o `projeto.json`, o `formato.json`, o
-`fontes.json` e o arquivo de base de cada item) têm uma forma certa, descrita num molde —
+`fontes.json`, o arquivo de base de cada item e o de prova de cada planilha) têm uma forma
+certa, descrita num molde —
 o *schema* — que fica em `scripts/esquemas/`. Este script confere se o arquivo segue o
 molde: se não falta campo obrigatório, se nada está no tipo errado, se nenhum código (id
 ou chave) se repete.
@@ -81,7 +83,8 @@ neles.
     python scripts/validar_dados.py docs/formato.json
 
 O script acha o molde pelo nome do arquivo (o de `formato.json` é `formato.schema.json`).
-Os arquivos de base têm o nome do item, então pra eles diga o molde com `--schema`:
+Os arquivos de base têm o nome do item, e os de prova, o nome da planilha, então pra eles
+diga o molde com `--schema` (`base.schema.json` ou `prova.schema.json`):
 
     python scripts/validar_dados.py docs/bases/AG1.json --schema scripts/esquemas/base.schema.json
 
@@ -234,6 +237,50 @@ arquivo de novo, o tique continua lá — a não ser que o conteúdo daquela par
 mudado depois do tique: aí o tique sai, e a parte diz isso, pra ninguém achar que o texto
 novo já foi conferido.
 
+## `confere_cartoes.py` — confere cada cartão contra a prova dele
+
+**Pra que serve.** Cada cartão diz um fato com palavras próprias e traz, atrás, a citação
+da fonte, na coluna `fonte`. A prova do cartão é o trecho da fonte que diz esse fato,
+copiado letra por letra. Ela fica num arquivo à parte, um por planilha, fora do GitHub,
+porque é texto de terceiros. Este script confere, cartão por cartão, se o trecho está
+mesmo no lugar que a citação diz — a página ou o slide da transcrição da aula, ou uma
+frase da base do material de fora — e monta a conferência dos cartões, com os tiques da
+IA e da pessoa.
+
+**Como funciona, passo a passo.**
+
+1. Copie [`modelo-dados/prova.json`](../modelo-dados/prova.json) pra pasta das provas,
+   com o nome da planilha: no modelo, a prova da planilha `perguntas-nucleo.csv` fica em
+   `docs/material-base/gerados-ocr/provas/perguntas-nucleo.json`.
+2. Pra cada cartão, a IA, ou você, escreve ali três coisas:
+   - a `pergunta`, igual à da planilha — é por ela que o cartão e a prova se acham;
+   - os `trechos`, copiados da transcrição ou da base, letra por letra;
+   - a `afirmacao`: `categorica`, se a fonte afirma, ou `possibilidade`, se ela trata
+     como possível. Nesse caso, a resposta do cartão tem de dizer isso.
+3. Na coluna `fonte` da planilha vão só as chamadas, cada uma com o lugar:
+   `(Silva, 2020, p. 12)`, ou, com duas fontes, `(Silva, 2020, p. 12; Souza, 2019,
+   slide 3)`. O nome e o ano de cada fonte são os que a conferência das referências
+   mostra; o lugar é o título da página na transcrição (`p. 12`, `slide 3`) ou a página da
+   frase na base. Fonte sem páginas, como uma página da internet, vai sem lugar.
+4. Rode o script. Ele não julga se a resposta está certa: confere só o que é mecânico. O
+   resto é a pessoa que confere, na conferência dos cartões.
+
+**Como rodar.**
+
+    python scripts/confere_cartoes.py
+
+**O que aparece.** Uma linha `ERRO` pra cada coisa que não bate: cartão sem prova, prova
+sem cartão (a pergunta mudou só de um lado), chamada que não é de nenhuma fonte, lugar
+que a fonte não tem, trecho que não está no lugar citado, lugar citado sem trecho, prova
+que diz que a fonte afirma quando a base marca o trecho como possibilidade. Na
+comparação só contam as letras: espaços, quebras de linha e marcas de destaque não. No
+fim, quantos cartões há, quantos têm erro e quantos estão sem o tique da pessoa. A
+conferência (no modelo, `CONFERENCIA-CARTOES.md`, na pasta das transcrições) mostra cada
+cartão com a pergunta, a resposta, a fonte, os trechos e onde cada um foi achado. Se o
+cartão, a prova ou o texto da fonte mudarem depois do tique, o tique sai.
+
+Usa só o Python: não precisa instalar nada.
+
 ## `montar_deck.py` — das planilhas de pergunta ao baralho do Anki
 
 **Pra que serve.** Transforma cada planilha de perguntas (no modelo, os arquivos
@@ -261,8 +308,8 @@ Precisa da biblioteca `genanki`.
 
 ## `comum.py`
 
-Não se roda: é a parte que os outros scripts compartilham (achar o `projeto.json`, ler o
-registro da fonte, guardar os tiques).
+Não se roda: é a parte que os outros scripts compartilham (achar o `projeto.json` e as
+planilhas de pergunta, ler o registro da fonte, guardar os tiques).
 
 ---
 

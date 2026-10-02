@@ -35,9 +35,10 @@ completas estão em [`docs/FONTES.md`](docs/FONTES.md).
 [Origem do material de base: de onde veio, se foi produzido por quem mantém o
 repositório ou por terceiros, se está coberto pela licença deste projeto.] Por isso
 esse material nunca é versionado nem redistribuído: fica só localmente, fora do
-controle de versão (`.gitignore`). O mesmo vale para a transcrição literal das aulas e
-para a base de trechos literais do material de fora, em `docs/material-base/gerados-ocr/`:
-são cópia de material de terceiros, usadas só para conferir o que se escreve.
+controle de versão (`.gitignore`). O mesmo vale para a transcrição literal das aulas,
+para a base de trechos literais do material de fora e para a prova de cada cartão, em
+`docs/material-base/gerados-ocr/`: são cópia de material de terceiros, usadas só para
+conferir o que se escreve.
 
 Onde a aula não cobre o que algum eixo da ficha pede, o material usa [quais fontes de
 fora — ou diga que a aula cobriu tudo e apague o resto deste parágrafo]. As cópias

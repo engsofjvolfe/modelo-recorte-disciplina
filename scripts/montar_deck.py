@@ -48,7 +48,7 @@ from pathlib import Path
 import genanki
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from comum import acha_projeto  # noqa: E402
+from comum import acha_projeto, planilhas  # noqa: E402
 
 # Coluna com papel de bastidor: se existir, vira campo do cartao (pra nao perder a
 # informacao), mas nao aparece na linha de metadados do cartao -- so pra nao poluir a
@@ -127,18 +127,6 @@ def id_estavel(nome, minimo=1_000_000_000, maximo=1_999_999_999):
     return minimo + (int(digest, 16) % (maximo - minimo))
 
 
-def descobrir_csvs(pasta, prefixo, filtro=None):
-    """Lista os CSVs de perguntas prontos para virar deck: qualquer <prefixo>*.csv
-    direto dentro da pasta (nao entra em subpastas -- uma eventual subpasta de material
-    arquivado de outra disciplina nao e ativa e nao deve ser descoberta aqui). `filtro`,
-    se dado, mantem so arquivos cujo nome contenha o trecho (case-insensitive)."""
-    candidatos = sorted(pasta.glob(f"{prefixo}*.csv"))
-    if filtro:
-        alvo = filtro.lower()
-        candidatos = [c for c in candidatos if alvo in c.name.lower()]
-    return candidatos
-
-
 def nomes_a_partir_do_arquivo(caminho_csv: Path, prefixo: str):
     """"<prefixo>nucleo-dicionarios.csv" -> familia "Nucleo", nome de saida
     "Nucleo-Dicionarios". Tira o prefixo (se existir) e capitaliza cada palavra
@@ -209,7 +197,7 @@ def main(argv=None):
     projeto = acha_projeto(a.projeto)
     pasta, prefixo = projeto.caminho("material_gerado"), projeto.valor("prefixo_planilhas")
 
-    csvs = descobrir_csvs(pasta, prefixo, a.filtro)
+    csvs = planilhas(projeto, a.filtro)
     if not csvs:
         alvo_desc = f" com filtro {a.filtro!r}" if a.filtro else ""
         raise SystemExit(f"nenhum CSV '{prefixo}*.csv' encontrado em {pasta}{alvo_desc}")

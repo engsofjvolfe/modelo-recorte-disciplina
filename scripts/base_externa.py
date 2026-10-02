@@ -65,6 +65,7 @@ CLASSES = {
 AFIRMACAO = {"categorica": "a fonte afirma", "possibilidade": "a fonte trata como possibilidade"}
 COBERTURA = {"aula": "coberto pela aula", "fonte": "coberto pelo material de fora",
              "lacuna": "lacuna: nenhuma fonte cobre"}
+TEXTO_INTEIRO = "texto inteiro"  # o lugar de uma frase de fonte sem paginas
 PARAGRAFO = "¶"  # marca interna de quebra de bloco (linha em branco no PDF, fim de bloco no HTML)
 FIM_DE_FRASE = re.compile(r'(?<=[.!?])\s+(?=[A-ZÀ-Ý"“(])|\s*[•▪●¶]\s*')
 BLOCO_HTML = re.compile(r"(?i)</?(p|div|h[1-6]|li|tr|td|th|br|section|article|header|footer|ul|ol|table|caption"
@@ -229,7 +230,7 @@ def grava_base(dados, formato, grade, partes, lugares, raiz, saida):
                 _, p, f = por_codigo[c]
                 fonte = c.split(":")[0]
                 local = (f"{pagina_impressa(lugar_da_fonte[fonte], p)} (arquivo p. {p})" if p is not None
-                         else "texto inteiro")
+                         else TEXTO_INTEIRO)
                 corpo += ["", f"**{fonte}, {local} — {c} — {AFIRMACAO[cl['afirmacao']]}**", "", f"> {f}"]
     saida.parent.mkdir(parents=True, exist_ok=True)
     saida.write_text("\n".join(corpo) + "\n", encoding="utf-8")
@@ -256,7 +257,7 @@ def bloco_do_item(dados, arquivo_dados, base, partes, lugares, raiz, saida, ante
         sig = assinatura(impressao(arquivo), parte, *[f"{c}|{f}|{json.dumps(cl, sort_keys=True)}"
                                                       for (c, f), cl in zip(fs, classes)])
         tiques, retirado = tiques_da_parte(anteriores, item, parte, sig)
-        titulo = f"{pagina_impressa(lugar, p)} (arquivo p. {p})" if p is not None else "texto inteiro"
+        titulo = f"{pagina_impressa(lugar, p)} (arquivo p. {p})" if p is not None else TEXTO_INTEIRO
         corpo += ["", f"### {fonte} — {titulo}", "", marca(item, parte, sig), ""]
         if p is not None:
             nome_img = re.sub(r"[^\w.-]", "_", f"{item}-{fonte}")
@@ -299,7 +300,7 @@ def processa(projeto, arquivo_dados, formato, anteriores):
     partes = junta([pt for l in lugares for pt in partes_do_lugar(l, raiz)], dados.get("juntar", []), erros)
     grade = unidades_da_grade(formato)
     erros += confere(dados, grade, partes, any(i["id"] == dados["item"] for i in formato["itens"]))
-    base = projeto.caminho_do_item("base_externa", dados["item"])
+    base = projeto.caminho_com("base_externa", dados["item"])
     grava_base(dados, formato, grade, partes, lugares, raiz, base)
     saida = projeto.caminho("conferencia_trechos")
     bloco, cont = bloco_do_item(dados, arquivo_dados, base, partes, lugares, raiz, saida, anteriores,
@@ -317,8 +318,8 @@ def main(argv=None):
         raise SystemExit(f"o formato da disciplina não existe: {projeto.caminho('formato')} -- "
                          "responda o Descubra seu modelo e grave as respostas nele")
     formato = json.loads(projeto.caminho("formato").read_text(encoding="utf-8"))
-    arquivos = ([projeto.caminho_do_item("bases", i) for i in a.itens] if a.itens
-                else projeto.todos_os_itens("bases"))
+    arquivos = ([projeto.caminho_com("bases", i) for i in a.itens] if a.itens
+                else projeto.todos_com("bases"))
     if not arquivos:
         raise SystemExit("nenhum arquivo de dados de base encontrado")
     saida = projeto.caminho("conferencia_trechos")

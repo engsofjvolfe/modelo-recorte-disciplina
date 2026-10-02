@@ -1,0 +1,10 @@
+{
+  "versao_schema": 1,
+  "provas": [
+    {
+      "pergunta": "[a pergunta, igual à da planilha]",
+      "trechos": ["[o trecho da fonte que prova a resposta, letra por letra]"],
+      "afirmacao": "categorica"
+    }
+  ]
+}

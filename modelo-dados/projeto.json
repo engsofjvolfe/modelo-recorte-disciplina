@@ -16,6 +16,8 @@
     "bases": "docs/bases/{item}.json",
     "base_externa": "docs/material-base/gerados-ocr/{item}-fontes-externas.md",
     "conferencia_trechos": "docs/material-base/gerados-ocr/CONFERENCIA-TRECHOS.md",
+    "provas": "docs/material-base/gerados-ocr/provas/{planilha}.json",
+    "conferencia_cartoes": "docs/material-base/gerados-ocr/CONFERENCIA-CARTOES.md",
     "imagens": "docs/material-base/gerados-ocr/imagens",
     "estilo_cartao": "estilo-cartao.css"
   }

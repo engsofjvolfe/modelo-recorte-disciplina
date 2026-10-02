@@ -2,9 +2,10 @@
 # Copyright do codigo sob GPL-3.0 -- ver LICENSE e NOTICE.md na raiz do projeto.
 
 """
-Funcoes que os outros scripts usam: achar o projeto, o registro da fonte no topo de um
-documento gerado, a impressao digital de um arquivo, os tiques de um arquivo de
-conferencia e a imagem de uma pagina de PDF. Nao e para rodar sozinho.
+Funcoes que os outros scripts usam: achar o projeto e as planilhas de pergunta, o
+registro da fonte no topo de um documento gerado, a impressao digital de um arquivo, os
+tiques de um arquivo de conferencia e a imagem de uma pagina de PDF. Nao e para rodar
+sozinho.
 
 Nenhum caminho fica no codigo. O projeto e achado pelo arquivo "projeto.json", subindo
 de pasta em pasta a partir de onde o script e chamado (ou pelo arquivo indicado com
@@ -32,6 +33,7 @@ ARQUIVO_PROJETO = "projeto.json"
 LINHA_FONTE = re.compile(r"^fonte (?P<chave>\S+): (?P<caminho>.+?) \| sha256: (?P<hash>[0-9a-f]{64})$")
 MARCA_PARTE = re.compile(r"^<!-- parte: ([^|]+)\|([^|]+)\|([0-9a-f]+) -->$")
 TIQUE = re.compile(r"^- \[([ xX])\] (IA|pessoa)\s*$")
+VARIAVEL = re.compile(r"\{[^{}]+\}")
 
 
 class Projeto:
@@ -45,14 +47,14 @@ class Projeto:
     def caminho(self, nome):
         return self.raiz / self.dados["caminhos"][nome]
 
-    def caminho_do_item(self, nome, item):
-        """Caminho que o projeto.json da com "{item}" no lugar do id do item."""
-        return self.raiz / self.dados["caminhos"][nome].replace("{item}", item)
+    def caminho_com(self, nome, valor):
+        """Caminho que o projeto.json da com uma variavel entre chaves, como "{item}" ou
+        "{planilha}", com o valor no lugar dela."""
+        return self.raiz / VARIAVEL.sub(lambda _: valor, self.dados["caminhos"][nome])
 
-    def todos_os_itens(self, nome):
-        """Arquivos que existem para o modelo de caminho com "{item}" (qualquer item)."""
-        modelo = self.dados["caminhos"][nome]
-        return sorted(self.raiz.glob(modelo.replace("{item}", "*")))
+    def todos_com(self, nome):
+        """Arquivos que existem para o modelo de caminho com variavel (qualquer valor)."""
+        return sorted(self.raiz.glob(VARIAVEL.sub("*", self.dados["caminhos"][nome])))
 
     def valor(self, nome):
         return self.dados[nome]
@@ -78,6 +80,15 @@ def acha_projeto(arquivo=None):
     if erros:
         raise SystemExit("\n".join(f"ERRO em {projeto.arquivo}: {e}" for e in erros))
     return projeto
+
+
+def planilhas(projeto, filtro=None):
+    """As planilhas de pergunta: os CSVs direto na pasta do material gerado (sem entrar em
+    subpastas) cujo nome comeca com o prefixo do projeto; com filtro, so as que tem o
+    trecho no nome, sem diferenca entre maiuscula e minuscula."""
+    pasta, prefixo = projeto.caminho("material_gerado"), projeto.valor("prefixo_planilhas")
+    todas = sorted(pasta.glob(f"{prefixo}*.csv"))
+    return [c for c in todas if filtro.lower() in c.name.lower()] if filtro else todas
 
 
 def impressao(arquivo):

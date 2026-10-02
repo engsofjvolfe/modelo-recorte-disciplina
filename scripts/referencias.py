@@ -323,13 +323,13 @@ def grava_conferencia(refs, chamadas, fontes, copias, saida, pasta_img, resoluca
     return sem_pessoa
 
 
-def roda(projeto, chave_nova=None):
-    fontes, saida = projeto.caminho("fontes"), projeto.caminho("referencias")
-    conferencia, transcricoes = projeto.caminho("conferencia_referencias"), projeto.caminho("gerados")
+def monta(projeto):
+    """(fontes, referencias, chamadas, erros): as fontes do arquivo de fontes, as
+    referencias em ordem [(chave, referencia)] e a chamada de cada fonte {chave: (entre
+    parenteses, na frase)}; com erro nos dados, so os erros."""
+    fontes = projeto.caminho("fontes")
     if not fontes.exists():
-        print(f"FALTA REFERÊNCIA: {fontes} não existe -- crie a partir de modelo-dados/fontes.json do modelo"
-              + (f" e acrescente a chave {chave_nova}" if chave_nova else ""))
-        return 1
+        return [], [], {}, [f"{fontes} não existe -- crie a partir de modelo-dados/fontes.json do modelo"]
     dados, erros = le_dados(fontes, "fontes.schema.json")
     meses, erros_meses = le_dados(ARQUIVO_MESES, "meses.schema.json")
     erros += [f"{ARQUIVO_MESES.name}: {e}" for e in erros_meses]
@@ -340,15 +340,28 @@ def roda(projeto, chave_nova=None):
         r = Regras(dados["et_al"], meses["meses"], texto)
         erros = erros_de_idioma(lista, r)
     if erros:
-        for e in erros:
-            print(f"ERRO em {fontes.name}: {e}")
-        return 1
+        return [], [], {}, [f"{fontes.name}: {e}" for e in erros]
     com_chamada = [f for f in lista if f["tipo"] != "outro"]
     nomes = {f["chave"]: nomes_da_chamada(f) for f in com_chamada}
     letras = desempata(com_chamada, nomes, r)
     refs = sorted(((f["chave"], referencia(f, r, letras.get(f["chave"], ""))) for f in lista),
                   key=lambda x: ordem(x[1]))
     chamadas = {f["chave"]: chamada(nomes[f["chave"]], ano(f) + letras.get(f["chave"], ""), r) for f in com_chamada}
+    return lista, refs, chamadas, []
+
+
+def roda(projeto, chave_nova=None):
+    fontes, saida = projeto.caminho("fontes"), projeto.caminho("referencias")
+    conferencia, transcricoes = projeto.caminho("conferencia_referencias"), projeto.caminho("gerados")
+    if not fontes.exists():
+        print(f"FALTA REFERÊNCIA: {fontes} não existe -- crie a partir de modelo-dados/fontes.json do modelo"
+              + (f" e acrescente a chave {chave_nova}" if chave_nova else ""))
+        return 1
+    lista, refs, chamadas, erros = monta(projeto)
+    if erros:
+        for e in erros:
+            print(f"ERRO em {e}")
+        return 1
     grava_fontes_md(refs, saida, projeto.caminho("licenca_conteudo"))
     copias = copias_registradas(transcricoes, projeto.raiz) if transcricoes.exists() else {}
     sem_pessoa = grava_conferencia(refs, chamadas, lista, copias, conferencia,

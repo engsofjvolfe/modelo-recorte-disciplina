@@ -39,7 +39,9 @@ ensina a usar IA — só deixa claro onde ela entra.
   diz aos scripts onde fica cada coisa; o [formato](modelo-dados/formato.json), com as
   respostas do Descubra seu modelo; as [fontes](modelo-dados/fontes.json), com os dados de
   cada fonte, de onde saem as referências; a [base](modelo-dados/base.json) de um item,
-  com o que foi lido do material de fora e a decisão sobre cada frase; e o
+  com o que foi lido do material de fora e a decisão sobre cada frase; a
+  [prova](modelo-dados/prova.json) dos cartões de uma planilha, com o trecho da fonte que
+  prova cada um; e o
   [estilo dos cartões](modelo-dados/estilo-cartao.css), com a aparência deles no Anki.
 - **[Material de base](docs/material-base/README.md)** — a pasta do material de aula, da
   transcrição literal dele e das cópias do material de fora que completa a aula. Nada
