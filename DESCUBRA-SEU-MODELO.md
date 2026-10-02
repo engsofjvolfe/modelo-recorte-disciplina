@@ -1,9 +1,13 @@
 # Descubra o formato da sua disciplina
 
-Este documento ajuda a decidir a estrutura de conteúdo de uma disciplina nova: quantos
-elos o dicionário tem, quantos eixos a ficha tem, que colunas a planilha de perguntas
-precisa. Nenhum desses números é fornecido aqui — cada disciplina responde essas
-perguntas pra si mesma, a partir do próprio material.
+Este documento ajuda a decidir a estrutura de conteúdo de uma disciplina nova. O método
+monta, pra cada assunto que se estuda um por um (os *itens*), dois documentos: o
+*dicionário*, que conta o item como uma história dividida em partes, os *elos*; e a
+*ficha*, uma tabela seca com uma linha pra cada tipo de fato que todo item tem, os
+*eixos*. Os cartões de pergunta saem de uma *planilha*, uma tabela com uma coluna pra
+cada informação do cartão. Aqui você decide quantos elos o dicionário tem, quantos eixos
+a ficha tem e que colunas a planilha precisa. Nenhum desses números é fornecido aqui —
+cada disciplina responde essas perguntas pra si mesma, a partir do próprio material.
 
 ## O que é estável entre disciplinas
 
@@ -48,12 +52,15 @@ decisão é sua; no arquivo de formato vai só a resposta, não a justificativa.
 
 ## Depois de responder
 
-Grave as respostas no arquivo de formato da disciplina, `docs/formato.json`: copie
-[`modelo-dados/formato.json`](modelo-dados/formato.json) pra lá e troque cada colchete
-pela resposta. O arquivo é só de dados — nomes e listas, sem explicação — e cada campo
-responde a uma pergunta:
+Grave as respostas no arquivo de formato da disciplina, `docs/formato.json`. É um
+arquivo de texto com as respostas organizadas de um jeito que os scripts (os pequenos
+programas do modelo) conseguem ler. Copie
+[`modelo-dados/formato.json`](modelo-dados/formato.json) pra lá e troque cada trecho entre
+colchetes pela resposta, sem mexer no resto. O arquivo guarda só as respostas — nomes e
+listas, sem explicação — e cada informação dele, com o nome que aparece entre aspas no
+arquivo, responde a uma pergunta:
 
-| Campo | Pergunta |
+| Informação | Pergunta |
 |---|---|
 | `itens` | 1 (lista vazia, se não houver itens) |
 | `eixos` e os `subtopicos` de cada eixo | 2 (lista vazia de subtópicos, se o eixo não se dividir) |
@@ -62,18 +69,20 @@ responde a uma pergunta:
 | `curso`, `disciplina` e `nivel` | *Antes das perguntas* |
 | `idioma` | o idioma do material gerado |
 
-Confira o arquivo com `python scripts/validar_dados.py docs/formato.json`. É desse
-arquivo que sai a grade do que cada item precisa ter, antes de qualquer material ser
-escrito. Se a sua disciplina precisar de um dado que o formato ainda não tem, acrescente
-o campo: o arquivo aceita campos novos, e os scripts ignoram o que não conhecem.
-Registre a mudança na metodologia (seção 17), pra que o formato cresça no modelo também.
+Depois, confira se o arquivo ficou bem preenchido com o script `validar_dados.py`: o
+[README dos scripts](scripts/README.md) diz, passo a passo, como rodar. É desse arquivo
+que sai a grade do que cada item precisa ter, antes de qualquer material ser escrito. Se
+a sua disciplina precisar de uma informação que o formato ainda não tem, acrescente: o
+arquivo aceita informações novas, e os scripts ignoram o que não conhecem. Registre a
+mudança na metodologia (seção 17), pra que o formato cresça no modelo também.
 
-O gerador de baralho (`scripts/montar_deck.py`) só exige duas colunas por nome: uma
-chamada `pergunta` e outra `resposta`. A metodologia pede mais uma em toda planilha, a
-`fonte`, com a citação de cada fato, que o gerador mostra no verso do cartão (seções 3
-e 9 da metodologia). Qualquer outra coluna que você criar vira parte do cartão
-automaticamente, com o nome que você escolheu; no Anki, o nome aparece sem o sublinhado
-e com cada palavra em maiúscula (`tipo_pergunta` vira `TipoPergunta`).
+O script que monta os cartões do Anki (`montar_deck.py`) só exige duas colunas com nome
+certo na planilha: uma chamada `pergunta` e outra `resposta`. A metodologia pede mais
+uma em toda planilha, a `fonte`, com a citação de onde veio cada fato, que aparece atrás
+do cartão, embaixo da resposta (seções 3 e 9 da metodologia). Qualquer outra coluna que
+você criar vira parte do cartão automaticamente, com o nome que você escolheu; no Anki,
+o nome aparece sem o sublinhado e com cada palavra em maiúscula (`tipo_pergunta` vira
+`TipoPergunta`).
 
 ---
 

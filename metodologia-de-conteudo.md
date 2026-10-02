@@ -13,9 +13,21 @@ Siga isto por padrão, mas corrija quando sua disciplina expuser um caso que nã
 coberto aqui. Quando isso acontecer, atualize este documento também, não só o conteúdo
 da sua disciplina.
 
+Algumas partes do trabalho são feitas por *scripts*: pequenos programas que vêm prontos no
+modelo e fazem sempre o mesmo trabalho, do mesmo jeito. Quando este guia diz pra rodar um
+deles — um comando como `python scripts/conferencia.py` —, o
+[README dos scripts](scripts/README.md) explica, passo a passo, como abrir o terminal (a
+janela onde se digita o comando) e o que aparece na tela. Você não precisa saber
+programar.
+
 Os caminhos de pasta e de arquivo citados aqui são os do modelo. Em cada projeto, quem
-diz onde fica cada coisa é o `projeto.json`, na raiz dele: é dali que os scripts tiram
-todo caminho (ver o [README dos scripts](scripts/README.md)).
+diz onde fica cada coisa é o mapa do projeto, o arquivo `projeto.json`, na pasta
+principal dele: é dali que os scripts tiram todo caminho.
+
+Uma palavra que aparece muito aqui: *publicar*. O projeto de uma disciplina pode ser
+publicado — no GitHub, um site que guarda projetos na internet, ou em qualquer outro
+lugar. O material de terceiros (as aulas, a transcrição delas, as cópias do material de
+fora e tudo o que traz texto delas) nunca é publicado; o resto pode ser.
 
 As seções seguem a ordem do trabalho, que é uma cadeia: o formato da disciplina dá a
 grade de tudo (seção 1); cada fonte vira uma transcrição conferida e uma referência
@@ -32,9 +44,9 @@ conferência.
 Antes de qualquer material, decida o formato da disciplina: o curso, a disciplina e o
 nível de estudo; os itens; os eixos da ficha e os subtópicos de cada um; os elos do
 dicionário; e as colunas dos cartões. O [Descubra seu modelo](DESCUBRA-SEU-MODELO.md) traz
-as perguntas, e as respostas vão para `docs/formato.json`, conferido com `python
-scripts/validar_dados.py docs/formato.json`. Uma IA pode propor cada resposta, dizendo
-por que ela cabe naquele curso e naquele nível; a decisão é da pessoa.
+as perguntas, e as respostas vão para o arquivo de formato, `docs/formato.json`, que se
+confere com `python scripts/validar_dados.py docs/formato.json`. Uma IA pode propor cada
+resposta, dizendo por que ela cabe naquele curso e naquele nível; a decisão é da pessoa.
 
 Esse arquivo é a grade de tudo o que vem depois: é por ele que se sabe o que cada item
 precisa ter, o que a aula cobre e onde falta, antes de qualquer material ser escrito.
@@ -46,9 +58,9 @@ precisa ter, o que a aula cobre e onde falta, antes de qualquer material ser esc
 Guarde o material de aula original da disciplina — slides, apostila, ou o que for —
 numa pasta própria (`material-base/`, por convenção). Essa pasta carrega um arquivo
 pequeno e próprio dela, `docs/material-base/README.md`, que só documenta a convenção
-dessa pasta específica. Nunca disponibilize a pasta `material-base/` publicamente: quem olha o projeto de fora
-normalmente não vai ver o conteúdo dela nem saber o que tem lá — ela existe só
-localmente, pra você, enquanto organiza aquela disciplina.
+dessa pasta específica. Nunca publique a pasta `material-base/`: quem olha o projeto de
+fora normalmente não vai ver o conteúdo dela nem saber o que tem lá — ela existe só no
+seu computador, pra você, enquanto organiza aquela disciplina.
 
 Faça uma transcrição integral e literal desse material, usando OCR se ele estiver
 digitalizado como imagem ou PDF escaneado (OCR é uma tecnologia que lê o texto de uma
@@ -56,7 +68,7 @@ imagem e devolve como texto comum). Essa transcrição não é opcional, com ou 
 de IA: ela é o que permite conferir, depois, que nada do material ficou de fora do que
 você escreveu — texto literal e completo é mais fácil de conferir contra o que foi
 escrito do que voltar num PDF escaneado toda vez. Guarde essa transcrição também sem
-disponibilizar publicamente, no padrão de *Como transcrever*, logo abaixo.
+publicar, no padrão de *Como transcrever*, logo abaixo.
 
 Ao escrever o conteúdo de estudo — sozinho, ou com ajuda de um assistente de IA, o que
 preferir — leia o material inteiro antes de escrever qualquer coisa, sem usar nenhuma
@@ -90,13 +102,15 @@ escrito: nem descrição de imagem, nem explicação, nem correção. Guarde a t
 qual arquivo veio, com `python scripts/registrar_fonte.py [transcrição] [arquivo
 original] [chave]`. A chave é a mesma da referência dessa fonte (ver a
 [seção 3](#3-cite-cada-fonte-conforme-a-abnt)); o script grava a chave, o caminho do
-arquivo e a impressão digital dele (o hash), e em seguida atualiza as referências. É
-esse registro que liga a transcrição ao original, não o nome dos arquivos.
+arquivo e a impressão digital dele — um código calculado a partir do conteúdo do
+arquivo, que muda se o arquivo mudar —, e em seguida atualiza as referências. É esse
+registro que liga a transcrição ao original, não o nome dos arquivos.
 
-Cada página vira uma seção da transcrição, com o título no formato
-`## [como a citação chama a página] (arquivo p. [posição no arquivo])` — por exemplo,
-`## p. 12 (arquivo p. 14)` ou `## slide 3 (arquivo p. 3)`. Uma página sem texto nenhum
-fica com a seção e a marca `[sem texto]`.
+Cada página vira uma parte da transcrição, que começa com uma linha de título escrita
+assim: `## [como a citação chama a página] (arquivo p. [posição no arquivo])` — por
+exemplo, `## p. 12 (arquivo p. 14)` ou `## slide 3 (arquivo p. 3)`. Os dois `#` no começo
+marcam a linha como título. Uma página sem texto nenhum fica com o título e a marca
+`[sem texto]`.
 
 Um fato que só a imagem mostra, sem texto, não está na transcrição. Se ele precisar
 entrar no material, a prova dele é a própria imagem, conferida por uma pessoa, ou uma
@@ -143,12 +157,12 @@ toda referência é citada em algum lugar. Por exemplo:
 [AUTOR OU INSTITUIÇÃO]. [Título]. [Local]: [editora], [ano]. Disponível em: [endereço]. Acesso em: [data].
 ```
 
-Esse documento é conteúdo do projeto e é versionado: o que fica fora do controle de
-versão é a cópia do material, não a referência a ele.
+Esse documento é conteúdo do projeto e é publicado com ele: o que nunca se publica é a
+cópia do material, não a referência a ele.
 
 Ninguém escreve esse documento à mão. Os dados de cada fonte — autoria, título, local,
-editora, data, endereço, data de acesso, com uma chave curta — ficam em
-`docs/fontes.json` (copiado de `modelo-dados/fontes.json`), e `python
+editora, data, endereço, data de acesso, com uma chave curta — ficam no arquivo de
+fontes, `docs/fontes.json` (copiado de `modelo-dados/fontes.json`), e `python
 scripts/referencias.py` monta cada referência pela norma, em ordem alfabética, e grava o
 `docs/FONTES.md`. Junto, ele gera a conferência das referências: cada referência e a
 chamada dela como ficaram, ao lado da cópia registrada da fonte (a primeira página, se
@@ -167,8 +181,8 @@ completa a aula, não a substitui: use-o só onde a aula não chega. Vale a mesm
 aula: o fato tem de estar escrito nesse material, nunca deduzido.
 
 Guarde uma cópia de cada material de fora junto do material de aula, numa subpasta
-própria (`docs/material-base/fontes-externas/`, por convenção), também sem versionar nem
-disponibilizar publicamente: ele também não é de quem mantém o projeto. Dê a cada cópia
+própria (`docs/material-base/fontes-externas/`, por convenção), também sem publicar: ele
+também não é de quem mantém o projeto. Dê a cada cópia
 um nome que comece pela entrada e pelo ano da referência dela, pra achar o arquivo a
 partir da citação.
 
@@ -184,8 +198,8 @@ as frases usadas, letra por letra, com a citação e a página. Ele recusa frase
 subtópico sem marca, subtópico do material de fora sem frase nenhuma e frase usada onde
 a aula já cobre ou num subtópico marcado como lacuna, e não grava a base enquanto houver
 erro. A base e a conferência dela — cada página com as frases e a classe de
-cada uma, com tique da IA e da pessoa — ficam fora do controle de versão; o arquivo de
-dados, que só tem códigos e decisões, é versionado. É contra essa base que se confere
+cada uma, com tique da IA e da pessoa — nunca são publicadas; o arquivo de dados, que só
+tem códigos e decisões, pode ser publicado com o projeto. É contra essa base que se confere
 cada fato tirado do material de fora, e frase que a fonte trata como possibilidade entra
 no material com a ressalva escrita, nunca como certeza.
 
@@ -327,7 +341,7 @@ escritos, seção 5) pra um assistente de IA, com uma instrução como esta:
 > se a fonte afirma (`categorica`) ou trata como possibilidade (`possibilidade`).
 
 A prova fica num arquivo por planilha, copiado de `modelo-dados/prova.json`. Como ela
-tem texto de terceiros, fica com o material de base, fora do controle de versão
+tem texto de terceiros, fica com o material de base e nunca é publicada
 (`docs/material-base/gerados-ocr/provas/`, por convenção). Quando a fonte trata o fato
 como possibilidade, a resposta do cartão diz isso: nenhum cartão apresenta como certo o
 que a fonte não afirma. `python scripts/confere_cartoes.py` confere cada cartão contra a
@@ -342,13 +356,16 @@ fonte trata como possibilidade? Essa conferência é sua, não da IA — é o qu
 nada ficou de fora.
 
 Uma vez com a planilha pronta e conferida, o baralho do Anki será gerado automaticamente
-pelo script do modelo, acionado por você (veja seção 10). Você pode editar um cartão direto dentro do app Anki — mas se
-depois você mudar a planilha (ou o dicionário/ficha de origem) e rodar o script de
-novo, o cartão é gerado de novo a partir da planilha, e essa edição feita direto no
-Anki não sobrevive em caso de enviar novamente o baralho recriado pelo script para o app. Ou seja: enquanto você for regenerando o baralho a partir da
-planilha, é a planilha (ou o dicionário/ficha) que precisa estar certa com suas modificações. 
+pelo script do modelo, acionado por você (veja seção 10). Você pode editar um cartão
+direto dentro do Anki — mas se depois você mudar a planilha (ou o dicionário/ficha de
+origem) e gerar o baralho de novo, o cartão é refeito a partir da planilha, e a edição
+feita direto no Anki não sobrevive quando o baralho novo for importado. Ou seja: enquanto
+você for refazendo o baralho a partir da planilha, é a planilha (ou o dicionário/ficha)
+que precisa estar certa.
 
-Então se você precisa modificar um baralho, saiba qual o cartão ou quais os cartões, dê instruções para a IA que você usa ou altere você mesmo direto no CSV (no caso de IA, confira o que ela criar). Em seguida recrie o deck utilizando o script.
+Então, se você precisa mudar um baralho, saiba qual cartão ou quais cartões, dê as
+instruções pra IA que você usa ou mude você mesmo direto na planilha (no caso da IA,
+confira o que ela fez). Em seguida, gere o baralho de novo com o script.
 
 ---
 
@@ -413,10 +430,10 @@ cartões saírem certos mesmo assim, está funcionando do jeito certo.
 Tudo o que a IA produz passa por duas análises antes de valer. A primeira é mecânica:
 um script confere, sempre do mesmo jeito, o que dá pra conferir sem julgar — se o dado
 tem a forma certa, se o trecho está na fonte, se nada falta dos dois lados. A segunda é
-humana: a pessoa confere o conteúdo contra a fonte. O `validar_dados.py` confere a forma
-de cada arquivo de dados, e cada um dos scripts abaixo grava um arquivo de conferência,
-fora do controle de versão, com duas caixas de tique em cada parte: a da IA, uma
-primeira passada, e a da pessoa, que é sempre o último elo.
+humana: a pessoa confere o conteúdo contra a fonte. O `validar_dados.py` confere se
+cada arquivo de dados está bem preenchido, e cada um dos scripts abaixo grava um arquivo
+de conferência, que nunca é publicado, com duas caixas de tique em cada parte: a da IA,
+uma primeira passada, e a da pessoa, que é sempre o último elo.
 
 | O que se confere | Contra o quê | Script | Arquivo de conferência (no modelo) |
 |---|---|---|---|
